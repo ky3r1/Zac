@@ -63,6 +63,9 @@
     <Filter Include="AI\Spawn">
       <UniqueIdentifier>{591a5449-80c9-465f-af4d-ee8bedf16631}</UniqueIdentifier>
     </Filter>
+    <Filter Include="System\Effect">
+      <UniqueIdentifier>{38b2c568-e98d-44b7-b4bf-72749aa5f3ae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\imgui\imconfig.h">
@@ -156,12 +159,6 @@
       <Filter>Character</Filter>
     </ClInclude>
     <ClInclude Include="Source\Collision.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Effect.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\EffectManager.h">
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="Source\Framework.h">
@@ -269,6 +266,12 @@
     <ClInclude Include="Source\Graphics\Font.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Effect.h">
+      <Filter>System\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EffectManager.h">
+      <Filter>System\Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="External\imgui\imgui.cpp">
@@ -338,12 +341,6 @@
       <Filter>Character</Filter>
     </ClCompile>
     <ClCompile Include="Source\Collision.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Effect.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\EffectManager.cpp">
       <Filter>System</Filter>
     </ClCompile>
     <ClCompile Include="Source\Framework.cpp">
@@ -453,6 +450,12 @@
     </ClCompile>
     <ClCompile Include="Source\Graphics\Font.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Effect.cpp">
+      <Filter>System\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\EffectManager.cpp">
+      <Filter>System\Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

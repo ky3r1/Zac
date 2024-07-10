@@ -5,8 +5,9 @@
 //カメラ
 class Camera
 {
-    Camera()   {}
-    ~Camera()   {}
+public:
+    //コンストラクタ
+    Camera();
 public:
     //唯一のインスタンス取得
     static Camera& Instance()

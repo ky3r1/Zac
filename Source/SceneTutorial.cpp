@@ -123,11 +123,8 @@ void SceneTutorial::Update(float elapsedTime)
 
 	//カメラコントローラー更新処理
 #ifdef  ALLPLAYER
-	DirectX::XMFLOAT3 target = Player::Instance().GetPosition();
-	target.y += 0.5f;
-	cameraController->SetTarget(target);
 #endif //  ALLPLAYER
-	cameraController->Update(elapsedTime);
+	cameraController->Update(Player::Instance().GetPosition());
 
 	StageManager::Instance().Update(elapsedTime);
 
@@ -321,7 +318,6 @@ void SceneTutorial::Render()
 #ifdef DEBUGIMGUI
     // デバッグGUI描画
 	Player::Instance().DrawDebugGUI();
-	cameraController->DrawDebugGUI();
 	EnemyManager::Instance().DrawDebugGUI();
 	StageManager::Instance().DrawDebugGUI();
 #endif // DebugImGui

@@ -30,6 +30,10 @@
 // 初期化
 void SceneGame::Initialize()
 {
+	ID3D11Device* device = Graphics::Instance().GetDevice();
+	float screenWidth = Graphics::Instance().GetScreenWidth();
+	float screenHeight = Graphics::Instance().GetScreenHeight();
+
 	//ステージ初期化
 #ifdef ALLSTAGE
 	//Main
@@ -63,24 +67,23 @@ void SceneGame::Initialize()
 #ifdef HPGAUGE
 	gauge = std::unique_ptr<Sprite>(new Sprite);
 #endif // HPGAUGE
+	DirectX::XMFLOAT3 position = { 0,0,0 };
+	if(player)position = player->GetPosition();
 
-
-	//カメラ初期設定
-	Graphics& graphics = Graphics::Instance();
-	Camera& camera = Camera::Instance();
-	camera.SetLookAt(
-		DirectX::XMFLOAT3(0, 3, 0),
-		DirectX::XMFLOAT3(0, 0, 0),
-		DirectX::XMFLOAT3(0, 1, 0)
-	);
+	// カメラ設定
 	camera.SetPerspectiveFov(
-		DirectX::XMConvertToRadians(90),
-		graphics.GetScreenWidth() / graphics.GetScreenHeight(),
-		0.1f,
-		100.0f
+		DirectX::XMConvertToRadians(45),	// 画角
+		screenWidth / screenHeight,			// 画面アスペクト比
+		0.1f,								// ニアクリップ
+		1000.0f								// ファークリップ
 	);
-	//カメラコントローラー初期化
-	cameraController = std::unique_ptr<CameraController>(new CameraController());
+	camera.SetLookAt(
+		{ position.x, position.y + 12, position.z + 12 },	// 視点
+		{ position.x, position.y, position.z },				// 注視点
+		{ 0, 1, 0 }			// 上ベクトル
+	);
+	camera_controller.SyncCameraToController(camera);
+
 #ifdef ALLENEMY
 	int index = 0;
 	spown = std::unique_ptr<Spown>(new Spown());
@@ -165,17 +168,21 @@ void SceneGame::Finalize()
 // 更新処理
 void SceneGame::Update(float elapsedTime)
 {
-	//カメラコントローラー更新処理
-	DirectX::XMFLOAT3 target = Player::Instance().GetPosition();
-	target.y += 0.5f;
-	cameraController->SetTarget(target);
-	cameraController->Update(elapsedTime);
+	////カメラコントローラー更新処理
+	//DirectX::XMFLOAT3 target = Player::Instance().GetPosition();
+	//target.y += 0.5f;
+	//cameraController->SetTarget(target);
+	//cameraController->Update(elapsedTime);
+	
+	// カメラ更新処理
+	camera_controller.Update(player.get()->GetPosition());
+	camera_controller.SyncControllerToCamera(camera);
 
 	StageManager::Instance().Update(elapsedTime);
 
 	Graphics& graphics = Graphics::Instance();
 	ID3D11DeviceContext* dc = graphics.GetDeviceContext();
-	MouseManager::GetInstance().MouseTransform(dc, Camera::Instance().GetView(), Camera::Instance().GetProjection());
+	//MouseManager::GetInstance().MouseTransform(dc, Camera::Instance().GetView(), Camera::Instance().GetProjection());
 
 #ifdef  ALLPLAYER
 	Player::Instance().Update(elapsedTime);
@@ -193,14 +200,6 @@ void SceneGame::Update(float elapsedTime)
 
 	//エフェクト更新処理
 	EffectManager::Instance().Update(elapsedTime);
-
-	////マップのナンバーが変わったらSceneGameを読み込み直してマップを変える
-	//if (StageMapChip::Instance().GetStageNum() != mapcategory)
-	//{
-	//	SceneManager::Instance().ChangeScene(new SceneLoading(new SceneGame));
-	//}
-
-	//font = std::make_unique<Font>(graphics.GetDevice(), ".\\Data\\Font\\MS_Gothic.fnt", 1024);
 }
 
 // 描画処理
@@ -281,7 +280,7 @@ void SceneGame::Render()
 #ifdef DEBUGIMGUI
     // デバッグGUI描画
 	Player::Instance().DrawDebugGUI();
-	cameraController->DrawDebugGUI();
+	//cameraController->DrawDebugGUI();
 	EnemyManager::Instance().DrawDebugGUI();
 	StageManager::Instance().DrawDebugGUI();
 	spown->DrawDebugGUI();

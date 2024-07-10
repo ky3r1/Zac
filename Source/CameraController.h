@@ -1,25 +1,25 @@
 #pragma once
 
 #include "All.h"
+#include "Camera.h"
 
 class CameraController
 {
 public:
-    CameraController() {}
-    ~CameraController() {}
+	// カメラからコントローラーへパラメータを同期する
+	void SyncCameraToController(const Camera& camera);
 
-    //更新処理
-    void Update(float elapsedTime);
+	// コントローラーからカメラへパラメータを同期する
+	void SyncControllerToCamera(Camera& camera);
 
-    //ターゲット位置設定
-    void SetTarget(const DirectX::XMFLOAT3& target) { this->target = target; }
-
-    void DrawDebugGUI();
+	// 更新処理
+	void Update(DirectX::XMFLOAT3 target);
 
 private:
-    DirectX::XMFLOAT3       target = { 0,0,0 };
-    DirectX::XMFLOAT3       angle = { /*1.59f*/0.981f,0,0 };
-    DirectX::XMFLOAT3       eye = { 0,0,0 };
-    float                   rollSpeed = DirectX::XMConvertToRadians(90);
-    float                   range = 10.0f;
+	DirectX::XMFLOAT3		eye;
+	DirectX::XMFLOAT3		focus;
+	DirectX::XMFLOAT3		up;
+	DirectX::XMFLOAT3		right;
+	float					distance;
+	DirectX::XMFLOAT3		angle;
 };
