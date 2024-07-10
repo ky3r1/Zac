@@ -1,0 +1,25 @@
+#pragma once
+
+//インクルード
+#include<DirectXMath.h>
+#include <stdlib.h>
+#include <stdio.h>
+
+//デバッグ用define
+
+///////////////////////Stage/////////////////////////
+#define StageMove
+#define Unit16_OnCharacter
+
+///////////////////////Enemy/////////////////////////
+#define Enemy_Define
+#define Slime_Define
+
+///////////////////////Player/////////////////////////
+#define Player_Animation
+
+///////////////////////UI/////////////////////////
+//HPゲージ
+#define HPGAUGE
+//EnemyAdd
+//#define EnemyAdd
