@@ -2,12 +2,13 @@
 
 #include "Graphics/Sprite.h"
 #include "Scene.h"
+//#include "Player.h"
 
 //タイトルシーン
 class SceneResult : public Scene
 {
 public:
-    SceneResult() {}
+    SceneResult(bool oc) { outcome = oc; }
     ~SceneResult() override {}
 
     //初期化
@@ -23,5 +24,6 @@ public:
     void Render() override;
 
 private:
-    Sprite* sprite = nullptr;
+    std::unique_ptr<Sprite> sprite = nullptr;
+    bool outcome = false;
 };

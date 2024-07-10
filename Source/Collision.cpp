@@ -5,9 +5,11 @@ bool Collision::IntersectCylinderVsSphere(
     const DirectX::XMFLOAT3& positionA,
     float radiusA,
     float heightA,
+    float weightA,
     const DirectX::XMFLOAT3& positionB,
     float radiusB,
     float heightB,
+    float weightB,
     DirectX::XMFLOAT3& outPositionB)
 {
     //Aの足元がBの頭より上なら当たってない
@@ -16,7 +18,7 @@ bool Collision::IntersectCylinderVsSphere(
         return false;
     }
     //Aの頭がBの足元より下なら当たってない
-    if(positionA.y+heightA<positionB.y)
+    if (positionA.y + heightA < positionB.y)
     {
         return false;
     }
@@ -63,33 +65,6 @@ bool Collision::IntersectCylinderVsSphere(
     outPositionB.z = resultPos.y;
 
     return true;
-
-
-    ////A→Bの単位ベクトルを算出
-    //DirectX::XMVECTOR PositionA = DirectX::XMLoadFloat3(&positionA);
-    //DirectX::XMVECTOR PositionB = DirectX::XMLoadFloat3(&positionB);
-    //DirectX::XMVECTOR Vec       = DirectX::XMVectorSubtract(PositionB, PositionA);
-    //DirectX::XMVECTOR LengthSq  = DirectX::XMVector3LengthSq(Vec);
-    //float lengthSq;
-    //DirectX::XMStoreFloat(&lengthSq, LengthSq);
-
-    ////距離判定
-    //float range = radiusA + radiusB;
-    //if (lengthSq > range)
-    //{
-    //    return false;
-    //}
-
-    ////AがBを押し出す
-    ////A→Bベクトルを正規化
-    //Vec = DirectX::XMVector3Normalize(Vec);
-    ////ベクトルをrange分スケール
-    //Vec = DirectX::XMVectorScale(Vec, range);
-    ////
-    //Vec = DirectX::XMVectorAdd(PositionA, Vec);
-
-    //DirectX::XMStoreFloat3(&outPositionB, Vec);
-
 }
 
 
@@ -188,14 +163,10 @@ bool Collision::IntersectRayVsModel(
 
     bool hit = false;
     const ModelResource* resource = model->GetResource();
-
-    const Model::Node* node_data = model->GetNodes().data();
-
     for (const ModelResource::Mesh& mesh : resource->GetMeshes())
     {
         //メッシュノード取得
-        //const Model::Node& node = model->GetNodes().at(mesh.nodeIndex);
-        const Model::Node& node = node_data[mesh.nodeIndex];
+        const Model::Node& node = model->GetNodes().at(mesh.nodeIndex);
 
         //レイをワールド空間からローカル空間へ変換
         DirectX::XMMATRIX WorldTransform = DirectX::XMLoadFloat4x4(&node.worldTransform);
@@ -312,4 +283,59 @@ bool Collision::IntersectRayVsModel(
         }
     }
     return hit;
+}
+
+bool Collision::HPbarPoint(DirectX::XMFLOAT3 player_position, DirectX::XMFLOAT3 enemy_position)
+{
+    bool HPpoint;
+    if (player_position.x > enemy_position.x - 10.0f || player_position.x < enemy_position.x + 10.0f)//X軸
+    {
+        if (player_position.y > enemy_position.y - 10.0f || player_position.y < enemy_position.y + 10.0f)//Y軸
+        {
+            if (player_position.z > enemy_position.z - 10.0f || player_position.z < enemy_position.z + 10.0f)//Z軸
+            {
+                HPpoint = true;
+            }
+        }
+    }
+    HPpoint = false;
+    return HPpoint;
+}
+
+bool Collision::InPoint(DirectX::XMFLOAT3 bottom_left_front, DirectX::XMFLOAT3 top_right_back, DirectX::XMFLOAT3 move_pos)
+{
+    //X軸、Y軸、Z軸それぞれの範囲内に入っているかの判定
+    //bottom_left_front < top_right_backじゃないと通らない
+    if (bottom_left_front.x<move_pos.x && top_right_back.x>move_pos.x)
+    {
+        if (bottom_left_front.y<move_pos.y && top_right_back.y>move_pos.y)
+        {
+            if (bottom_left_front.z<move_pos.z && top_right_back.z>move_pos.z)
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool Collision::InXYPoint(DirectX::XMFLOAT3 bottom_left_front, DirectX::XMFLOAT3 top_right_back, DirectX::XMFLOAT3 move_pos)
+{
+    //X軸、Z軸それぞれの範囲内に入っているかの判定
+    //bottom_left_front < top_right_backじゃないと通らない
+    if (bottom_left_front.x<move_pos.x && top_right_back.x>move_pos.x)
+    {
+        if (bottom_left_front.z<move_pos.z && top_right_back.z>move_pos.z)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Collision::PointInsideCircle(DirectX::XMFLOAT3 point, DirectX::XMFLOAT3 center, float radius)
+{
+    float distance = sqrt(pow(point.x - center.x, 2) + pow(point.z - center.z, 2));
+
+    return distance <= radius;
 }

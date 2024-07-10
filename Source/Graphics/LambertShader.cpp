@@ -1,5 +1,7 @@
-#include "Misc.h"
+#include "misc.h"
 #include "Graphics/LambertShader.h"
+#include "Camera.h"
+#include "Graphics/texture.h"
 
 LambertShader::LambertShader(ID3D11Device* device)
 {
@@ -7,7 +9,7 @@ LambertShader::LambertShader(ID3D11Device* device)
 	{
 		// ファイルを開く
 		FILE* fp = nullptr;
-		fopen_s(&fp, "Shader\\LambertVS.cso", "rb");
+		fopen_s(&fp, "Data\\Shader\\Ramp_shader_vs.cso", "rb");
 		_ASSERT_EXPR_A(fp, "CSO File not found");
 
 		// ファイルのサイズを求める
@@ -22,7 +24,7 @@ LambertShader::LambertShader(ID3D11Device* device)
 
 		// 頂点シェーダー生成
 		HRESULT hr = device->CreateVertexShader(csoData.get(), csoSize, nullptr, vertexShader.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 
 		// 入力レイアウト
 		D3D11_INPUT_ELEMENT_DESC inputElementDesc[] =
@@ -36,14 +38,14 @@ LambertShader::LambertShader(ID3D11Device* device)
 			{ "BONES",    0, DXGI_FORMAT_R32G32B32A32_UINT,  0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		};
 		hr = device->CreateInputLayout(inputElementDesc, ARRAYSIZE(inputElementDesc), csoData.get(), csoSize, inputLayout.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 	}
 
 	// ピクセルシェーダー
 	{
 		// ファイルを開く
 		FILE* fp = nullptr;
-		fopen_s(&fp, "Shader\\LambertPS.cso", "rb");
+		fopen_s(&fp, "Data\\Shader\\Ramp_shader_ps.cso", "rb");
 		_ASSERT_EXPR_A(fp, "CSO File not found");
 
 		// ファイルのサイズを求める
@@ -58,7 +60,7 @@ LambertShader::LambertShader(ID3D11Device* device)
 
 		// ピクセルシェーダー生成
 		HRESULT hr = device->CreatePixelShader(csoData.get(), csoSize, nullptr, pixelShader.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 	}
 
 	// 定数バッファ
@@ -74,19 +76,34 @@ LambertShader::LambertShader(ID3D11Device* device)
 		desc.StructureByteStride = 0;
 
 		HRESULT hr = device->CreateBuffer(&desc, 0, sceneConstantBuffer.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 
 		// メッシュ用バッファ
 		desc.ByteWidth = sizeof(CbMesh);
 
 		hr = device->CreateBuffer(&desc, 0, meshConstantBuffer.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 
 		// サブセット用バッファ
 		desc.ByteWidth = sizeof(CbSubset);
 
 		hr = device->CreateBuffer(&desc, 0, subsetConstantBuffer.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
+
+		/*desc.ByteWidth = sizeof(constants);
+
+        hr = device->CreateBuffer(&desc, 0, constant_buffer.GetAddressOf());
+        _ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));*/
+
+		desc.ByteWidth = sizeof(light_constants);
+
+        hr = device->CreateBuffer(&desc, 0, light_constant_buffer.GetAddressOf());
+        _ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
+
+		desc.ByteWidth = sizeof(scene_constants);
+
+        hr = device->CreateBuffer(&desc, 0, scene_constant_buffer.GetAddressOf());
+        _ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 	}
 
 	// ブレンドステート
@@ -105,7 +122,7 @@ LambertShader::LambertShader(ID3D11Device* device)
 		desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
 		HRESULT hr = device->CreateBlendState(&desc, blendState.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 	}
 
 	// 深度ステンシルステート
@@ -117,7 +134,7 @@ LambertShader::LambertShader(ID3D11Device* device)
 		desc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
 
 		HRESULT hr = device->CreateDepthStencilState(&desc, depthStencilState.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 	}
 
 	// ラスタライザーステート
@@ -136,7 +153,7 @@ LambertShader::LambertShader(ID3D11Device* device)
 		desc.AntialiasedLineEnable = false;
 
 		HRESULT hr = device->CreateRasterizerState(&desc, rasterizerState.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 	}
 
 	// サンプラステート
@@ -158,8 +175,22 @@ LambertShader::LambertShader(ID3D11Device* device)
 		desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 
 		HRESULT hr = device->CreateSamplerState(&desc, samplerState.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
+
+		desc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+		desc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+		desc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+		desc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+		desc.MaxAnisotropy = 16;
+		desc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+		desc.MinLOD = 0;
+		desc.MaxLOD = D3D11_FLOAT32_MAX;
+		hr = device->CreateSamplerState(&desc, ramp_sampler_state.GetAddressOf());
+		_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 	}
+
+	load_texture_from_file(device, L".\\Data\\Sprite\\ranp.png",
+		ramp_texture.GetAddressOf(), &ramp_texture2dDesc);
 }
 
 // 描画開始
@@ -169,12 +200,21 @@ void LambertShader::Begin(ID3D11DeviceContext* dc, const RenderContext& rc)
 	dc->PSSetShader(pixelShader.Get(), nullptr, 0);
 	dc->IASetInputLayout(inputLayout.Get());
 
-	ID3D11Buffer* constantBuffers[] =
+	/*ID3D11Buffer* constantBuffers[] =
 	{
 		sceneConstantBuffer.Get(),
 		meshConstantBuffer.Get(),
 		subsetConstantBuffer.Get()
+	};*/
+
+	ID3D11Buffer* constantBuffers[] =
+	{
+		meshConstantBuffer.Get(),
+		subsetConstantBuffer.Get(),
+		scene_constant_buffer.Get(),
+		light_constant_buffer.Get(),
 	};
+
 	dc->VSSetConstantBuffers(0, ARRAYSIZE(constantBuffers), constantBuffers);
 	dc->PSSetConstantBuffers(0, ARRAYSIZE(constantBuffers), constantBuffers);
 
@@ -183,20 +223,27 @@ void LambertShader::Begin(ID3D11DeviceContext* dc, const RenderContext& rc)
 	dc->OMSetDepthStencilState(depthStencilState.Get(), 0);
 	dc->RSSetState(rasterizerState.Get());
 	dc->PSSetSamplers(0, 1, samplerState.GetAddressOf());
+	dc->PSSetSamplers(2,1,ramp_sampler_state.GetAddressOf());
+	dc->PSSetShaderResources(2,1,ramp_texture.GetAddressOf());
 
 	// シーン用定数バッファ更新
 	CbScene cbScene;
-
+	scene_constants scene_constant;
+	light_constants light_constant;
 	DirectX::XMMATRIX V = DirectX::XMLoadFloat4x4(&rc.view);
 	DirectX::XMMATRIX P = DirectX::XMLoadFloat4x4(&rc.projection);
-	DirectX::XMStoreFloat4x4(&cbScene.viewProjection, V * P);
+	DirectX::XMStoreFloat4x4(&scene_constant.view_projection, V * P);
+	scene_constant.camera_position = { Camera::Instance().GetEye().x,Camera::Instance().GetEye().y,Camera::Instance().GetEye().z,0 };
 
-	cbScene.lightDirection = rc.lightDirection;
-	dc->UpdateSubresource(sceneConstantBuffer.Get(), 0, 0, &cbScene, 0, 0);
+	light_constant.directional_light_direction = rc.lightDirection;
+	light_constant.directional_light_color = { 1,1,1,1 };
+	light_constant.ambient_color = { 0.1f,0.1f,0.1f,1.0f };
+	dc->UpdateSubresource(scene_constant_buffer.Get(), 0, 0, &scene_constant, 0, 0);
+	dc->UpdateSubresource(light_constant_buffer.Get(), 0, 0, &light_constant, 0, 0);
 }
 
 // 描画
-void LambertShader::Draw(ID3D11DeviceContext* dc, const Model* model)
+void LambertShader::Draw(ID3D11DeviceContext* dc, const Model* model, DirectX::XMFLOAT4 color)
 {
 	const ModelResource* resource = model->GetResource();
 	const std::vector<Model::Node>& nodes = model->GetNodes();
@@ -231,7 +278,7 @@ void LambertShader::Draw(ID3D11DeviceContext* dc, const Model* model)
 		for (const ModelResource::Subset& subset : mesh.subsets)
 		{
 			CbSubset cbSubset;
-			cbSubset.materialColor = subset.material->color;
+			cbSubset.materialColor = color;
 			dc->UpdateSubresource(subsetConstantBuffer.Get(), 0, 0, &cbSubset, 0, 0);
 			dc->PSSetShaderResources(0, 1, subset.material->shaderResourceView.GetAddressOf());
 			dc->PSSetSamplers(0, 1, samplerState.GetAddressOf());

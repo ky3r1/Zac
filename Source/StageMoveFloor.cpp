@@ -1,8 +1,20 @@
 #include "StageMoveFloor.h"
 
 //コンストラクタ
-StageMoveFloor::StageMoveFloor()
+StageMoveFloor::StageMoveFloor(int category)
 {
+    switch (category)
+    {
+    case 0:
+        scale.x = scale.z = 3.0f;
+        scale.y = 0.5f;
+        position = { 0, 1, 3 };
+        UpdateTransform();
+        start = position;
+        goal = { 10, 2, 3 };
+        torque = { 0, 1.0f, 0 };
+        break;
+    }
     scale.x = scale.z = 3.0f;
     scale.y = 0.5f;
 
@@ -54,7 +66,7 @@ void StageMoveFloor::Update(float elapsedTime)
 
     //行列更新
     UpdateTransform();
-#ifdef Unit16_OnCharacter
+
     //レイキャスト用にモデル空間行列にするための単位行列を渡す
     const DirectX::XMFLOAT4X4 transformIdentity =
     {
@@ -64,10 +76,6 @@ void StageMoveFloor::Update(float elapsedTime)
         0,0,0,1
     };
     model->UpdateTransform(transformIdentity);
-#else
-    //モデル行列更新
-    model->UpdateTransform(transform);
-#endif
 }
 
 //描画処理
@@ -81,13 +89,13 @@ void StageMoveFloor::Render(ID3D11DeviceContext* dc, Shader* shader)
 //レイキャスト
 bool StageMoveFloor::RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit)
 {
-#ifdef Unit16_OnCharacter
+    //return Collision::IntersectRayVsModel(start, end, model, hit);
+
     //前回のワールド行列の逆行列を求める
     DirectX::XMMATRIX OldTransform;
     OldTransform = DirectX::XMMatrixInverse(nullptr, DirectX::XMLoadFloat4x4(&oldTransform));
 
     //前回のローカル空間でのレイに変換
-    
     //ワールド空間
     DirectX::XMVECTOR WorldStart = DirectX::XMLoadFloat3(&start);//始点
     DirectX::XMVECTOR WorldEnd = DirectX::XMLoadFloat3(&end);//終点
@@ -108,17 +116,14 @@ bool StageMoveFloor::RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFL
         //前回のローカル空間から今回のワールド空間への変換
         //前回から今回にかけて変更された内容が乗っているオブジェクトに反映される。
         DirectX::XMMATRIX Transform = DirectX::XMLoadFloat4x4(&transform);
-
         DirectX::XMVECTOR LocalCharacterPosition = DirectX::XMLoadFloat3(&localHit.position);
-
         DirectX::XMVECTOR WorldCharacterPosition = DirectX::XMVector3TransformCoord(LocalCharacterPosition, Transform);
-
         DirectX::XMStoreFloat3(&hit.position, WorldCharacterPosition);
 
         //回転差分を算出
-        hit.rotation.x = angle.x-oldAngle.x;
-        hit.rotation.y = angle.y-oldAngle.y;
-        hit.rotation.z = angle.z-oldAngle.z;
+        hit.rotation.x = angle.x;
+        hit.rotation.y = angle.y;
+        hit.rotation.z = angle.z;
 
         DirectX::XMVECTOR V = DirectX::XMVectorSubtract(WorldCharacterPosition, WorldStart);
         DirectX::XMVECTOR WorldLength = DirectX::XMVector3Length(V);
@@ -127,17 +132,16 @@ bool StageMoveFloor::RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFL
         return true;
     }
     return false;
-#else
-    return Collision::IntersectRayVsModel(start, end, model, hit);
-#endif
 }
 
-//行列更新処理
-void StageMoveFloor::UpdateTransform()
+void StageMoveFloor::DrawDebugGUI()
 {
-    DirectX::XMMATRIX S = DirectX::XMMatrixScaling(scale.x, scale.y, scale.z);
-    DirectX::XMMATRIX R = DirectX::XMMatrixRotationRollPitchYaw(angle.x, angle.y, angle.z);
-    DirectX::XMMATRIX T = DirectX::XMMatrixTranslation(position.x, position.y, position.z);
-    DirectX::XMMATRIX W = S * R * T;
-    DirectX::XMStoreFloat4x4(&transform, W);
+    if (ImGui::TreeNode("StageMoveFloor"))
+    {
+        ImGui::SliderFloat3("position", &position.x, -5, 5);
+        ImGui::SliderFloat3("scale", &scale.x, 0.001f, 4.0f);
+        ImGui::SliderFloat3("angle", &angle.x, -3.14f, 3.14f);
+        ImGui::TreePop();
+    }
 }
+

@@ -22,10 +22,7 @@ void EnemyManager::Update(float elapsedTime)
 
         delete enemy;
     }
-
     removes.clear();
-
-
     //敵同士の衝突処理
     CollisionEnemyVsEnemies();
 }
@@ -42,6 +39,8 @@ void EnemyManager::Render(ID3D11DeviceContext* context, Shader* shader)
 //エネミー登録
 void EnemyManager::Register(Enemy* enemy)
 {
+    //エネミーにIDを付与
+    enemy->SetId(static_cast<int>(enemies.size()) + 1);
     enemies.emplace_back(enemy);
 }
 
@@ -52,18 +51,6 @@ void EnemyManager::Remove(Enemy* enemy)
     removes.insert(enemy);
 }
 
-//デバッグプリミティブ描画
-void EnemyManager::DrawDebugPrimitive()
-{
-    DebugRenderer* debugRenderer = Graphics::Instance().GetDebugRenderer();
-
-    //衝突判定用のデバッグ球を描画
-    for (Enemy* enemy : enemies)
-    {
-        enemy->DrewDebugPrimitive();
-    }
-}
-
 //エネミー全削除
 void EnemyManager::clear()
 {
@@ -72,6 +59,37 @@ void EnemyManager::clear()
         delete enemy;
     }
     enemies.clear();
+}
+
+//デバッグプリミティブ描画
+void EnemyManager::DrawDebugPrimitive()
+{
+    for (Enemy* enemy : enemies)
+    {
+        enemy->DrewDebugPrimitive();
+    }
+}
+
+//デバッグGUI表示
+void EnemyManager::DrawDebugGUI()
+{
+    ImGui::Begin("Enemy");
+    ImGui::SetNextTreeNodeOpen(true);
+    for (Enemy* enemy : enemies)
+    {
+        enemy->DrawDebugGUI();
+    }
+    ImGui::End();
+}
+
+DirectX::XMFLOAT3 EnemyManager::GetPosition()
+{
+    DirectX::XMFLOAT3 reposition = { 0.0f,0.0f,0.0f };
+    for (Enemy* enemy : enemies)
+    {
+        reposition=enemy->GetPosition();
+    }
+    return reposition;
 }
 
 void EnemyManager::CollisionEnemyVsEnemies()
@@ -88,12 +106,60 @@ void EnemyManager::CollisionEnemyVsEnemies()
             //衝突処理
             DirectX::XMFLOAT3 outPosition;
             if (Collision::IntersectCylinderVsSphere(
-                enemy1->GetPosition(), enemy1->GetRadius(),enemy1->GetHeight(),
-                enemy2->GetPosition(), enemy2->GetRadius(),enemy2->GetHeight(),
+                enemy1->GetPosition(), enemy1->GetRadius(),enemy1->GetHeight(),enemy1->GetWeight(),
+                enemy2->GetPosition(), enemy2->GetRadius(),enemy2->GetHeight(),enemy2->GetWeight(),
                 outPosition))
             {
+                //if(enemy1->GetWeight()<enemy2->GetWeight())enemy1->SetPosition(outPosition);
+                //else enemy2->SetPosition(outPosition);
                 enemy2->SetPosition(outPosition);
             }
         }
     }
+}
+
+// IDからエネミーを取得する
+Enemy* EnemyManager::GetEnemyFromId(int id)
+{
+    for (Enemy* enemy : enemies)
+    {
+        if (enemy->GetId() == id)
+            return enemy;
+    }
+    return nullptr;
+}
+
+Enemy* EnemyManager::NearEnemy(DirectX::XMFLOAT3 position)
+{
+    //最も近い敵を総当たりで探索
+    EnemyManager& enemyManager = EnemyManager::Instance();
+    float current_nearest_distance = FLT_MAX;
+    Enemy* c = nullptr;
+    int enemyCount = enemyManager.GetEnemyCount();
+    DirectX::XMVECTOR Pos = DirectX::XMLoadFloat3(&position);
+    for (int index = 0; index < enemyCount; index++)
+    {
+        Enemy* enemy = EnemyManager::Instance().GetEnemy(index);
+        if (position.x == enemy->GetPosition().x && position.y == enemy->GetPosition().y && position.z == enemy->GetPosition().z)continue;
+        DirectX::XMVECTOR Epos = DirectX::XMLoadFloat3(&enemy->GetPosition());
+        DirectX::XMVECTOR Vec = DirectX::XMVectorSubtract(Epos, Pos);
+        DirectX::XMVECTOR D = DirectX::XMVector3LengthSq(Vec);
+        float d;
+        DirectX::XMStoreFloat(&d, D);
+        if (d < current_nearest_distance)
+        {
+            current_nearest_distance = d;
+            c = enemy;
+        }
+    }
+    return c;
+}
+
+bool EnemyManager::IsAllEnemyAlrealyHit()
+{
+    for (Enemy* enemy : enemies)
+    {
+        if (!enemy->isHit)return false;
+    }
+    return true;
 }

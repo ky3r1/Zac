@@ -1,13 +1,11 @@
 #include "Graphics/Graphics.h"
 #include "Graphics/Model.h"
-//#include "Model.h"
+#include "Model.h"
 #include "ResourceManager.h"
 
 // コンストラクタ
 Model::Model(const char* filename)
 {
-
-
 	//// リソース読み込み
 	//resource = std::make_shared<ModelResource>();
 	//resource->Load(Graphics::Instance().GetDevice(), filename);
@@ -106,9 +104,9 @@ void Model::UpdateTransform(const DirectX::XMFLOAT4X4& transform)
 Model::Node* Model::FindNode(const char* name)
 {
 	//すべてのノードを総当たりで名前比較する
-	for (auto& nodename :nodes )
+	for (auto&& nodename : nodes)
 	{
-		if (strcmp(nodename.name,name) == 0)
+		if (strcmp(nodename.name, name) == 0)
 		{
 			return &nodename;
 		}

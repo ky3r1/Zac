@@ -7,11 +7,8 @@
 class StageMoveFloor :public Stage
 {
 public:
-    StageMoveFloor();
+    StageMoveFloor(int category);
     ~StageMoveFloor();
-
-    void SetPosition(const DirectX::XMFLOAT3& position) { this->position = position; }
-    const DirectX::XMFLOAT3& GetPosition() const { return position; }
 
     //更新処理
     void Update(float elapsedTime)override;
@@ -20,6 +17,8 @@ public:
 
     //レイキャスト
     bool RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit)override;
+    //デバッグ用GUI
+    void DrawDebugGUI()override;
 
     //スタート位置
     void SetStartPoint(const DirectX::XMFLOAT3& start) { this->start = start; }
@@ -27,20 +26,8 @@ public:
     void SetGoalPoint(const DirectX::XMFLOAT3& end) { this->goal = end; }
     //トルク設定
     void SetTrque(const DirectX::XMFLOAT3& torque) { this->torque = torque; }
-//private:
-    void UpdateTransform();
+
 private:
-    Model* model = nullptr;
-    DirectX::XMFLOAT3 position = { 0,0,0 };
-    DirectX::XMFLOAT3 angle = { 0, 0, 0 };
-    DirectX::XMFLOAT3 scale = { 1,1,1 };
-    DirectX::XMFLOAT4X4 transform =
-    {
-        1,0,0,0,
-        0,1,0,0,
-        0,0,1,0,
-        0,0,0,1
-    };
     DirectX::XMFLOAT4X4 oldTransform =
     {
         1,0,0,0,

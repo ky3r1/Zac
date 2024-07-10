@@ -11,7 +11,7 @@ public:
 	~LambertShader() override {}
 
 	void Begin(ID3D11DeviceContext* dc, const RenderContext& rc) override;
-	void Draw(ID3D11DeviceContext* dc, const Model* model) override;
+	void Draw(ID3D11DeviceContext* dc, const Model* model,DirectX::XMFLOAT4 color) override;
 	void End(ID3D11DeviceContext* dc) override;
 
 private:
@@ -32,6 +32,28 @@ private:
 	{
 		DirectX::XMFLOAT4	materialColor;
 	};
+
+
+
+	struct scene_constants
+	{
+		DirectX::XMFLOAT4X4 view_projection;
+		DirectX::XMFLOAT4 options;	//	xy : マウスの座標値, z : タイマー, w : フラグ
+		DirectX::XMFLOAT4 camera_position;
+	};
+	Microsoft::WRL::ComPtr<ID3D11Buffer> scene_constant_buffer;
+
+	struct light_constants
+	{
+		DirectX::XMFLOAT4 ambient_color;
+		DirectX::XMFLOAT4 directional_light_direction;
+		DirectX::XMFLOAT4 directional_light_color;
+	};
+	Microsoft::WRL::ComPtr<ID3D11Buffer> light_constant_buffer;
+
+	D3D11_TEXTURE2D_DESC ramp_texture2dDesc;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> ramp_texture;
+	Microsoft::WRL::ComPtr<ID3D11SamplerState> ramp_sampler_state;
 
 
 	Microsoft::WRL::ComPtr<ID3D11Buffer>			sceneConstantBuffer;

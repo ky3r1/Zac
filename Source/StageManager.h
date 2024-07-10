@@ -24,17 +24,20 @@ public:
     //ステージ登録
     void Register(Stage* stage);
 
+    //ステージ削除
+    void Remove(Stage* stage);
+
+    //デバッグ用GUI
+    void DrawDebugGUI();
+
     //ステージ全削除
     void Clear();
     
     //レイキャスト
     bool RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit);
 
-    ////ステージ数取得
-    //int GetStageCount() const { return static_cast<int>(stages.size()); }
-    ////ステージ取得
-    //Stage* GetStage(int index) { return stages.at(index); }
 
 private:
     std::vector<Stage*> stages;
+    std::set<Stage*> removes;
 };

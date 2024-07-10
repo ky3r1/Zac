@@ -8,21 +8,22 @@
 #include "SceneManager.h"
 #include "SceneLoading.h"
 
+#include "Ui.h"
+
+//#include "StageMapChip.h"
+
+float enemy_score[5];
+float total_score;
 
 void SceneResult::Initialize()
 {
     //スプライト初期化
-    sprite = new Sprite("Data/Sprite/Title.png");
+    sprite = std::unique_ptr<Sprite>(new Sprite("Data/Sprite/Title.png"));
+    //StageMapChip::Instance().SetStageNum(0);
 }
 
 void SceneResult::Finalize()
 {
-    //スプライト終了化
-    if (sprite != nullptr)
-    {
-        delete sprite;
-        sprite = nullptr;
-    }
 }
 
 void SceneResult::Update(float elapsedTime)
@@ -35,6 +36,7 @@ void SceneResult::Update(float elapsedTime)
         | GamePad::BTN_X
         | GamePad::BTN_Y
         ;
+    
     if (gamePad.GetButtonDown() & anyButton)
     {
         SceneManager::Instance().ChangeScene(new SceneLoading(new SceneTitle));
@@ -60,11 +62,16 @@ void SceneResult::Render()
         float screenHeight = static_cast<float>(graphics.GetScreenHeight());
         float textureWidth = static_cast<float>(sprite->GetTextureWidth());
         float textureHeight = static_cast<float>(sprite->GetTextureHeight());
+        DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+        if (outcome)color = DirectX::XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f);
+        else color = DirectX::XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f);
         //タイトルスプライト描画
         sprite->Render(dc,
             0, 0, screenWidth, screenHeight,
             0, 0, textureWidth, textureHeight,
             0,
-            1, 1, 0, 1);
+            color.x, color.y, color.z, color.w);
+
+        Ui::Instance().result(dc);
     }
 }

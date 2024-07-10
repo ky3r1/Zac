@@ -1,13 +1,16 @@
 #include "ProjectileHoming.h"
 
-ProjectileHoming::ProjectileHoming(ProjectileManager* manager)
+ProjectileHoming::ProjectileHoming(ProjectileManager* manager,int category)
     : Projectile(manager)
 {
-    model = new Model("Data/Model/SpikeBall/SpikeBall.mdl");
-    //model = new Model("Data/Model/Sword/Sword.mdl");
-    lineEffect = std::unique_ptr<Effect>(new Effect("Data/Effect/Homing.efkefc"));
+    model = new Model("Data/Model/Bullet/Bullet.mdl");
+
+    color = { 1,0,0,1 };
+
     //モデルが小さいのでスケーリング
     scale.x = scale.y = scale.z = 0.5f; //sword is 3.0
+    radius = 0.5f;
+    this->category = category;
 }
 
 ProjectileHoming::~ProjectileHoming()
@@ -91,7 +94,6 @@ void ProjectileHoming::Update(float elapsedTime)
     {
         Destroy();
     }
-    lineEffect.get()->Play(position, 0.5f);
     //オブジェクト行列を更新
     UpdateTransform();
 
@@ -101,7 +103,7 @@ void ProjectileHoming::Update(float elapsedTime)
 
 void ProjectileHoming::Render(ID3D11DeviceContext* dc, Shader* shader)
 {
-    shader->Draw(dc, model);
+    shader->Draw(dc, model,color);
 }
 
 void ProjectileHoming::Launch(const DirectX::XMFLOAT3& direction,
@@ -113,4 +115,9 @@ void ProjectileHoming::Launch(const DirectX::XMFLOAT3& direction,
     this->target = target;
 
     UpdateTransform();
+}
+
+void ProjectileHoming::DrawDebugGUI()
+{
+
 }

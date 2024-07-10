@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Graphics/Shader.h"
+#include "Graphics/Graphics.h"
 #include "All.h"
 #include "Effect.h"
 
@@ -39,6 +40,12 @@ public:
     //半径取得
     float GetRadius() const { return radius; }
 
+    //エネミーの種類
+    int GetCategory() { return category; }
+
+    virtual void DrawDebugGUI() = 0;
+
+    virtual void ChangeColor(DirectX::XMFLOAT4& color, int category);
 protected:
     //行列更新処理
     void UpdateTransform();
@@ -47,8 +54,11 @@ protected:
     DirectX::XMFLOAT3       position = { 0,0,0 };
     DirectX::XMFLOAT3       direction = { 0,0,1 };
     DirectX::XMFLOAT3       scale = { 1,1,1 };
+    DirectX::XMFLOAT4       color = { 1,1,1,1 };
     DirectX::XMFLOAT4X4     transform = { 1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1 };
     ProjectileManager*      manager = nullptr;
     float                   radius = 0.5f;
+    //エネミーの種類
+    int category;
     std::unique_ptr<Effect> lineEffect;
 };

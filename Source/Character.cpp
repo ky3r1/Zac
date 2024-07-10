@@ -1,17 +1,21 @@
 #include "Character.h"
 #include "StageManager.h"
+//#include "StageMapChip.h"
 #include "Mathf.h"
+#include "ProjectileManager.h"
+#include "ProjectileStraight.h"
+#include "ProjectileHoming.h"
+#include "EnemyManager.h"
+
 
 //行列更新処理
 void Character::UpdateTransform()
 {
     //スケール行列を作成
     DirectX::XMMATRIX S = DirectX::XMMatrixScaling(scale.x, scale.y, scale.z);
+    //DirectX::XMMATRIX S = DirectX::XMMatrixScaling(0.1, 0.1, 0.1);
     //回転行列を作成
-    DirectX::XMMATRIX X = DirectX::XMMatrixRotationX(angle.x);
-    DirectX::XMMATRIX Y = DirectX::XMMatrixRotationY(angle.y);
-    DirectX::XMMATRIX Z = DirectX::XMMatrixRotationZ(angle.z);
-    DirectX::XMMATRIX R = Y * X * Z;
+    DirectX::XMMATRIX R = DirectX::XMMatrixRotationRollPitchYaw(angle.x, angle.y, angle.z);
     //位置行列を作成
     DirectX::XMMATRIX T = DirectX::XMMatrixTranslation(position.x, position.y, position.z);
     //3つの行列を組み合わせ、ワールド行列を作成
@@ -28,10 +32,6 @@ void Character::Jump(float speed)
 
 void Character::Move(float vx, float vz, float speed)
 {
-    /*speed *= elapsedTime;
-    position.x += vx * speed;
-    position.z += vz * speed;*/
-
     //移動方向ベクトル
     moveVecX = vx;
     moveVecZ = vz;
@@ -79,7 +79,6 @@ void Character::Turn(float elapsedTime, float vx, float vz, float speed)
     {
         angle.y -= rot;
     }
-
 }
 
 //速力処理更新
@@ -101,6 +100,7 @@ void Character::UpdateVelocity(float elapsedTime)
     UpdateHorizontalMove(elapsedTime);
 }
 
+//無敵時間
 void Character::UpdateInvincibleTime(float elapsedTime)
 {
     if (invincibleTimer > 0.0f)
@@ -109,33 +109,34 @@ void Character::UpdateInvincibleTime(float elapsedTime)
     }
 }
 
+//ダメージを与える
 bool Character::ApplyDamage(int damage, float invincibleTime)
 {
-        //　ダメージが０の場合は健康状態を変更する必要がない
-        if (damage == 0) return false;
+    //　ダメージが０の場合は健康状態を変更する必要がない
+    if (damage == 0) return false;
 
-        //死亡している場合は健康状態を変更しない
-        if (health <= 0) return false;
-        if (invincibleTimer <= 0)
+    //死亡している場合は健康状態を変更しない
+    if (health <= 0) return false;
+    if (invincibleTimer <= 0)
+    {
+        //ダメージ処理
+        health -= damage;
+        invincibleTimer = invincibleTime;
+        //死亡通知
+        if (health <= 0)
         {
-            //ダメージ処理
-            health -= damage;
-            invincibleTimer = invincibleTime;
-            //死亡通知
-            if (health <= 0)
-            {
-                OnDead();
-            }
-            else
-            {
-                OnDamaged();
-            }
-
-            //健康状態が変更した場合はtrueを返す
-            return true;
+            OnDead();
         }
+        else
+        {
+            OnDamaged();
+        }
+        //健康状態が変更した場合はtrueを返す
+        return true;
+    }
 }
 
+//衝撃を与える
 void Character::AddImpulse(const DirectX::XMFLOAT3& impulse)
 {
     //速力に力を加える
@@ -144,10 +145,20 @@ void Character::AddImpulse(const DirectX::XMFLOAT3& impulse)
     velocity.z += impulse.z;
 }
 
+void Character::DrawDebugGUI()
+{
+}
+
+//初期化
+void Character::Clear()
+{
+    health = maxHealth;
+}
+
 //垂直速力処理
 void Character::UpdateVerticalVelocity(float elapsedFrame)
 {
-    //重力処理
+    ////重力処理
     velocity.y += gravity * elapsedFrame;
 }
 
@@ -161,7 +172,7 @@ void Character::UpdateVerticalMove(float elapsedTime)
 
     //キャラのY軸方向となる法線ベクトル
     DirectX::XMFLOAT3 normal = { 0,1,0 };
-    
+
     //落下中
     if (my < 0.0f)
     {
@@ -174,16 +185,16 @@ void Character::UpdateVerticalMove(float elapsedTime)
         HitResult hit;
         if (StageManager::Instance().RayCast(start, end, hit))
         {
+            //地面に接地している
+
             //法線ベクトル取得
             normal = hit.normal;
 
-            //地面に接地している
-#ifdef Unit16_OnCharacter
             position = hit.position;
-            angle.y += hit.rotation.y;
-#else
+            //if (position.y > 0.5)angle = hit.rotation;
+
             position.y = hit.position.y;
-#endif
+
 
             //傾斜率の計算
             float normalLengthXZ = sqrtf(hit.normal.x + hit.normal.z * hit.normal.z);
@@ -218,8 +229,8 @@ void Character::UpdateVerticalMove(float elapsedTime)
         X = atan2f(normal.z, normal.y);
         Z = -atan2f(normal.x, normal.y);
 
-        angle.x=Mathf::Lerp(angle.x, X, 0.1f);
-        angle.z=Mathf::Lerp(angle.z, Z, 0.1f);
+        angle.x = Mathf::Lerp(angle.x, X, 0.1f);
+        angle.z = Mathf::Lerp(angle.z, Z, 0.1f);
     }
 }
 
@@ -270,7 +281,7 @@ void Character::UpdateHorizontalVelocity(float elapsedFrame)
         {
             velocity.x = 5.0f;
         }
-        if (velocity.z < -5.0f )
+        if (velocity.z < -5.0f)
         {
             velocity.z = -5.0f;
         }
@@ -296,7 +307,7 @@ void Character::UpdateHorizontalVelocity(float elapsedFrame)
             velocity.x += moveVecX * acceleration;
             velocity.z += moveVecZ * acceleration;
 
-            
+
 
             //最大速度制限
             if (length > maxMoveSpeed)
@@ -356,7 +367,7 @@ void Character::UpdateHorizontalMove(float elapsedTime)
 
             DirectX::XMVECTOR O = DirectX::XMVectorAdd(End, DirectX::XMVectorScale(DirectX::XMVector3Normalize(Normal), DirectX::XMVectorGetX(Dot)));
             DirectX::XMFLOAT3 o;
-            DirectX::XMStoreFloat3(&o, O);            
+            DirectX::XMStoreFloat3(&o, O);
 
             DirectX::XMFLOAT3 collectPosition = position;
             collectPosition.x = o.x;
@@ -375,4 +386,317 @@ void Character::UpdateHorizontalMove(float elapsedTime)
             position.z += mz;
         }
     }
+}
+
+void Character::ProjectileDirection(ID3D11DeviceContext* dc, const DirectX::XMFLOAT4X4& view, const DirectX::XMFLOAT4X4& projection)
+{
+    //ビューポート
+    D3D11_VIEWPORT viewport;
+    UINT numViewports = 1;
+    dc->RSGetViewports(&numViewports, &viewport);
+
+    //変換行列
+    DirectX::XMMATRIX View = DirectX::XMLoadFloat4x4(&view);
+    DirectX::XMMATRIX Projection = DirectX::XMLoadFloat4x4(&projection);
+    DirectX::XMMATRIX World = DirectX::XMMatrixIdentity();
+
+
+    //エネミー配置処理
+    GamePad& gamePad = Input::Instance().GetGamePad();
+    Mouse& mouse = Input::Instance().GetMouse();
+    /*if (gamePad.GetButtonDown() & GamePad::BTN_A)
+    {*/
+    //マウスカーソル座標取得
+    DirectX::XMFLOAT3 screenPosition;
+    screenPosition.x = static_cast<float>(mouse.GetPositionX());
+    screenPosition.y = 0;
+    screenPosition.z = static_cast<float>(mouse.GetPositionY());
+
+    DirectX::XMVECTOR ScreenCursor = DirectX::XMLoadFloat3(&screenPosition);
+
+    DirectX::XMVECTOR WorldPosition = DirectX::XMVector3Unproject
+    (
+        ScreenCursor,
+        viewport.TopLeftX,
+        viewport.TopLeftY,
+        viewport.Width,
+        viewport.Height,
+        viewport.MinDepth,
+        viewport.MaxDepth,
+        Projection,
+        View,
+        World
+    );
+    DirectX::XMFLOAT3 world_position_start;
+    DirectX::XMStoreFloat3(&world_position_start, WorldPosition);
+
+    screenPosition.z = 1;
+    ScreenCursor = DirectX::XMLoadFloat3(&screenPosition);
+    WorldPosition = DirectX::XMVector3Unproject
+    (
+    	ScreenCursor,
+    	viewport.TopLeftX,
+    	viewport.TopLeftY,
+    	viewport.Width,
+    	viewport.Height,
+    	viewport.MinDepth,
+    	viewport.MaxDepth,
+    	Projection,
+    	View,
+    	World
+    );
+    DirectX::XMFLOAT3 world_position_end;
+    DirectX::XMStoreFloat3(&world_position_end, WorldPosition);
+
+    HitResult hit;
+    StageMain stage_main;
+    if (stage_main.RayCast(world_position_start, world_position_end, hit))
+    {
+    /*EnemyManager& enemyManager = EnemyManager::Instance();
+    EnemySlime* slime = new EnemySlime(GREEN, 0);
+    slime->SetPosition(DirectX::XMFLOAT3(world_position_start.x, world_position_start.y, world_position_start.z));
+    enemyManager.Register(slime);*/
+    }
+    //}
+}
+
+//DelayTimeの更新
+void Character::UpdateDelayTime(bool& checker, int& time, int delaytime)
+{
+    //checkerがfalse場合はタイムを減らす
+    //checkerがtrue場合はcheckerをtrueにしてタイムをリセット
+    if (!checker)
+    {
+        time--;
+    }
+    if (time < 0)
+    {
+        checker = true;
+        time = delaytime;
+    }
+}
+
+
+//弾とキャラクターの衝突判定
+void Character::CollisionProjectileVsCharacter(Character* character, Effect hiteffect)
+{
+    //すべての弾丸とtargetを総当たりで衝突処理
+    int projectileCount = ProjectileManager::Instance().GetProjectileCount();
+    for (int i = 0; i < projectileCount; ++i)
+    {
+        //弾丸取得
+        Projectile* projectile = ProjectileManager::Instance().GetProjectile(i);
+         EnemyManager& enemyManager = EnemyManager::Instance();
+         int enemyCount = enemyManager.GetEnemyCount();
+
+        //衝突判定
+        DirectX::XMFLOAT3 outPosition;
+        if (Collision::IntersectSphereVsCylinder(
+            projectile->GetPosition(),
+            projectile->GetRadius(),
+            character->GetPosition(),
+            character->GetRadius(),
+            character->GetHeight(),
+            outPosition))
+        {
+            //衝突した弾と弾を出したキャラクター(引数のcharacterではない)のカテゴリーが同じ場合
+            if (category == projectile->GetCategory())
+            {
+                //弾丸破棄
+                /*if(pro_type == NORMAL)
+                {
+                    if (category == PLAYERCATEGORY)
+                    {
+                        projectile->Destroy();
+                    }
+                }*/
+
+                if (projectile_category == PENETRATION)
+                {
+
+                    if (category == PLAYERCATEGORY && penetration_count == 0)
+                    {
+                        projectile->Destroy();
+                    }
+                }
+                if (projectile_category == RICOCHET)
+                {
+                    //if(invincible==true){}
+                    for (int i = 0; i < enemyCount; i++)
+                    {
+                        Enemy* enemy = EnemyManager::Instance().GetEnemy(i);
+                        Enemy* ne = EnemyManager::Instance().NearEnemy(enemy->GetPosition());
+                        if (enemy->isHit)break;
+                        enemy->isHit = true;
+
+                        if (invincible == true)break;
+                        invincible = true;
+                        ProjectileRicochetShotting(character->GetPosition(), PLAYERCATEGORY, 0.0f, FRONT);
+                    }
+                    if (invincible == false)
+                    {
+                        if (ricochet_count < 0)
+                        {
+                            projectile->Destroy();
+                            for (int i = 0; i < enemyCount; i++)
+                            {
+                                Enemy* enemy = EnemyManager::Instance().GetEnemy(i);
+                                if (enemy->isHit)
+                                {
+                                    enemy->isHit = false;
+                                }
+                            }
+                        }
+                    }
+
+                }
+                if (character->ApplyDamage(1, 0.5f))
+                {
+                    //吹き飛ばす
+                    {
+                        DirectX::XMFLOAT3 impulse;
+                        //吹き飛ばす力
+                        const float power = 2.0f;
+
+                        //敵の位置
+                        DirectX::XMVECTOR eVec = DirectX::XMLoadFloat3(&character->GetPosition());
+                        //弾の位置
+                        DirectX::XMVECTOR pVec = DirectX::XMLoadFloat3(&projectile->GetPosition());
+                        //弾から敵への方向ベクトルを計算（敵 - 弾）
+                        auto v = DirectX::XMVectorSubtract(eVec, pVec);
+                        //方向ベクトルを正規化
+                        v = DirectX::XMVector3Normalize(v);
+
+                        DirectX::XMFLOAT3 vec;
+                        DirectX::XMStoreFloat3(&vec, v);
+
+                        impulse.x = power * vec.x;
+                        impulse.y = power * 0.5f;
+                        impulse.z = power * vec.z;
+                        penetration_count--;
+                        ricochet_count--;
+
+                        character->AddImpulse(impulse);
+                    }
+                    //ヒットエフェクト再生
+                    {
+                        DirectX::XMFLOAT3 e = character->GetPosition();
+                        e.y += character->GetHeight() * 0.5f;
+                        hiteffect.Play(e, 2.0f);
+                    }
+                }
+                else
+                {
+                    //弾丸破棄
+                    projectile->Destroy();
+                }
+            }
+        }
+    }
+}
+
+//弾丸発射処理
+void Character::ProjectileStraightShotting(int category, float angle, int vector)
+{
+    //発射
+    ProjectileStraight* projectile{};
+    //前方向
+    DirectX::XMFLOAT3 dir;
+    //DirectX::XMFLOAT3 axis = { 0,1,0 };
+    //DirectX::XMVECTOR Axis;
+    //DirectX::XMFLOAT3 s={ scale.x / 0.1f,scale.y / 0.1f ,scale.z / 0.1f };
+    DirectX::XMFLOAT3 s = { 0.1f / scale.x,0.1f / scale.y ,0.1f / scale.z };
+
+    dir.x = vector * transform._31 * 100.0f * s.x;
+    dir.y = 0.0f;
+    dir.z = vector * transform._33 * 100.0f * s.z;
+    DirectX::XMFLOAT3 right;
+    right.x = transform._11 * 100.0f * s.x;
+    right.y = 0.0f;
+    right.z = transform._13 * 100.0f * s.z;
+    //発射位置（プレイヤーの腰当たり）
+    DirectX::XMFLOAT3 pos;
+    pos.x = position.x;
+    pos.y = position.y + height * 0.5f;
+    pos.z = position.z;
+
+    DirectX::XMVECTOR Right = DirectX::XMLoadFloat3(&right);
+    Right = DirectX::XMVectorScale(Right, angle);
+    DirectX::XMVECTOR Dir = DirectX::XMLoadFloat3(&dir);
+    DirectX::XMVECTOR Pos = DirectX::XMLoadFloat3(&pos);
+    DirectX::XMVECTOR Ev = DirectX::XMVectorAdd(Dir, Right);
+    DirectX::XMVECTOR Ep = DirectX::XMVectorAdd(Pos, Ev);
+    Ep = DirectX::XMVectorSubtract(Ep, Pos);
+    DirectX::XMFLOAT3 ep;
+    DirectX::XMStoreFloat3(&ep, Ep);
+    dir.x = ep.x;
+    dir.y = 0.0f;
+    dir.z = ep.z;
+    //projectile = new ProjectileStraight(&ProjectileManager::Instance(), category,lineEffect.get());
+    projectile = new ProjectileStraight(&ProjectileManager::Instance(), category);
+    projectile->Launch(dir, pos);
+}
+
+void Character::ProjectileRicochetShotting(DirectX::XMFLOAT3 ne,int category, float angle, int vector)
+{
+    Ricochet(ne, vector);
+}
+
+
+void Character::Ricochet(DirectX::XMFLOAT3 ne, int vector)
+{
+    //発射
+    ProjectileStraight* projectile{};
+    //前方向
+    DirectX::XMFLOAT3 dir;
+    //DirectX::XMFLOAT3 axis = { 0,1,0 };
+    //DirectX::XMVECTOR Axis;
+    //DirectX::XMFLOAT3 s={ scale.x / 0.1f,scale.y / 0.1f ,scale.z / 0.1f };
+    DirectX::XMFLOAT3 s = { 0.1f / scale.x,0.1f / scale.y ,0.1f / scale.z };
+
+
+    Enemy* ne1 = EnemyManager::Instance().NearEnemy(position);
+
+    Enemy* ne2 = EnemyManager::Instance().NearEnemy(ne);
+
+    if (ne2 == nullptr)return;
+    DirectX::XMVECTOR NE1 = DirectX::XMLoadFloat3(&ne);
+    DirectX::XMVECTOR NE2 = DirectX::XMLoadFloat3(&ne2->GetPosition());
+    DirectX::XMVECTOR Vec = DirectX::XMVector3Normalize(DirectX::XMVectorSubtract(NE2, NE1));
+    DirectX::XMFLOAT3 ND;
+    DirectX::XMStoreFloat3(&ND, Vec);
+
+    dir.x = vector * ND.x * 100.0f * s.x;
+    dir.y = 0.0f;
+    dir.z = vector * ND.z * 100.0f * s.z;
+    DirectX::XMFLOAT3 right;
+    right.x = ND.x * 100.0f * s.x;
+    right.y = 0.0f;
+    right.z = ND.z * 100.0f * s.z;
+    //発射位置（プレイヤーの腰当たり）
+    DirectX::XMFLOAT3 pos;
+    pos.x = ne.x;
+    pos.y = ne.y + height * 0.5f;
+    pos.z = ne.z;
+
+    DirectX::XMVECTOR Right = DirectX::XMLoadFloat3(&right);
+    Right = DirectX::XMVectorScale(Right, 0.0f);
+    DirectX::XMVECTOR Dir = DirectX::XMLoadFloat3(&dir);
+    DirectX::XMVECTOR Pos = DirectX::XMLoadFloat3(&pos);
+    DirectX::XMVECTOR Ev = DirectX::XMVectorAdd(Dir, Right);
+    DirectX::XMVECTOR Ep = DirectX::XMVectorAdd(Pos, Ev);
+    Ep = DirectX::XMVectorSubtract(Ep, Pos);
+    DirectX::XMFLOAT3 ep;
+    DirectX::XMStoreFloat3(&ep, Ep);
+    dir.x = ep.x;
+    dir.y = 0.0f;
+    dir.z = ep.z;
+    projectile = new ProjectileStraight(&ProjectileManager::Instance(), category);
+    projectile->Launch(dir, pos);
+}
+
+
+void Character::ProjectileStraightShotting(float angle, int vector)
+{
+    ProjectileStraightShotting(category, angle, vector);
 }

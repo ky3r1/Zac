@@ -1,6 +1,7 @@
 #include "Graphics/Graphics.h"
 #include "SceneTitle.h"
 #include "SceneGame.h"
+#include "SceneTutorial.h"
 #include "SceneManager.h"
 #include "SceneLoading.h"
 #include "Input/Input.h"
@@ -9,17 +10,13 @@
 void SceneTitle::Initialize()
 {
     //スプライト初期化
-    sprite = new Sprite("Data/Sprite/Title.png");
+    sprite = std::unique_ptr<Sprite>(new Sprite("Data/Sprite/Title.png"));
+    test=std::unique_ptr<Sprite>(new Sprite("Data/Sprite/check.png"));
+    ui = std::unique_ptr<Ui>(new Ui);
 }
 
 void SceneTitle::Finalize()
 {
-    //スプライト終了化
-    if (sprite != nullptr)
-    {
-        delete sprite;
-        sprite = nullptr;
-    }
 }
 
 void SceneTitle::Update(float elapsedTime)
@@ -40,6 +37,7 @@ void SceneTitle::Update(float elapsedTime)
 
 void SceneTitle::Render()
 {
+
     Graphics& graphics = Graphics::Instance();
     ID3D11DeviceContext* dc = graphics.GetDeviceContext();
     ID3D11RenderTargetView* rtv = graphics.GetRenderTargetView();
@@ -62,6 +60,7 @@ void SceneTitle::Render()
             0, 0, screenWidth, screenHeight,
             0, 0, textureWidth, textureHeight,
             0,
-            1, 1, 1, 1);
+            1, 1, 1, 1); 
+        ui.get()->title(dc);
     }
 }

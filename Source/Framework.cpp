@@ -20,7 +20,9 @@ Framework::Framework(HWND hWnd)
 	, graphics(hWnd)
 {
 	//エフェクトマネージャー初期化
-	EffectManager::Instance().Initialize();
+	EffectManager::Instance().Initialize(); graphics.GetDeviceContext();
+	EffectManager::Instance().Initialize(); graphics.GetDeviceContext();
+	EffectManager::Instance().Initialize(); graphics.GetDeviceContext();
 
 	//シーン初期化
 	//sceneGame.Initialize();
@@ -117,7 +119,7 @@ int Framework::Run()
 			timer.Tick();
 			CalculateFrameStats();
 
-			float elapsedTime = syncInterval == 0
+			float elapsedTime = syncInterval == 1
 				? timer.TimeInterval()
 				: syncInterval / 60.0f
 				;

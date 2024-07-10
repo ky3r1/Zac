@@ -11,6 +11,15 @@ public:
     ProjectileManager();
     ~ProjectileManager();
 
+public:
+    //唯一のインスタンス取得
+    static ProjectileManager& Instance()
+    {
+        static ProjectileManager instance;
+        return instance;
+    }
+
+
     //更新処理
     void Update(float elapsedTime);
 
@@ -19,6 +28,9 @@ public:
 
     //デバッグプリミティブ描画
     void DrawDebugPrimitive();
+
+    //デバッグプリミティブ描画
+    void DrawDebugGUI();
 
     //弾丸登録
     void Register(Projectile* projectile);

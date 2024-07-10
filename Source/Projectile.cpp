@@ -1,6 +1,6 @@
 #include "Projectile.h"
 #include "ProjectileManager.h"
-#include "Graphics/Graphics.h"
+
 
 Projectile::Projectile(ProjectileManager* manager) : manager(manager)
 {
@@ -17,31 +17,35 @@ void Projectile::DrawDebugPrimitive()
 {
     DebugRenderer* debugRenderer = Graphics::Instance().GetDebugRenderer();
 
+    switch (category)
+    {
+    case PLAYERCATEGORY:
+        debugRenderer->DrawSphere(position, radius, DirectX::XMFLOAT4(1, 0, 0, 1));
+        break;
+    case ENEMYCATEGORY:
+        debugRenderer->DrawSphere(position, radius, DirectX::XMFLOAT4(0, 1, 0, 1));
+        break;
+    default:
+        break;
+    }
+}
 
-    debugRenderer->DrawSphere(position, radius, DirectX::XMFLOAT4(1, 0, 0, 1));
-
+void Projectile::ChangeColor(DirectX::XMFLOAT4& color, int category)
+{
+    switch (category)
+    {
+    case PLAYERCATEGORY:
+        color = { 1,0,0,1 };
+        break;
+    case ENEMYCATEGORY:
+        color = { 0,1,0,1 };
+        break;
+    }
 }
 
 //行列更新処理
 void Projectile::UpdateTransform()
 {
-    /*transform._11 = scale.x;
-    transform._12 = 0.0f;
-    transform._13 = 0.0f;
-    transform._14 = 0.0f;
-    transform._21 = 0.0f;
-    transform._22 = scale.y;
-    transform._23 = 0.0f;
-    transform._24 = 0.0f;
-    transform._31 = 0.0f;
-    transform._32 = 0.0f;
-    transform._33 = scale.z;
-    transform._34 = 0.0f;
-    transform._41 = position.x;
-    transform._42 = position.y;
-    transform._43 = position.z;
-    transform._44 = 1.0f;*/
-
     DirectX::XMVECTOR Front, Up, Right;
 
     //前ベクトルを算出

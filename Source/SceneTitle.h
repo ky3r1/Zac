@@ -2,6 +2,7 @@
 
 #include "Graphics/Sprite.h"
 #include "Scene.h"
+#include "Ui.h"
 
 //タイトルシーン
 class SceneTitle : public Scene
@@ -23,5 +24,7 @@ public:
     void Render() override;
 
 private:
-    Sprite* sprite = nullptr;
+    std::unique_ptr<Sprite> sprite = nullptr;
+    std::unique_ptr<Sprite> test = nullptr;
+    std::unique_ptr<Ui> ui = nullptr;
 };

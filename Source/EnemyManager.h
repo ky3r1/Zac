@@ -34,14 +34,28 @@ public:
     //デバッグプリミティブ描画
     void DrawDebugPrimitive();
 
+    //デバッグ用GUI
+    void DrawDebugGUI();
+
+    void EnemyMove(Player* player);
+
     //エネミー数取得
     int GetEnemyCount() const { return static_cast<int>(enemies.size()); }
 
     //エネミー取得
     Enemy* GetEnemy(int index) { return enemies.at(index); }
 
+    DirectX::XMFLOAT3 GetPosition();
+
     //エネミー全削除
     void clear();
+
+    // 付与したIDからエネミーを取得
+    Enemy* GetEnemyFromId(int id);
+
+    Enemy* NearEnemy(DirectX::XMFLOAT3 position);
+
+    bool IsAllEnemyAlrealyHit();
 
 private:
     //エネミー同士の衝突処理

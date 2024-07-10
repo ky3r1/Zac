@@ -1,120 +1,209 @@
-#include "Graphics/Graphics.h"
-#include "SceneGame.h"
-#include "Camera.h"
-#include "EnemyManager.h"
-#include "EnemySlime.h"
-#include "EffectManager.h"
-#include "Input/Input.h"
+ï»¿#include "SceneGame.h"
 
+//CameraInclude
+#include "Camera.h"
+
+//CharacterInclude
+#include "EnemyManager.h"
+#include "Enemy01.h"
+#include "Enemy02.h"
+#include "Enemy03.h"
+#include "EnemyBoss.h"
+#include "EffectManager.h"
+#include "MouseManager.h"
+
+//SceneIncldue
+#include "SceneManager.h"
+#include "SceneLoading.h"
+#include "SceneResult.h"
+
+//StageIncldue
 #include "StageManager.h"
 #include "StageMain.h"
-#include "StageMoveFloor.h"
+//#include "StageMapChip.h"
+//#include "StageMapChip.h"
+
+#include "Input/Input.h"
+#include "Ui.h"
 
 
-// ‰Šú‰»
+// åˆæœŸåŒ–
 void SceneGame::Initialize()
 {
-	//ƒXƒe[ƒW‰Šú‰»
-	StageManager& stageManager = StageManager::Instance();
-
+	//ã‚¹ãƒ†ãƒ¼ã‚¸åˆæœŸåŒ–
+#ifdef ALLSTAGE
 	//Main
+	StageManager& stageManager = StageManager::Instance();
 	StageMain* stageMain = new StageMain();
 	stageManager.Register(stageMain);
 
-#ifdef StageMove
-	//Movefloor
-	StageMoveFloor* stageMoveFloor = new StageMoveFloor();
-	stageMoveFloor->SetPosition(DirectX::XMFLOAT3(0, 1, 3));
-	stageMoveFloor->UpdateTransform();
-	stageMoveFloor->SetStartPoint(stageMoveFloor->GetPosition());
-	stageMoveFloor->SetGoalPoint(DirectX::XMFLOAT3(10, 2, 3));
-	stageMoveFloor->SetTrque(DirectX::XMFLOAT3(0, 1.0f, 0));
-	stageManager.Register(stageMoveFloor);
-#endif // StageMove
+#ifdef STAGEMOVE
+	for (int index = 0; index < 1; ++index)
+	{
+		StageMoveFloor* stageMoveFloor = new StageMoveFloor(index);
+		stageManager.Register(stageMoveFloor);
+	}
+#endif // STAGEMOVE
 
-	gauge = new Sprite;
-	player = new Player();
+#ifdef STAGEWALL
+	for (int index = 0; index < 2; ++index)
+	{
+		StageWall* stageWall = new StageWall(index);
+		stageManager.Register(stageWall);
+	}
+#endif // STAGEWALL
 
-	//ƒJƒƒ‰‰Šúİ’è
+#endif // ALLSTAGE
+
+
+#ifdef ALLPLAYER
+    player = std::unique_ptr<Player>(new Player);
+#endif // PLAYER
+
+#ifdef HPGAUGE
+	gauge = std::unique_ptr<Sprite>(new Sprite);
+#endif // HPGAUGE
+
+
+	//ã‚«ãƒ¡ãƒ©åˆæœŸè¨­å®š
 	Graphics& graphics = Graphics::Instance();
 	Camera& camera = Camera::Instance();
 	camera.SetLookAt(
-		DirectX::XMFLOAT3(0, 10, -10),
+		DirectX::XMFLOAT3(0, 3, 0),
 		DirectX::XMFLOAT3(0, 0, 0),
 		DirectX::XMFLOAT3(0, 1, 0)
 	);
 	camera.SetPerspectiveFov(
-		DirectX::XMConvertToRadians(45),
+		DirectX::XMConvertToRadians(90),
 		graphics.GetScreenWidth() / graphics.GetScreenHeight(),
 		0.1f,
-		1000.0f
+		100.0f
 	);
-	//ƒJƒƒ‰ƒRƒ“ƒgƒ[ƒ‰[‰Šú‰»
-	cameraController = new CameraController();
-#ifdef Enemy_Define
-
-#ifdef Slime_Define
-	//ƒGƒlƒ~[‰Šú‰»
-	for (int i = 0; i < 3; i++)
+	//ã‚«ãƒ¡ãƒ©ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼åˆæœŸåŒ–
+	cameraController = std::unique_ptr<CameraController>(new CameraController());
+#ifdef ALLENEMY
+	int index = 0;
+	spown = std::unique_ptr<Spown>(new Spown());
+#ifdef ENEMY01
+	while (index < 1)
 	{
-		EnemySlime* slime = new EnemySlime();
-		slime->SetPosition(DirectX::XMFLOAT3(i * 2.0f, 0, 5));
-		slime->SetTerritory(slime->GetPosition(), 10.0f);
+		//if (index < 3)color = 1;
+		Enemy01* slime = new Enemy01(ENEMYCATEGORY);
+		switch (index)
+		{
+		case 0:
+			slime->SetPosition(DirectX::XMFLOAT3(5.0f, 0, 25));
+			slime->SetWeight(0.0f);
+			break;
+		case 1:
+			slime->SetPosition(DirectX::XMFLOAT3(10.0f, 0, 25));
+			slime->SetWeight(1.0f);
+			break;
+		case 2:
+			slime->SetPosition(DirectX::XMFLOAT3(-5.0f, 0, 25));
+			slime->SetWeight(2.0f);
+			break;
+		case 3:
+			slime->SetPosition(DirectX::XMFLOAT3(-10.0f, 0, 25));
+			slime->SetWeight(3.0f);
+			break;
+		case 4:
+			slime->SetPosition(DirectX::XMFLOAT3(0.0f, 0, 25));
+			slime->SetWeight(4.0f);
+			break;
+			//default:
+			//	slime->SetPosition(DirectX::XMFLOAT3(0.0f, 0, 5));
+	  //          break;
+		}
 		EnemyManager::Instance().Register(slime);
+		index++;
 	}
-#endif // Slime_Define
-
-
-#endif//Enemy_Define
-
+	index = 0;
+#endif // ENEMY01
+#ifdef ENEMY02
+	while (index < 1)
+	{
+		Enemy02* slime = new Enemy02(ENEMYCATEGORY);
+		slime->SetPosition(DirectX::XMFLOAT3(10.0f, 0, 20));
+		EnemyManager::Instance().Register(slime);
+		index++;
+	}
+	index = 0;
+#endif // ENEMY02
+#ifdef ENEMY03
+	while (index < 1)
+	{
+		Enemy03* jammo = new Enemy03(ENEMYCATEGORY);
+		jammo->SetPosition(DirectX::XMFLOAT3(0.0f, 0, 20));
+		EnemyManager::Instance().Register(jammo);
+		index++;
+	}
+	index = 0;
+#endif // ENEMY03
+#ifdef ENEMYBOSS
+	while (index < 1)
+	{
+		EnemyBoss* boss = new EnemyBoss(ENEMYCATEGORY);
+		boss->SetPosition(DirectX::XMFLOAT3(0.0f, 0, 20));
+		EnemyManager::Instance().Register(boss);
+		index++;
+	}
+#endif // ENEMYBOSS
+#endif // ALLENEMY
 }
 
-// I—¹‰»
+// çµ‚äº†åŒ–
 void SceneGame::Finalize()
 {
-	//ƒGƒlƒ~[I—¹‰»
+	Player::Instance().Clear();
+	//ã‚¨ãƒãƒŸãƒ¼çµ‚äº†åŒ–
 	EnemyManager::Instance().clear();
-	if (cameraController != nullptr)
-	{
-		delete cameraController;
-		cameraController = nullptr;
-	}
-
-	if (player != nullptr)
-	{
-		delete player;
-		player = nullptr;
-	}
-
-	if (gauge != nullptr)
-	{
-		delete gauge;
-		gauge = nullptr;
-	}
-
+	//ã‚¹ãƒ†ãƒ¼ã‚¸çµ‚äº†åŒ–
 	StageManager::Instance().Clear();
 }
 
-// XVˆ—
+// æ›´æ–°å‡¦ç†
 void SceneGame::Update(float elapsedTime)
 {
-	//ƒJƒƒ‰ƒRƒ“ƒgƒ[ƒ‰[XVˆ—
-	DirectX::XMFLOAT3 target = player->GetPosition();
+	//ã‚«ãƒ¡ãƒ©ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼æ›´æ–°å‡¦ç†
+	DirectX::XMFLOAT3 target = Player::Instance().GetPosition();
 	target.y += 0.5f;
 	cameraController->SetTarget(target);
 	cameraController->Update(elapsedTime);
 
 	StageManager::Instance().Update(elapsedTime);
-	player->Update(elapsedTime);
 
-	//ƒGƒlƒ~[XVˆ—
+	Graphics& graphics = Graphics::Instance();
+	ID3D11DeviceContext* dc = graphics.GetDeviceContext();
+	MouseManager::GetInstance().MouseTransform(dc, Camera::Instance().GetView(), Camera::Instance().GetProjection());
+
+#ifdef  ALLPLAYER
+	Player::Instance().Update(elapsedTime);
+	if(Player::Instance().GetHealth() <= 0)SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult(false)));
+#endif //  ALLPLAYER
+
+#ifdef SPOWNENEMY
+    spown->Update(elapsedTime);
+	if(spown.get()->GetStageClear())SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult(true)));
+#endif // SPOWNENEMY
+
+
+	//ã‚¨ãƒãƒŸãƒ¼æ›´æ–°å‡¦ç†
 	EnemyManager::Instance().Update(elapsedTime);
 
-	//ƒGƒtƒFƒNƒgXVˆ—
+	//ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæ›´æ–°å‡¦ç†
 	EffectManager::Instance().Update(elapsedTime);
+
+	////ãƒãƒƒãƒ—ã®ãƒŠãƒ³ãƒãƒ¼ãŒå¤‰ã‚ã£ãŸã‚‰SceneGameã‚’èª­ã¿è¾¼ã¿ç›´ã—ã¦ãƒãƒƒãƒ—ã‚’å¤‰ãˆã‚‹
+	//if (StageMapChip::Instance().GetStageNum() != mapcategory)
+	//{
+	//	SceneManager::Instance().ChangeScene(new SceneLoading(new SceneGame));
+	//}
+
+	//font = std::make_unique<Font>(graphics.GetDevice(), ".\\Data\\Font\\MS_Gothic.fnt", 1024);
 }
 
-// •`‰æˆ—
+// æç”»å‡¦ç†
 void SceneGame::Render()
 {
 	Graphics& graphics = Graphics::Instance();
@@ -122,136 +211,129 @@ void SceneGame::Render()
 	ID3D11RenderTargetView* rtv = graphics.GetRenderTargetView();
 	ID3D11DepthStencilView* dsv = graphics.GetDepthStencilView();
 
-	// ‰æ–ÊƒNƒŠƒA•ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒgİ’è
-	FLOAT color[] = { 0.0f, 0.0f, 0.5f, 1.0f };	// RGBA(0.0`1.0)
+	// ç”»é¢ã‚¯ãƒªã‚¢ï¼†ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆè¨­å®š
+	FLOAT color[] = { 0.4f, 0.4f, 0.4f, 1.0f };	// RGBA(0.0ï½1.0)
 	dc->ClearRenderTargetView(rtv, color);
 	dc->ClearDepthStencilView(dsv, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	dc->OMSetRenderTargets(1, &rtv, dsv);
 
-	// •`‰æˆ—
+	// æç”»å‡¦ç†
 	RenderContext rc;
-	rc.lightDirection = { 0.0f, -1.0f, 0.0f, 0.0f };	// ƒ‰ƒCƒg•ûŒüi‰º•ûŒüj
+	rc.lightDirection = { 0.0f, -1.0f, 0.0f, 0.0f };	// ãƒ©ã‚¤ãƒˆæ–¹å‘ï¼ˆä¸‹æ–¹å‘ï¼‰
 
-	//ƒJƒƒ‰ƒpƒ‰ƒ[ƒ^İ’è
+	//ã‚«ãƒ¡ãƒ©ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿è¨­å®š
 	Camera& camera = Camera::Instance();
 	rc.view = camera.GetView();
 	rc.projection = camera.GetProjection();
 
-	// 3Dƒ‚ƒfƒ‹•`‰æ
+
+	// 3Dãƒ¢ãƒ‡ãƒ«æç”»
 	{
 		Shader* shader = graphics.GetShader();
 		shader->Begin(dc, rc);
-		//ƒXƒe[ƒW•`‰æ
+		//ã‚¹ãƒ†ãƒ¼ã‚¸æç”»
 		StageManager::Instance().Render(dc, shader);
 
-		//ƒGƒlƒ~[•`‰æ
+		//ã‚¨ãƒãƒŸãƒ¼æç”»
 		EnemyManager::Instance().Render(dc, shader);
 
-		//ƒvƒŒƒCƒ„[•`‰æ
-		player->Render(dc, shader);
+		//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼æç”»
+#ifdef  ALLPLAYER
+		Player::Instance().Render(dc, shader);
+#endif //  ALLPLAYER
 		shader->End(dc);
-
 	}
 
-	//3DƒGƒtƒFƒNƒg•`‰æ
+	//3Dã‚¨ãƒ•ã‚§ã‚¯ãƒˆæç”»
 	{
 		EffectManager::Instance().Render(rc.view, rc.projection);
 	}
 
-	// 3DƒfƒoƒbƒO•`‰æ
+	// 3Dãƒ‡ãƒãƒƒã‚°æç”»
 	{
-		//ƒvƒŒƒCƒ„[ƒfƒoƒbƒOƒvƒŠƒ~ƒeƒBƒu•`‰æ
-		player->DrawDebugPrimitive();
-
-		//ƒGƒlƒ~[ƒfƒoƒbƒOƒvƒŠƒ~ƒeƒBƒu•`‰æ
+#ifdef  DEBUGIMGUI
+		//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒ‡ãƒãƒƒã‚°ãƒ—ãƒªãƒŸãƒ†ã‚£ãƒ–æç”»
+		Player::Instance().DrawDebugPrimitive();
+		//ã‚¨ãƒãƒŸãƒ¼ãƒ‡ãƒãƒƒã‚°ãƒ—ãƒªãƒŸãƒ†ã‚£ãƒ–æç”»
 		EnemyManager::Instance().DrawDebugPrimitive();
-		
-		// ƒ‰ƒCƒ“ƒŒƒ“ƒ_ƒ‰•`‰æÀs
+		// ãƒ©ã‚¤ãƒ³ãƒ¬ãƒ³ãƒ€ãƒ©æç”»å®Ÿè¡Œ
 		graphics.GetLineRenderer()->Render(dc, rc.view, rc.projection);
-
-		// ƒfƒoƒbƒOƒŒƒ“ƒ_ƒ‰•`‰æÀs
+		// ãƒ‡ãƒãƒƒã‚°ãƒ¬ãƒ³ãƒ€ãƒ©æç”»å®Ÿè¡Œ
 		graphics.GetDebugRenderer()->Render(dc, rc.view, rc.projection);
+#endif //DEBUGIMGUI
 	}
 
-	// 2DƒXƒvƒ‰ƒCƒg•`‰æ
+	// 2Dã‚¹ãƒ—ãƒ©ã‚¤ãƒˆæç”»
 	{
 #ifdef HPGAUGE
 		RenderEnemyGauge(dc, rc.view, rc.projection);
+		RenderPlayerGauge(dc, rc.view, rc.projection);
 #endif // HPGAUGE
-#ifdef EnemyAdd
+#ifdef ENEMYADD
 		CrickEnemyAdd(dc, rc.view, rc.projection);
-#endif // EnemyAdd
+#endif // ENEMYADD
+		Ui::Instance().game(dc);
+#ifdef SPOWNENEMY
+		spown->render(dc);
+#endif // SPOWNENEMY
 	}
 
-	// 2DƒfƒoƒbƒOGUI•`‰æ
+#ifdef DEBUGIMGUI
+    // ãƒ†ã‚™ãƒãƒƒã‚°GUIæç”»
+	Player::Instance().DrawDebugGUI();
+	cameraController->DrawDebugGUI();
+	EnemyManager::Instance().DrawDebugGUI();
+	StageManager::Instance().DrawDebugGUI();
+	spown->DrawDebugGUI();
+#endif // DebugImGui
+}
+
+//ã‚¨ãƒãƒŸãƒ¼HPã‚²ãƒ¼ã‚¸æç”»
+void SceneGame::RenderEnemyGauge(ID3D11DeviceContext* dc, const DirectX::XMFLOAT4X4& view, const DirectX::XMFLOAT4X4& projection)
+{
+	//ã™ã¹ã¦ã®æ•µã®é ­ä¸Šã«HPã‚²ãƒ¼ã‚¸ã‚’è¡¨ç¤º
+	EnemyManager& enemyManager = EnemyManager::Instance();
+	int enemyCount = enemyManager.GetEnemyCount();
+	DirectX::XMFLOAT4 color = { 1,0,1,1 }; //ã‚²ãƒ¼ã‚¸ã®è‰²
+	for (int i = 0; i < enemyCount; ++i)
 	{
-		//ƒvƒŒƒCƒ„[ƒfƒoƒbƒO•`‰æ
-		player->DrawDebugGUI();
-		//cameraController->DrawDebugGUI();
+		Enemy* enemy = enemyManager.GetEnemy(i);
+		DirectX::XMFLOAT3 enemy_position = enemy->GetPosition();
+		enemy_position.y += 3.0f;
+		CharacterGauge(dc, view, projection, enemy_position, enemy->GetHealth(), color);
 	}
 }
 
-//ƒGƒlƒ~[HPƒQ[ƒW•`‰æ
-void SceneGame::RenderEnemyGauge(ID3D11DeviceContext* dc, const DirectX::XMFLOAT4X4& view, const DirectX::XMFLOAT4X4& projection)
+//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼HPã‚²ãƒ¼ã‚¸æç”»
+void SceneGame::RenderPlayerGauge(ID3D11DeviceContext* dc, const DirectX::XMFLOAT4X4& view, const DirectX::XMFLOAT4X4& projection)
 {
-	//ƒrƒ…[ƒ|[ƒg
+
+	DirectX::XMFLOAT3 player_position = Player::Instance().GetPosition();
+	DirectX::XMVECTOR PlayerPosition = DirectX::XMLoadFloat3(&player_position);
+	DirectX::XMFLOAT4 color = { 1,0.5,0,1 };//ã‚²ãƒ¼ã‚¸ã®è‰²
+	CharacterGauge(dc, view, projection, player_position, Player::Instance().GetHealth(), color);
+}
+
+void SceneGame::CharacterGauge(ID3D11DeviceContext* dc, const DirectX::XMFLOAT4X4& view, const DirectX::XMFLOAT4X4& projection, DirectX::XMFLOAT3 position,int health, DirectX::XMFLOAT4 gaugecolor)
+{
+	//ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆ
 	D3D11_VIEWPORT viewport;
 	UINT numViewports = 1;
 	dc->RSGetViewports(&numViewports, &viewport);
 
-	//•ÏŠ·s—ñ
+	//å¤‰æ›è¡Œåˆ—
 	DirectX::XMMATRIX View = DirectX::XMLoadFloat4x4(&view);
 	DirectX::XMMATRIX Projection = DirectX::XMLoadFloat4x4(&projection);
 	DirectX::XMMATRIX World = DirectX::XMMatrixIdentity();
 
-	//‚·‚×‚Ä‚Ì“G‚Ì“ªã‚ÉHPƒQ[ƒW‚ğ•\¦
-	EnemyManager& enemyManager = EnemyManager::Instance();
-	int enemyCount = enemyManager.GetEnemyCount();
+	DirectX::XMFLOAT3 player_position = Player::Instance().GetPosition();
+	player_position.y = 1.0f;
+	DirectX::XMVECTOR PlayerPosition = DirectX::XMLoadFloat3(&player_position);
+	DirectX::XMVECTOR Position = DirectX::XMLoadFloat3(&position);
 
-	for (int i = 0; i < enemyCount; ++i)
-	{
-		Enemy* enemy = enemyManager.GetEnemy(i);
-		DirectX::XMVECTOR enemyPos = DirectX::XMLoadFloat3(&enemy->GetPosition());
-
-		//ƒ[ƒ‹ƒhÀ•W‚©‚çƒXƒNƒŠ[ƒ“À•W‚Ö•ÏŠ·‚·‚éŠÖ”
-		DirectX::XMVECTOR ScreenPosition = DirectX::XMVector3Project(
-			enemyPos,
-			viewport.TopLeftX,
-			viewport.TopLeftY,
-			viewport.Width,
-			viewport.Height,
-			viewport.MinDepth,
-			viewport.MaxDepth,
-			Projection,
-			View,
-			World
-		);
-		DirectX::XMFLOAT3 screen_pos;
-		DirectX::XMStoreFloat3(&screen_pos, ScreenPosition);
-
-		for (int i = 0; i < enemy->GetHealth(); ++i)
-		{
-			gauge->Render(
-				dc,
-				screen_pos.x - 25 + i * 10, screen_pos.y - 70,
-				9, 10,
-				100, 100,
-				25, 10,
-				0,
-				1, 0, 0, 1);
-			gauge->Render(
-				dc,
-				screen_pos.x - 25 + i * 10, screen_pos.y - 70,
-				1, 10,
-				100, 100,
-				25, 10,
-				0,
-				0, 0, 0, 1);
-		}
-	}
-	//ƒ[ƒ‹ƒhÀ•W‚©‚çƒXƒNƒŠ[ƒ“À•W‚Ö•ÏŠ·‚·‚éŠÖ”
-	DirectX::XMVECTOR ScreenPosition = DirectX::XMVector3Project(
-		DirectX::XMLoadFloat3(&player->GetPosition()),
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‹ã‚‰ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™ã¸å¤‰æ›ã™ã‚‹é–¢æ•°
+	Position = DirectX::XMVector3Project(
+		Position,
 		viewport.TopLeftX,
 		viewport.TopLeftY,
 		viewport.Width,
@@ -262,22 +344,23 @@ void SceneGame::RenderEnemyGauge(ID3D11DeviceContext* dc, const DirectX::XMFLOAT
 		View,
 		World
 	);
-	DirectX::XMFLOAT3 screen_pos;
-	DirectX::XMStoreFloat3(&screen_pos, ScreenPosition);
+	DirectX::XMStoreFloat3(&position, Position);
 
-	for (int i = 0; i < player->GetHealth(); ++i)
+	Player::Instance().SetScreenPos(position);
+
+	for (int i = 0; i < health; ++i)
 	{
 		gauge->Render(
 			dc,
-			screen_pos.x - 25 + i * 10, screen_pos.y - 70,
+			position.x - 25 + i * 10, position.y,
 			9, 10,
 			100, 100,
 			25, 10,
 			0,
-			1, 0, 0, 1);
+			gaugecolor.x, gaugecolor.y, gaugecolor.z, gaugecolor.w);
 		gauge->Render(
 			dc,
-			screen_pos.x - 25 + i * 10, screen_pos.y - 70,
+			position.x - 25 + i * 10, position.y,
 			1, 10,
 			100, 100,
 			25, 10,
@@ -286,28 +369,28 @@ void SceneGame::RenderEnemyGauge(ID3D11DeviceContext* dc, const DirectX::XMFLOAT
 	}
 }
 
-
 void SceneGame::CrickEnemyAdd(ID3D11DeviceContext* dc, const DirectX::XMFLOAT4X4& view, const DirectX::XMFLOAT4X4& projection)
-{	//ƒrƒ…[ƒ|[ƒg
+{	//ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆ
 	D3D11_VIEWPORT viewport;
 	UINT numViewports = 1;
 	dc->RSGetViewports(&numViewports, &viewport);
 
-	//•ÏŠ·s—ñ
+	//å¤‰æ›è¡Œåˆ—
 	DirectX::XMMATRIX View = DirectX::XMLoadFloat4x4(&view);
 	DirectX::XMMATRIX Projection = DirectX::XMLoadFloat4x4(&projection);
 	DirectX::XMMATRIX World = DirectX::XMMatrixIdentity();
 
 
-	//ƒGƒlƒ~[”z’uˆ—
+	//ã‚¨ãƒãƒŸãƒ¼é…ç½®å‡¦ç†
+	GamePad& gamePad = Input::Instance().GetGamePad();
 	Mouse& mouse = Input::Instance().GetMouse();
 	if (mouse.GetButtonDown() & Mouse::BTN_LEFT)
 	{
-		//ƒ}ƒEƒXƒJ[ƒ\ƒ‹À•Wæ“¾
+		//ãƒã‚¦ã‚¹ã‚«ãƒ¼ã‚½ãƒ«åº§æ¨™å–å¾—
 		DirectX::XMFLOAT3 screenPosition;
 		screenPosition.x = static_cast<float>(mouse.GetPositionX());
-		screenPosition.y = static_cast<float>(mouse.GetPositionY());
-		screenPosition.z = 0;
+		screenPosition.y = 1;
+		screenPosition.z = static_cast<float>(mouse.GetPositionY());
 
 		DirectX::XMVECTOR ScreenCursor = DirectX::XMLoadFloat3(&screenPosition);
 
@@ -347,12 +430,12 @@ void SceneGame::CrickEnemyAdd(ID3D11DeviceContext* dc, const DirectX::XMFLOAT4X4
 
 		HitResult hit;
 		StageMain stage_main;
-		if (stage_main.RayCast(world_position_start, world_position_end, hit))
-		{
-			EnemyManager& enemyManager = EnemyManager::Instance();
-			EnemySlime* slime = new EnemySlime();
-			slime->SetPosition(DirectX::XMFLOAT3(hit.position.x, hit.position.y, hit.position.z));
-			enemyManager.Register(slime);
-		}
+		//if (stage_main.RayCast(world_position_start, world_position_end, hit))
+		//{
+		//	EnemyManager& enemyManager = EnemyManager::Instance();
+		//	Enemy01* slime = new Enemy01(GREEN);
+		//	slime->SetPosition(DirectX::XMFLOAT3(world_position_start.x, world_position_start.y, world_position_start.z));
+		//	enemyManager.Register(slime);
+		//}
 	}
 }

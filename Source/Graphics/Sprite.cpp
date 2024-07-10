@@ -1,7 +1,7 @@
-#include <stdio.h> 
+#include <stdio.h>
 #include <WICTextureLoader.h>
 #include "Sprite.h"
-#include "Misc.h"
+#include "misc.h"
 #include "Graphics/Graphics.h"
 
 // コンストラクタ
@@ -51,14 +51,14 @@ Sprite::Sprite(const char* filename)
 		subresource_data.SysMemSlicePitch = 0; //Not use for vertex buffers.
 		// 頂点バッファオブジェクトの生成
 		hr = device->CreateBuffer(&buffer_desc, &subresource_data, &vertexBuffer);
-		_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 	}
 
 	// 頂点シェーダー
 	{
 		// ファイルを開く
 		FILE* fp = nullptr;
-		fopen_s(&fp, "Shader\\SpriteVS.cso", "rb");
+		fopen_s(&fp, "Data\\Shader\\SpriteVS.cso", "rb");
 		_ASSERT_EXPR_A(fp, "CSO File not found");
 
 		// ファイルのサイズを求める
@@ -73,7 +73,7 @@ Sprite::Sprite(const char* filename)
 
 		// 頂点シェーダー生成
 		HRESULT hr = device->CreateVertexShader(csoData.get(), csoSize, nullptr, vertexShader.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 
 		// 入力レイアウト
 		D3D11_INPUT_ELEMENT_DESC inputElementDesc[] =
@@ -83,14 +83,14 @@ Sprite::Sprite(const char* filename)
 			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,       0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		};
 		hr = device->CreateInputLayout(inputElementDesc, ARRAYSIZE(inputElementDesc), csoData.get(), csoSize, inputLayout.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 	}
 
 	// ピクセルシェーダー
 	{
 		// ファイルを開く
 		FILE* fp = nullptr;
-		fopen_s(&fp, "Shader\\SpritePS.cso", "rb");
+		fopen_s(&fp, "Data\\Shader\\SpritePS.cso", "rb");
 		_ASSERT_EXPR_A(fp, "CSO File not found");
 
 		// ファイルのサイズを求める
@@ -105,7 +105,7 @@ Sprite::Sprite(const char* filename)
 
 		// ピクセルシェーダー生成
 		HRESULT hr = device->CreatePixelShader(csoData.get(), csoSize, nullptr, pixelShader.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 	}
 
 	// ブレンドステート
@@ -119,12 +119,12 @@ Sprite::Sprite(const char* filename)
 		desc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
 		desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
 		desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-		desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+		desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_INV_SRC_ALPHA;
 		desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
 		desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
 		HRESULT hr = device->CreateBlendState(&desc, blendState.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 	}
 
 	// 深度ステンシルステート
@@ -136,7 +136,7 @@ Sprite::Sprite(const char* filename)
 		desc.DepthFunc = D3D11_COMPARISON_ALWAYS;
 
 		HRESULT hr = device->CreateDepthStencilState(&desc, depthStencilState.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 	}
 
 	// ラスタライザーステート
@@ -155,7 +155,7 @@ Sprite::Sprite(const char* filename)
 		desc.AntialiasedLineEnable = false;
 
 		HRESULT hr = device->CreateRasterizerState(&desc, rasterizerState.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 	}
 
 	// サンプラステート
@@ -177,7 +177,7 @@ Sprite::Sprite(const char* filename)
 		desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 
 		HRESULT hr = device->CreateSamplerState(&desc, samplerState.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 	}
 
 	// テクスチャの生成
@@ -191,13 +191,13 @@ Sprite::Sprite(const char* filename)
 		// テクスチャ読み込み
 		Microsoft::WRL::ComPtr<ID3D11Resource> resource;
 		HRESULT hr = DirectX::CreateWICTextureFromFile(device, wfilename, resource.GetAddressOf(), shaderResourceView.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 
 		// テクスチャ情報の取得
 		D3D11_TEXTURE2D_DESC desc;
 		Microsoft::WRL::ComPtr<ID3D11Texture2D> texture2d;
 		hr = resource->QueryInterface<ID3D11Texture2D>(texture2d.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 		texture2d->GetDesc(&desc);
 
 		textureWidth = desc.Width;
@@ -229,10 +229,10 @@ Sprite::Sprite(const char* filename)
 
 		Microsoft::WRL::ComPtr<ID3D11Texture2D>	texture;
 		HRESULT hr = device->CreateTexture2D(&desc, &data, texture.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 
 		hr = device->CreateShaderResourceView(texture.Get(), nullptr, shaderResourceView.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 
 		textureWidth = desc.Width;
 		textureHeight = desc.Height;
@@ -311,7 +311,7 @@ void Sprite::Render(ID3D11DeviceContext *immediate_context,
 		// 頂点バッファの内容の編集を開始する。
 		D3D11_MAPPED_SUBRESOURCE mappedBuffer;
 		HRESULT hr = immediate_context->Map(vertexBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedBuffer);
-		_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 
 		// pDataを編集することで頂点データの内容を書き換えることができる。
 		Vertex* v = static_cast<Vertex*>(mappedBuffer.pData);
@@ -342,6 +342,7 @@ void Sprite::Render(ID3D11DeviceContext *immediate_context,
 		immediate_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 		immediate_context->IASetInputLayout(inputLayout.Get());
 
+		immediate_context->OMSetBlendState(blendState.Get(), nullptr, 0xFFFFFFFF);
 		immediate_context->RSSetState(rasterizerState.Get());
 
 		immediate_context->VSSetShader(vertexShader.Get(), nullptr, 0);
@@ -355,3 +356,22 @@ void Sprite::Render(ID3D11DeviceContext *immediate_context,
 	}
 }
 
+void Sprite::textout(ID3D11DeviceContext* immediate_context, std::string s,
+	float x, float y, float w, float h, DirectX::XMFLOAT4 color)
+{
+	float sw = static_cast<float>(textureWidth / 16);
+	float sh = static_cast<float>(textureHeight / 16);
+	float carriage = 0;
+	for (const char c : s)
+	{
+		Render(immediate_context, x + carriage, y, w, h,
+			sw * (c & 0x0F), sh * (c >> 4), sw, sh, 0,
+			color.x, color.y, color.z, color.w);
+		carriage += w;
+	}
+}
+
+void Sprite::Render(ID3D11DeviceContext* dc, DirectX::XMFLOAT2 pos, DirectX::XMFLOAT2 endpos, DirectX::XMFLOAT2 size, DirectX::XMFLOAT2 endsize, float angle, DirectX::XMFLOAT4 color) const
+{
+	Render(dc, pos.x, pos.y, endpos.x, endpos.y, size.x, size.y, endsize.x, endsize.y, angle, color.x, color.y, color.z, color.w);
+}
