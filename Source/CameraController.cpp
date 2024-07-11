@@ -155,3 +155,21 @@ void CameraController::Update(DirectX::XMFLOAT3 target)
 	//ƒJƒƒ‰‚Ì‹“_‚Æ’‹“_‚ğİ’è
 	Camera::Instance().SetLookAt(eye, target, DirectX::XMFLOAT3(0, 1, 0));
 }
+
+void CameraController::DrawDebugGUI()
+{
+	if (ImGui::Begin("Camera", nullptr, ImGuiWindowFlags_None))
+	{
+		if (ImGui::TreeNode("CameraController"))
+		{	
+			ImGui::InputFloat3("Eye", &eye.x);
+			ImGui::InputFloat3("Focus", &focus.x);
+			ImGui::SliderFloat3("Up", &up.x, -1, 1);
+			ImGui::SliderFloat3("Right", &right.x, -1, 1);
+			ImGui::SliderFloat("Distance", &distance, 0, 100);
+			ImGui::SliderFloat3("angle", &angle.x, -3.14f, 3.14f * 0.5f);
+			ImGui::TreePop();
+		}
+	}
+	ImGui::End();
+}

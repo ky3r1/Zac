@@ -162,9 +162,9 @@ void Player::Update(float elapsedTime)
     AT_Field->Play(position, 10.0f);
 
     //当たり判定のdelay
-    UpdateDelayTime(hit_delay.checker, hit_delay.time, DELAYPLAYERVSENEMY);
+    UpdateDelayTime(hit_delay, DELAYPLAYERVSENEMY);
     //オートで出てる弾のdelay
-    UpdateDelayTime(projectile_auto.checker, projectile_auto.time, DELAYAUTOTIME);
+    UpdateDelayTime(projectile_auto, DELAYAUTOTIME);
 }
 
 void Player::Render(ID3D11DeviceContext* dc, Shader* shader)
@@ -206,8 +206,8 @@ void Player::DrawDebugPrimitive()
 void Player::DrawDebugGUI()
 {
 
-    ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiCond_FirstUseEver);
-    ImGui::SetNextWindowSize(ImVec2(300, 300), ImGuiCond_FirstUseEver);
+    //ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiCond_FirstUseEver);
+    //ImGui::SetNextWindowSize(ImVec2(300, 300), ImGuiCond_FirstUseEver);
 
     // デバッグ文字列表示の変更
     std::string str = "";
@@ -249,7 +249,7 @@ void Player::DrawDebugGUI()
     }
     ImGui::End();
 
-    ProjectileManager::Instance().DrawDebugGUI();
+    //ProjectileManager::Instance().DrawDebugGUI();
 }
 
 //プレイヤーの移動方向を取得
@@ -388,16 +388,9 @@ void Player::InputProjectile()
         //前方弾丸発射
         if (projectile_auto.checker)
         {
-            if (Collision::PointInsideCircle(enemy->GetPosition(), position, sub_attack_range))
+            if (Collision::PointInsideCircle(enemy->GetPosition(), position, attack_range))
             {
-                penetration_count = 30;
-                ricochet_count = 1;
-                ProjectileStraightShotting(PLAYERCATEGORY, 0.0f, FRONT);
-                projectile_auto.checker = false;
-            }
-            else if (Collision::PointInsideCircle(enemy->GetPosition(), position, attack_range))
-            {
-                ProjectileStraightShotting(PLAYERCATEGORY, 0.0f, FRONT);
+                ProjectileStraightShotting(0.0f, FRONT);
                 projectile_auto.checker = false;
             }
         }

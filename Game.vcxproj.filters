@@ -51,20 +51,20 @@
     <Filter Include="ClassDiagram">
       <UniqueIdentifier>{cd684424-64ac-47eb-8246-e92123ea7eea}</UniqueIdentifier>
     </Filter>
-    <Filter Include="AI">
-      <UniqueIdentifier>{aa4836e2-7434-48e6-8942-ee08b696af25}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="AI\State">
-      <UniqueIdentifier>{80886cbe-aa3c-4c06-907d-c3a42c58a2fa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="AI\SearchSystem">
-      <UniqueIdentifier>{842ef880-36c4-4b2c-8309-da53038747e1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="AI\Spawn">
-      <UniqueIdentifier>{591a5449-80c9-465f-af4d-ee8bedf16631}</UniqueIdentifier>
-    </Filter>
     <Filter Include="System\Effect">
       <UniqueIdentifier>{38b2c568-e98d-44b7-b4bf-72749aa5f3ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EnemyControl">
+      <UniqueIdentifier>{aa4836e2-7434-48e6-8942-ee08b696af25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EnemyControl\State">
+      <UniqueIdentifier>{80886cbe-aa3c-4c06-907d-c3a42c58a2fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EnemyControl\SearchSystem">
+      <UniqueIdentifier>{842ef880-36c4-4b2c-8309-da53038747e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EnemyControl\Spawn">
+      <UniqueIdentifier>{591a5449-80c9-465f-af4d-ee8bedf16631}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -231,16 +231,16 @@
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Source\StateBase.h">
-      <Filter>AI\State</Filter>
+      <Filter>EnemyControl\State</Filter>
     </ClInclude>
     <ClInclude Include="Source\StateDerived.h">
-      <Filter>AI\State</Filter>
+      <Filter>EnemyControl\State</Filter>
     </ClInclude>
     <ClInclude Include="Source\StateMachine.h">
-      <Filter>AI\State</Filter>
+      <Filter>EnemyControl\State</Filter>
     </ClInclude>
     <ClInclude Include="Source\EnemyMoveSystem.h">
-      <Filter>AI\SearchSystem</Filter>
+      <Filter>EnemyControl\SearchSystem</Filter>
     </ClInclude>
     <ClInclude Include="Source\StageMain.h">
       <Filter>Stage</Filter>
@@ -255,7 +255,7 @@
       <Filter>Character\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Source\Spown.h">
-      <Filter>AI\Spawn</Filter>
+      <Filter>EnemyControl\Spawn</Filter>
     </ClInclude>
     <ClInclude Include="Source\Ui.h">
       <Filter>System</Filter>
@@ -419,16 +419,16 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Source\StateBase.cpp">
-      <Filter>AI\State</Filter>
+      <Filter>EnemyControl\State</Filter>
     </ClCompile>
     <ClCompile Include="Source\StateDerived.cpp">
-      <Filter>AI\State</Filter>
+      <Filter>EnemyControl\State</Filter>
     </ClCompile>
     <ClCompile Include="Source\StateMachine.cpp">
-      <Filter>AI\State</Filter>
+      <Filter>EnemyControl\State</Filter>
     </ClCompile>
     <ClCompile Include="Source\EnemyMoveSystem.cpp">
-      <Filter>AI\SearchSystem</Filter>
+      <Filter>EnemyControl\SearchSystem</Filter>
     </ClCompile>
     <ClCompile Include="Source\StageMain.cpp">
       <Filter>Stage</Filter>
@@ -443,7 +443,7 @@
       <Filter>Character\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Source\Spown.cpp">
-      <Filter>AI\Spawn</Filter>
+      <Filter>EnemyControl\Spawn</Filter>
     </ClCompile>
     <ClCompile Include="Source\Ui.cpp">
       <Filter>System</Filter>

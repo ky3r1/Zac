@@ -23,6 +23,8 @@
 //#include "StageMapChip.h"
 //#include "StageMapChip.h"
 
+#include "ProjectileManager.h"
+
 #include "Input/Input.h"
 #include "Ui.h"
 
@@ -278,12 +280,45 @@ void SceneGame::Render()
 	}
 
 #ifdef DEBUGIMGUI
+	static bool checker_camera = false;
+	static bool checker_player = false;
+	static bool checker_enemy = false;
+	static bool checker_projectile = false;
+	static bool checker_stage = false;
+	static bool checker_control= false;
+	if (ImGui::BeginMainMenuBar())
+	{
+		if (ImGui::BeginMenu("Camera"))
+		{
+			ImGui::MenuItem("CameraController", "", &checker_camera);
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Character"))
+		{
+			ImGui::MenuItem("Player", "", &checker_player);
+			ImGui::MenuItem("Enemy", "", &checker_enemy);
+			ImGui::MenuItem("Projectile", "", &checker_projectile);
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Stage"))
+		{
+			ImGui::MenuItem("Stage", "", &checker_stage);
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Control"))
+		{
+			ImGui::MenuItem("Enemy", "", &checker_control);
+			ImGui::EndMenu();
+		}
+		ImGui::EndMainMenuBar();
+	}
     // デバッグGUI描画
-	Player::Instance().DrawDebugGUI();
-	//cameraController->DrawDebugGUI();
-	EnemyManager::Instance().DrawDebugGUI();
-	StageManager::Instance().DrawDebugGUI();
-	spown->DrawDebugGUI();
+    if (checker_camera)camera_controller.DrawDebugGUI();
+	if (checker_player)Player::Instance().DrawDebugGUI();
+	if (checker_enemy)	EnemyManager::Instance().DrawDebugGUI();
+	if(checker_projectile)ProjectileManager::Instance().DrawDebugGUI();
+	if (checker_stage)StageManager::Instance().DrawDebugGUI();
+	if(checker_control)spown->DrawDebugGUI();
 #endif // DebugImGui
 }
 

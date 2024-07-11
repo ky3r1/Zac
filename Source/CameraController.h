@@ -15,6 +15,9 @@ public:
 	// 更新処理
 	void Update(DirectX::XMFLOAT3 target);
 
+	//デバッグ用Imgui表示
+    void DrawDebugGUI();
+
 private:
 	DirectX::XMFLOAT3		eye;
 	DirectX::XMFLOAT3		focus;

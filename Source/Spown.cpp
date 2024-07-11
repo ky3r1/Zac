@@ -180,21 +180,11 @@ void Spown::TextEasing(ID3D11DeviceContext* dc,std::string text_c, DirectX::XMFL
 
 void Spown::DrawDebugGUI()
 {
-    //ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiCond_FirstUseEver);
-    //ImGui::SetNextWindowSize(ImVec2(300, 300), ImGuiCond_FirstUseEver);
-
     if (ImGui::Begin("Spown", nullptr, ImGuiWindowFlags_None))
     {
         if (ImGui::TreeNode("Text"))
         {
             ImGui::SliderFloat2("position", &text_pos.x, -5, 5);
-            //ImGui::SliderFloat3("scale", &scale.x, 0.01f, 4.0f);
-            //ImGui::SliderFloat3("angle", &angle.x, -3.14f, 3.14f);
-            //ImGui::SliderInt("health", &health, 0.0f, 10.0f);
-            //ImGui::SliderFloat("movespeed", &moveSpeed, 0.0f, 20.0f);
-
-            //ImGui::SliderInt("delay_auto_time", &projectile_auto.time, 0.0f, DELAYAUTOTIME);
-
             ImGui::TreePop();
         }
     }

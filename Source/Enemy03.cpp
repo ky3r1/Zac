@@ -72,7 +72,7 @@ void Enemy03::Update(float elapsedTime)
     model->UpdateTransform(transform);
     model->UpdateAnimation(elapsedTime);
 
-    UpdateDelayTime(projectile_auto.checker, projectile_auto.time, DELAYAUTOTIME);
+    //UpdateDelayTime(projectile_auto.checker, projectile_auto.time, DELAYAUTOTIME);
 }
 
 //•`‰æˆ—

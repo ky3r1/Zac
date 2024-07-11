@@ -8,6 +8,12 @@
 #define FRONT 1
 #define BACK -1
 
+struct DelayTime
+{
+    int time;
+    bool checker = false;
+};
+
 //キャラクター
 class Character
 {
@@ -47,18 +53,13 @@ protected:
     void ProjectileDirection(ID3D11DeviceContext* dc, const DirectX::XMFLOAT4X4& view, const DirectX::XMFLOAT4X4& projection);
 
     //DelayTimeの更新
-    void UpdateDelayTime(bool& checker, int& time,int delaytime);
+    void UpdateDelayTime(DelayTime& delay,int delaytime);
 
     //弾とキャラクターの衝突判定
     void CollisionProjectileVsCharacter(Character* character, Effect hiteffect);
 
     //弾丸発射処理
-    virtual void ProjectileStraightShotting(int category, float angle,int vector);
     virtual void ProjectileStraightShotting(float angle, int vector);
-
-    virtual void ProjectileRicochetShotting(DirectX::XMFLOAT3 ne,int category, float angle, int vector);
-
-    void Ricochet(DirectX::XMFLOAT3 ne,int vector);
 
 public:
     //旋回処理
@@ -146,7 +147,6 @@ protected:
     //Effect* hitEffect = nullptr;
     std::unique_ptr<Effect>hitEffect=nullptr;
     std::unique_ptr<Effect>lineEffect = nullptr;
-
     DirectX::XMFLOAT3   position = { 0,0,0 };
     DirectX::XMFLOAT3   screen_pos = { 0,0,0 };
     DirectX::XMFLOAT3   angle = { 0,0,0 };
@@ -160,11 +160,6 @@ protected:
     };
     float radius = 0.5f;
     float weight = 0.0f;
-    struct DelayTime
-    {
-        int time;
-        bool checker = false;
-    };
     DelayTime hit_delay;
 
     float       gravity = -1.0f;

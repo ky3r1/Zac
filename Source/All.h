@@ -78,9 +78,3 @@
 #define ALLSTAGE
 //“®‚­°
 //#define STAGEMOVE
-
-//Stage‚ÌÅ‘å’l
-#define StageTopMax_X 40
-#define StageTopMax_Y 40
-#define StageBottomMax_X -40
-#define StageBottomMax_Y -40
