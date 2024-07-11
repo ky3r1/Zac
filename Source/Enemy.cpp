@@ -25,6 +25,7 @@ Enemy::Enemy()
 
 void Enemy::Update(float elapsedTime)
 {
+    Character::Update(elapsedTime);
     UpdateDelayTime(projectile_auto, DELAYAUTOTIME);
     CollisionProjectileVsPlayer();
 }

@@ -21,6 +21,8 @@ public:
     Character(){}
     virtual ~Character(){}
 
+    virtual void Update(float elapsedTime);
+
     //s—ñXVˆ—
     void UpdateTransform();
 
@@ -179,19 +181,12 @@ protected:
     float       slopeRate = 1.0f;
     int         category = 0;
     float       turnSpeed = DirectX::XMConvertToRadians(360);
-    int         penetration_count = 0;
-    int         ricochet_count = 0;
     int         projectile_category = 0;
-    int         projectile_type = 0;
-    int         pro_type = NORMAL;
 
     float       invincible_timer = 0.1f;
     bool        invincible = false;
     int         count = 0;
-    bool        enemy_rico_check = false;
 
     //UŒ‚”ÍˆÍ
     float		attack_range = 1.5f;
-    float       sub_attack_range = 5.0f;
-
 };

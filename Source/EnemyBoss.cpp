@@ -72,8 +72,6 @@ void EnemyBoss::Update(float elapsedTime)
     //モデル行列更新
     model->UpdateTransform(transform);
     model->UpdateAnimation(elapsedTime);
-
-    //UpdateDelayTime(projectile_auto, DELAYAUTOTIME);
 }
 
 void EnemyBoss::InputProjectile()

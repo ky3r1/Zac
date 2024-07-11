@@ -79,54 +79,27 @@ private:
     //死亡ステート更新
     void UpdateDeathState(float elapsedTime);
 
-public:
-
-    //サブ攻撃範囲のゲッター
-    float GetSubAttackRange()
-    {
-        return sub_attack_range;
-    }
 private:
-    Model* area = nullptr;
-    DirectX::XMFLOAT3 area_scale = {};
-    float       moveSpeed = 7.0f;
-    float       jumpSpeed = 20.0f;
-    int projectile_shot;
-
-    int         jumpCount = 0;
-    int         jumpLimit = 2;
-    DelayTime projectile_allangle;
-    DelayTime projectile_auto;
-    DelayTime projectile_front;
-
-    int nearest_enemy_index = -1;
-    float current_nearest_distance = FLT_MAX;
-    int ricochet_count = 30;
 
     ProjectileManager projectileManager;
 
+    float       moveSpeed = 7.0f;
+    float       jumpSpeed = 20.0f;
+
+    int         jumpCount = 0;
+    int         jumpLimit = 2;
+
+    //delay
+    DelayTime projectile_auto;
+
+
+
+    //Effect
     Effect* hitEffect = nullptr;
-    Effect* AT_Field = nullptr;
 
     GamePad& gamePad = Input::Instance().GetGamePad();
 
-    ////アニメーション:Jammo
-    //enum Animation
-    //{
-    //    Anim_Attack,
-    //    Anim_Death,
-    //    Anim_Falling,
-    //    Anim_GetHit1,
-    //    Anim_GetHit2,
-    //    Anim_Idle,
-    //    Anim_Jump,
-    //    Anim_Jump_Flip,
-    //    Anim_Landing,
-    //    Anim_Revive,
-    //    Anim_Running,
-    //    Anim_Walking,
-    //};
-    ////アニメーション:UnityChan
+    //アニメーション:UnityChan
     enum Animation
     {
         Anim_Attack,

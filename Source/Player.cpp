@@ -30,65 +30,42 @@ Player::Player()
 {
     instance = this;
     //TODO:プレイヤーのステータス設定
-    //model = new Model("Data/Model/UnitychanSD/UnitychanSD.mdl");
-    //scale.x = scale.y = scale.z = 0.02f;
-    //model = new Model("Data/Model/Dragon/dragon.mdl");
-    model = new Model("Data/Model/GP5_UnityChan/unitychan.mdl");
-    area = new Model("Data/Model/Player/Area.mdl");
-    area_scale = { 0.1f,1.0f,0.1f };
-    //scale.x = scale.y = scale.z = 0.1f;
-    scale.x = scale.y = scale.z = 1.0f;
-    turnSpeed = DirectX::XMConvertToRadians(720);
+    model = new Model("Data/Model/GP5_UnityChan/unitychan.mdl"); 
+    position = { 0.0001f,2,0 };
+    scale.x = scale.y = scale.z = 1.0f; 
+    color = { 1,1,1,1 }; 
+
+    moveSpeed = 15.0f;
+    turnSpeed = DirectX::XMConvertToRadians(900);
+
     weight = 100.0f;
-    color = { 1,1,1,1 };
 
     projectile_auto.time = DELAYAUTOTIME;
-
     hit_delay.time = DELAYPLAYERVSENEMY;
-    moveSpeed = 15.0f;
 
-    position = { 0.0001f,2,0 };
     attack_range = 9.0f;
-    sub_attack_range = 1.0f;
 
-    projectile_category = 0;;
     state = State::Idle;
+    category = PLAYERCATEGORY;
 
     // エフェクト
-    AT_Field = new Effect("Data/Effect/AT_field.efk");
-
-    //ヒットエフェクト読み込み
     hitEffect = new Effect("Data/Effect/Hit.efk");
-    lineEffect = std::unique_ptr<Effect>(new Effect("Data/Effect/PlayerLine.efkefc"));
-    //hitEffect = std::unique_ptr<Effect>(new Effect("Data/Effect/GP3_sample.efk"));
-    category = PLAYERCATEGORY;
-    turnSpeed = DirectX::XMConvertToRadians(900);
+
     ProjectileManager& projectile_manager = ProjectileManager::Instance();
 }
 
 Player::~Player()
 {
-    delete AT_Field;
-
     delete hitEffect;
     hitEffect = nullptr;
     delete model;
     model = nullptr;
-    delete area;
-    area = nullptr;
 }
 
 
 void Player::Update(float elapsedTime)
 {
-    //すべての敵と総当たりで衝突判定
-    //int enemyCount = EnemyManager::Instance().GetEnemyCount();
-    //for (int i = 0; i < enemyCount; i++)
-    //{
-    //    Enemy* enemy = EnemyManager::Instance().GetEnemy(i);
-    //}
-    //色変え
-    //ChangeColor(color, category);
+    Character::Update(elapsedTime);
 
     switch (state)
     {
@@ -121,24 +98,6 @@ void Player::Update(float elapsedTime)
     }
     Mouse& mouse = Input::Instance().GetMouse();
 
-    if (mouse.GetButtonDown() & Mouse::BTN_LEFT)
-    {
-        projectile_type++;
-    }
-    if (projectile_type == 0)
-    {
-        projectile_category = PENETRATION;
-    }
-    if (projectile_type == 1)
-    {
-        projectile_category = RICOCHET;
-    }
-    if (projectile_type >= 2)
-    {
-        projectile_type = 0;
-    }
-    //GamePad gamePad=
-
     //速力処理更新
     UpdateVelocity(elapsedTime);
 
@@ -158,8 +117,6 @@ void Player::Update(float elapsedTime)
     model->UpdateTransform(transform);
     //モデルアニメーション更新
     model->UpdateAnimation(elapsedTime);
-
-    AT_Field->Play(position, 10.0f);
 
     //当たり判定のdelay
     UpdateDelayTime(hit_delay, DELAYPLAYERVSENEMY);
@@ -198,7 +155,6 @@ void Player::DrawDebugPrimitive()
     //debugRenderer->DrawCube({ -12,-10,29 }, { 12,-5,31 }, { 1,0,0,1 });
     // 攻撃範囲をデバッグ円柱描画
     debugRenderer->DrawCylinder(position, attack_range, 1.0f, DirectX::XMFLOAT4(0.5f, 0.0f, 0.5f, 1.0f));
-    debugRenderer->DrawCylinder(position, sub_attack_range, 1.0f, DirectX::XMFLOAT4(0.5f, 0.3f, 0.3f, 1.0f));
     //弾丸デバッグプリミティブ描画
     ProjectileManager::Instance().DrawDebugPrimitive();
 }
@@ -395,21 +351,6 @@ void Player::InputProjectile()
             }
         }
     }
-}
-
-void Player::AreaTransform()
-{
-    //スケール行列を作成
-    DirectX::XMMATRIX S = DirectX::XMMatrixScaling(area_scale.x, area_scale.y, area_scale.z);
-    //DirectX::XMMATRIX S = DirectX::XMMatrixScaling(0.1, 0.1, 0.1);
-    //回転行列を作成
-    DirectX::XMMATRIX R = DirectX::XMMatrixRotationRollPitchYaw(angle.x, angle.y, angle.z);
-    //位置行列を作成
-    DirectX::XMMATRIX T = DirectX::XMMatrixTranslation(position.x, position.y, position.z);
-    //3つの行列を組み合わせ、ワールド行列を作成
-    DirectX::XMMATRIX W = S * R * T;
-    //計算したワールド行列を取り出す
-    DirectX::XMStoreFloat4x4(&transform, W);
 }
 
 //待機ステート

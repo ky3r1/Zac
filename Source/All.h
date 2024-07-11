@@ -17,7 +17,7 @@
 
 ///////////////////Character////////////////////////
 
-//Player
+///Player
 //プレイヤー
 #define ALLPLAYER
 //アニメーション
@@ -26,23 +26,17 @@
 //#define JUMPFRAG
 // 攻撃
 #define PLAYERATTACK
-// 弾の種類
-#define PENETRATION 0
-#define RICOCHET 1
-#define NORMAL 2
-//Player->Enemy 弾のダメージ
-#define PROJECTILEDAMAGE
 //Player->Enemy 踏みつけダメージ
 #define JUMPDAMAGE
 
 //Enemy->Player 接触ダメージ
 #define ENEMYHITTINGDAMAGE
 
-//Enemy
+///Enemy
 //エネミー
 #define ALLENEMY
-//スポーン
-#define SPOWNENEMY
+////スポーン
+//#define SPOWNENEMY
 
 ////01
 //#define ENEMY01 
@@ -60,6 +54,12 @@
 #define ENEMYSTATEMACHINE
 //アニメーション
 #define ENEMYANIMATION
+
+/////////////Projectile////////////////////////
+//弾のダメージ
+#define PROJECTILEDAMAGE
+//弾の衝撃
+#define PROJECTILEHIT
 
 ///////////////////UI////////////////////////
 

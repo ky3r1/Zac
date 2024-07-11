@@ -28,7 +28,7 @@ public:
     ~Enemy() override {}
 
     //XVˆ—
-    virtual void Update(float elapsedTime);
+    virtual void Update(float elapsedTime)override;
 
     //•`‰æˆ—
 	virtual void Render(ID3D11DeviceContext* dc, Shader* shader);

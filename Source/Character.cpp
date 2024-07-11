@@ -8,6 +8,10 @@
 #include "EnemyManager.h"
 
 
+void Character::Update(float elapsedTime)
+{
+}
+
 //s—ñXVˆ—
 void Character::UpdateTransform()
 {
@@ -431,7 +435,6 @@ void Character::CollisionProjectileVsCharacter(Character* character, Effect hite
             //Õ“Ë‚µ‚½’e‚Æ’e‚ðo‚µ‚½ƒLƒƒƒ‰ƒNƒ^[(ˆø”‚Ìcharacter‚Å‚Í‚È‚¢)‚ÌƒJƒeƒSƒŠ[‚ª“¯‚¶ê‡
             if (category == projectile->GetCategory())
             {
-
                 if (character->ApplyDamage(1, 0.5f))
                 {
                     //‚«”ò‚Î‚·
@@ -455,8 +458,6 @@ void Character::CollisionProjectileVsCharacter(Character* character, Effect hite
                         impulse.x = power * vec.x;
                         impulse.y = power * 0.5f;
                         impulse.z = power * vec.z;
-                        penetration_count--;
-                        ricochet_count--;
 
                         character->AddImpulse(impulse);
                     }
@@ -467,11 +468,8 @@ void Character::CollisionProjectileVsCharacter(Character* character, Effect hite
                         hiteffect.Play(e, 2.0f);
                     }
                 }
-                else
-                {
-                    //’eŠÛ”jŠü
-                    projectile->Destroy();
-                }
+                //’eŠÛ”jŠü
+                projectile->Destroy();
             }
         }
     }
@@ -514,7 +512,6 @@ void Character::ProjectileStraightShotting(float angle, int vector)
     dir.x = ep.x;
     dir.y = 0.0f;
     dir.z = ep.z;
-    //projectile = new ProjectileStraight(&ProjectileManager::Instance(), category,lineEffect.get());
     projectile = new ProjectileStraight(&ProjectileManager::Instance(), category);
     projectile->Launch(dir, pos);
 }
