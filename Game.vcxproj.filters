@@ -66,6 +66,9 @@
     <Filter Include="EnemyControl\Spawn">
       <UniqueIdentifier>{591a5449-80c9-465f-af4d-ee8bedf16631}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Component">
+      <UniqueIdentifier>{5216ba32-ad0f-4ef2-ae93-937c64bd62be}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\imgui\imconfig.h">
