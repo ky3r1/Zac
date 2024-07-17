@@ -119,7 +119,7 @@ public:
 	// •`‰æ
 	void Render(ID3D11DeviceContext* dc, Shader* shader);
 
-private:
+public:
 	void DrawLister();
 	void DrawDetail();
 

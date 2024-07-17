@@ -153,7 +153,7 @@ void CameraController::Update(DirectX::XMFLOAT3 target)
 	eye.z = target.z - front.z * distance / 1.0f;
 
 	//ƒJƒƒ‰‚Ì‹“_‚Æ’‹“_‚ğİ’è
-	Camera::Instance().SetLookAt(eye, target, DirectX::XMFLOAT3(0, 1, 0));
+	CameraManager::Instance().GetMainCamera().SetLookAt(eye, target, DirectX::XMFLOAT3(0, 1, 0));
 }
 
 void CameraController::DrawDebugGUI()

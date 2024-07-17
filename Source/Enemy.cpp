@@ -195,17 +195,17 @@ void Enemy::UpdateVerticalMove(float elapsedTime)
 //攻撃範囲内に入ったか
 bool Enemy::InAttackRange()
 {
-    // 目的地点までのXZ平面での距離判定
-    DirectX::XMFLOAT3 player_position = Player::Instance().GetPosition();
-    float vx = player_position.x - position.x;
-    float vz = player_position.z - position.z;
-    float distSq = vx * vx + vz * vz;
-    // 攻撃範囲内までプレイヤーに近づいた
-    if (distSq < attack_range * attack_range)
-    {
-        return true;
-    }
-    false;
+    //// 目的地点までのXZ平面での距離判定
+    //DirectX::XMFLOAT3 player_position = Player::Instance().GetPosition();
+    //float vx = player_position.x - position.x;
+    //float vz = player_position.z - position.z;
+    //float distSq = vx * vx + vz * vz;
+    //// 攻撃範囲内までプレイヤーに近づいた
+    //if (distSq < attack_range * attack_range)
+    //{
+    //    return true;
+    //}
+    return false;
 }
 
 void Enemy::InputProjectile()
@@ -222,7 +222,7 @@ void Enemy::InputProjectile()
 
 void Enemy::CollisionProjectileVsPlayer()
 {
-    //Playerと弾を衝突判定
-    Player& player= Player::Instance();
-    Character::CollisionProjectileVsCharacter(&player, *hitEffect);
+    ////Playerと弾を衝突判定
+    //Player& player= Player::Instance();
+    //Character::CollisionProjectileVsCharacter(&player, *hitEffect);
 }

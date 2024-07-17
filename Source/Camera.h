@@ -8,13 +8,6 @@ class Camera
 public:
     //コンストラクタ
     Camera();
-public:
-    //唯一のインスタンス取得
-    static Camera& Instance()
-    {
-        static Camera camera;
-        return camera;
-    }
 
     //指定方向を向く
     void SetLookAt(const DirectX::XMFLOAT3& eye, const DirectX::XMFLOAT3& focus, const DirectX::XMFLOAT3& up);
@@ -54,4 +47,26 @@ private:
     DirectX::XMFLOAT3       up;
     DirectX::XMFLOAT3       front;
     DirectX::XMFLOAT3       right;
+};
+
+// カメラマネージャー
+class CameraManager
+{
+private:
+    CameraManager() {}
+    ~CameraManager() {}
+
+public:
+    // インスタンス取得
+    static CameraManager& Instance()
+    {
+        static CameraManager instance;
+        return instance;
+    }
+
+    // メインカメラ取得
+    Camera& GetMainCamera() { return mainCamera; }
+
+private:
+    Camera		mainCamera;
 };

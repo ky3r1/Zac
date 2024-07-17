@@ -63,14 +63,25 @@ void SceneGame::Initialize()
 
 
 #ifdef ALLPLAYER
-    player = std::unique_ptr<Player>(new Player);
+	// プレイヤー
+	{
+		const char* filename = "Data/Model/GP5_UnityChan/unitychan.mdl";
+		std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
+		actor->LoadModel(filename);
+		actor->SetName("Player");
+		actor->SetPosition(DirectX::XMFLOAT3(0, 0, 0));
+		actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
+		actor->SetScale(DirectX::XMFLOAT3(0.1f, 0.1f, 0.1f));
+		actor->AddComponent<Movement>();
+		actor->AddComponent<Player>();
+	}
 #endif // PLAYER
 
 #ifdef HPGAUGE
 	gauge = std::unique_ptr<Sprite>(new Sprite);
 #endif // HPGAUGE
 	DirectX::XMFLOAT3 position = { 0,0,0 };
-	if(player)position = player->GetPosition();
+	//if(player)position = player->GetPosition();
 
 	// カメラ設定
 	camera.SetPerspectiveFov(
@@ -160,7 +171,7 @@ void SceneGame::Initialize()
 // 終了化
 void SceneGame::Finalize()
 {
-	Player::Instance().Clear();
+	//Player::Instance().Clear();
 	//エネミー終了化
 	EnemyManager::Instance().clear();
 	//ステージ終了化
@@ -177,7 +188,7 @@ void SceneGame::Update(float elapsedTime)
 	//cameraController->Update(elapsedTime);
 	
 	// カメラ更新処理
-	camera_controller.Update(player.get()->GetPosition());
+	//camera_controller.Update(player.get()->GetPosition());
 	camera_controller.SyncControllerToCamera(camera);
 
 	StageManager::Instance().Update(elapsedTime);
@@ -187,8 +198,9 @@ void SceneGame::Update(float elapsedTime)
 	//MouseManager::GetInstance().MouseTransform(dc, Camera::Instance().GetView(), Camera::Instance().GetProjection());
 
 #ifdef  ALLPLAYER
-	Player::Instance().Update(elapsedTime);
-	if(Player::Instance().GetHealth() <= 0)SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult(false)));
+    //プレイヤー更新処理
+	ActorManager::Instance().Update(elapsedTime);
+	//if(Player::Instance().GetHealth() <= 0)SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult(false)));
 #endif //  ALLPLAYER
 
 #ifdef SPOWNENEMY
@@ -223,7 +235,7 @@ void SceneGame::Render()
 	rc.lightDirection = { 0.0f, -1.0f, 0.0f, 0.0f };	// ライト方向（下方向）
 
 	//カメラパラメータ設定
-	Camera& camera = Camera::Instance();
+	Camera& camera = CameraManager::Instance().GetMainCamera();
 	rc.view = camera.GetView();
 	rc.projection = camera.GetProjection();
 
@@ -240,7 +252,9 @@ void SceneGame::Render()
 
 		//プレイヤー描画
 #ifdef  ALLPLAYER
-		Player::Instance().Render(dc, shader);
+	// アクター描画
+		ActorManager::Instance().UpdateTransform();
+		ActorManager::Instance().Render(dc, shader);
 #endif //  ALLPLAYER
 		shader->End(dc);
 	}
@@ -254,7 +268,7 @@ void SceneGame::Render()
 	{
 #ifdef  DEBUGIMGUI
 		//プレイヤーデバッグプリミティブ描画
-		Player::Instance().DrawDebugPrimitive();
+		//Player::Instance().DrawDebugPrimitive();
 		//エネミーデバッグプリミティブ描画
 		EnemyManager::Instance().DrawDebugPrimitive();
 		// ラインレンダラ描画実行
@@ -281,7 +295,7 @@ void SceneGame::Render()
 
 #ifdef DEBUGIMGUI
 	static bool checker_camera = false;
-	static bool checker_player = false;
+	static bool checker_actor = false;
 	static bool checker_enemy = false;
 	static bool checker_projectile = false;
 	static bool checker_stage = false;
@@ -293,11 +307,9 @@ void SceneGame::Render()
 			ImGui::MenuItem("CameraController", "", &checker_camera);
 			ImGui::EndMenu();
 		}
-		if (ImGui::BeginMenu("Character"))
+		if (ImGui::BeginMenu("Actor"))
 		{
-			ImGui::MenuItem("Player", "", &checker_player);
-			ImGui::MenuItem("Enemy", "", &checker_enemy);
-			ImGui::MenuItem("Projectile", "", &checker_projectile);
+			ImGui::MenuItem("AllAactor", "", &checker_actor);
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Stage"))
@@ -314,7 +326,12 @@ void SceneGame::Render()
 	}
     // デバッグGUI描画
     if (checker_camera)camera_controller.DrawDebugGUI();
-	if (checker_player)Player::Instance().DrawDebugGUI();
+	if (checker_actor)
+	{
+		ActorManager::Instance().DrawDetail();
+		ActorManager::Instance().DrawLister();
+	}
+	//if (checker_player)Player::Instance().DrawDebugGUI();
 	if (checker_enemy)	EnemyManager::Instance().DrawDebugGUI();
 	if(checker_projectile)ProjectileManager::Instance().DrawDebugGUI();
 	if (checker_stage)StageManager::Instance().DrawDebugGUI();
@@ -342,10 +359,10 @@ void SceneGame::RenderEnemyGauge(ID3D11DeviceContext* dc, const DirectX::XMFLOAT
 void SceneGame::RenderPlayerGauge(ID3D11DeviceContext* dc, const DirectX::XMFLOAT4X4& view, const DirectX::XMFLOAT4X4& projection)
 {
 
-	DirectX::XMFLOAT3 player_position = Player::Instance().GetPosition();
-	DirectX::XMVECTOR PlayerPosition = DirectX::XMLoadFloat3(&player_position);
-	DirectX::XMFLOAT4 color = { 1,0.5,0,1 };//ゲージの色
-	CharacterGauge(dc, view, projection, player_position, Player::Instance().GetHealth(), color);
+	//DirectX::XMFLOAT3 player_position = Player::Instance().GetPosition();
+	//DirectX::XMVECTOR PlayerPosition = DirectX::XMLoadFloat3(&player_position);
+	//DirectX::XMFLOAT4 color = { 1,0.5,0,1 };//ゲージの色
+	//CharacterGauge(dc, view, projection, player_position, Player::Instance().GetHealth(), color);
 }
 
 void SceneGame::CharacterGauge(ID3D11DeviceContext* dc, const DirectX::XMFLOAT4X4& view, const DirectX::XMFLOAT4X4& projection, DirectX::XMFLOAT3 position,int health, DirectX::XMFLOAT4 gaugecolor)
@@ -360,9 +377,9 @@ void SceneGame::CharacterGauge(ID3D11DeviceContext* dc, const DirectX::XMFLOAT4X
 	DirectX::XMMATRIX Projection = DirectX::XMLoadFloat4x4(&projection);
 	DirectX::XMMATRIX World = DirectX::XMMatrixIdentity();
 
-	DirectX::XMFLOAT3 player_position = Player::Instance().GetPosition();
-	player_position.y = 1.0f;
-	DirectX::XMVECTOR PlayerPosition = DirectX::XMLoadFloat3(&player_position);
+	//DirectX::XMFLOAT3 player_position = Player::Instance().GetPosition();
+	//player_position.y = 1.0f;
+	//DirectX::XMVECTOR PlayerPosition = DirectX::XMLoadFloat3(&player_position);
 	DirectX::XMVECTOR Position = DirectX::XMLoadFloat3(&position);
 
 	//ワールド座標からスクリーン座標へ変換する関数
@@ -380,7 +397,7 @@ void SceneGame::CharacterGauge(ID3D11DeviceContext* dc, const DirectX::XMFLOAT4X
 	);
 	DirectX::XMStoreFloat3(&position, Position);
 
-	Player::Instance().SetScreenPos(position);
+	//Player::Instance().SetScreenPos(position);
 
 	for (int i = 0; i < health; ++i)
 	{

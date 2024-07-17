@@ -175,11 +175,11 @@ void ActorManager::Render(ID3D11DeviceContext* dc, Shader* shader)
 
 	//shader->End(dc);
 
-	// リスター描画
-	DrawLister();
+	//// リスター描画
+	//DrawLister();
 
-	// 詳細描画
-	DrawDetail();
+	//// 詳細描画
+	//DrawDetail();
 
 }
 

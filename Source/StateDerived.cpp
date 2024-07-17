@@ -21,11 +21,11 @@ void SearchState::Enter()
 void SearchState::Execute(float elapsedTime)
 {
 	subState->Execute(elapsedTime);
-	if (Player::Instance().GetHealth() > 0)
-	{
-		// Battleステートへ遷移
-		owner->GetStateMachine()->ChangeState(static_cast<int>(Enemy::State::Battle));
-	}
+	//if (Player::Instance().GetHealth() > 0)
+	//{
+	//	// Battleステートへ遷移
+	//	owner->GetStateMachine()->ChangeState(static_cast<int>(Enemy::State::Battle));
+	//}
 }
 //出ていくとき
 void SearchState::Exit()
@@ -97,33 +97,33 @@ void PursuitState::Enter()
 //入った時
 void PursuitState::Execute(float elapsedTime)
 {
-	// 目的地点までのXZ平面での距離判定
-	DirectX::XMFLOAT3 position = owner->GetPosition();
-	DirectX::XMFLOAT3 player_position = Player::Instance().GetPosition();
-	owner->SetTargetPosition(player_position);
-	float vx = player_position.x - position.x;
-	float vz = player_position.z - position.z;
-	float distSq = vx * vx + vz * vz;
+	//// 目的地点までのXZ平面での距離判定
+	//DirectX::XMFLOAT3 position = owner->GetPosition();
+	//DirectX::XMFLOAT3 player_position = Player::Instance().GetPosition();
+	//owner->SetTargetPosition(player_position);
+	//float vx = player_position.x - position.x;
+	//float vz = player_position.z - position.z;
+	//float distSq = vx * vx + vz * vz;
 
-	// 攻撃範囲内までプレイヤーに近づいた
-	float radius = owner->GetAttackRange();
-	if (distSq < radius * radius)
-	{
-		owner->GetStateMachine()->ChangeSubState(static_cast<int>(Enemy::Battle::Attack));
-	}
-	if (Player::Instance().GetHealth() <= 0)
-	{
-		owner->GetStateMachine()->ChangeState(static_cast<int>(Enemy::State::Search));
-	}
-	owner->MoveSystem();
-	owner->OutMove();
-	// 目的地点へ移動
-	owner->MoveToTarget(elapsedTime, 0.5f);
-	if (health != owner->GetHealth())
-	{
-		owner->GetStateMachine()->ChangeSubState(static_cast<int>(Enemy::Battle::Hit));
-	}
-	health = owner->GetHealth();
+	//// 攻撃範囲内までプレイヤーに近づいた
+	//float radius = owner->GetAttackRange();
+	//if (distSq < radius * radius)
+	//{
+	//	owner->GetStateMachine()->ChangeSubState(static_cast<int>(Enemy::Battle::Attack));
+	//}
+	//if (Player::Instance().GetHealth() <= 0)
+	//{
+	//	owner->GetStateMachine()->ChangeState(static_cast<int>(Enemy::State::Search));
+	//}
+	//owner->MoveSystem();
+	//owner->OutMove();
+	//// 目的地点へ移動
+	//owner->MoveToTarget(elapsedTime, 0.5f);
+	//if (health != owner->GetHealth())
+	//{
+	//	owner->GetStateMachine()->ChangeSubState(static_cast<int>(Enemy::Battle::Hit));
+	//}
+	//health = owner->GetHealth();
 }
 //出ていくとき
 void PursuitState::Exit()
@@ -142,45 +142,45 @@ void AttackState::Enter()
 //実行中
 void AttackState::Execute(float elapsedTime)
 {
-	DirectX::XMFLOAT3 player_position = Player::Instance().GetPosition();
-	DirectX::XMFLOAT3 enemy_position = owner->GetPosition();
-	owner->SetTargetPosition(player_position);
-	float vx = player_position.x - enemy_position.x;
-	float vz = player_position.z - enemy_position.z;
-	float distSq = vx * vx + vz * vz;
-	if (distSq > owner->GetAttackRange() * owner->GetAttackRange())
-	{
-		if (!owner->GetModel()->IsPlayAnimation())
-		{
-			owner->GetStateMachine()->ChangeSubState(static_cast<int>(Enemy::Battle::Pursuit));
-		}
-	}
-	else
-	{
-#ifdef ENEMYATTACK
-		owner->InputProjectile();
-#endif // ENEMYATTACK
-	}
-	if (Player::Instance().GetHealth() <= 0)
-	{
-		if (!owner->GetModel()->IsPlayAnimation())
-		{
-			owner->GetStateMachine()->ChangeState(static_cast<int>(Enemy::State::Search));
-		}
-	}
-	if (!owner->GetProjectileAttackFlg())
-	{
-		if (!owner->GetModel()->IsPlayAnimation())
-		{
-			owner->GetStateMachine()->ChangeSubState(static_cast<int>(Enemy::Battle::Idle));
-		}
-	}
-	owner->Turn(elapsedTime, vx, vz, owner->GetTurnSpeed());
-	if (health != owner->GetHealth())
-	{
-		owner->GetStateMachine()->ChangeSubState(static_cast<int>(Enemy::Battle::Hit));
-	}
-	health = owner->GetHealth();
+//	DirectX::XMFLOAT3 player_position = Player::Instance().GetPosition();
+//	DirectX::XMFLOAT3 enemy_position = owner->GetPosition();
+//	owner->SetTargetPosition(player_position);
+//	float vx = player_position.x - enemy_position.x;
+//	float vz = player_position.z - enemy_position.z;
+//	float distSq = vx * vx + vz * vz;
+//	if (distSq > owner->GetAttackRange() * owner->GetAttackRange())
+//	{
+//		if (!owner->GetModel()->IsPlayAnimation())
+//		{
+//			owner->GetStateMachine()->ChangeSubState(static_cast<int>(Enemy::Battle::Pursuit));
+//		}
+//	}
+//	else
+//	{
+//#ifdef ENEMYATTACK
+//		owner->InputProjectile();
+//#endif // ENEMYATTACK
+//	}
+//	if (Player::Instance().GetHealth() <= 0)
+//	{
+//		if (!owner->GetModel()->IsPlayAnimation())
+//		{
+//			owner->GetStateMachine()->ChangeState(static_cast<int>(Enemy::State::Search));
+//		}
+//	}
+//	if (!owner->GetProjectileAttackFlg())
+//	{
+//		if (!owner->GetModel()->IsPlayAnimation())
+//		{
+//			owner->GetStateMachine()->ChangeSubState(static_cast<int>(Enemy::Battle::Idle));
+//		}
+//	}
+//	owner->Turn(elapsedTime, vx, vz, owner->GetTurnSpeed());
+//	if (health != owner->GetHealth())
+//	{
+//		owner->GetStateMachine()->ChangeSubState(static_cast<int>(Enemy::Battle::Hit));
+//	}
+//	health = owner->GetHealth();
 }
 //出ていくとき
 void AttackState::Exit()
@@ -196,27 +196,27 @@ void BattleIdleState::Enter()
 
 void BattleIdleState::Execute(float elapsedTime)
 {
-	if (owner->GetProjectileAttackFlg())
-	{
-		owner->GetStateMachine()->ChangeSubState(static_cast<int>(Enemy::Battle::Attack));
-	}
+	//if (owner->GetProjectileAttackFlg())
+	//{
+	//	owner->GetStateMachine()->ChangeSubState(static_cast<int>(Enemy::Battle::Attack));
+	//}
 
-	DirectX::XMFLOAT3 player_position = Player::Instance().GetPosition();
-	DirectX::XMFLOAT3 enemy_position = owner->GetPosition();
-	owner->SetTargetPosition(player_position);
-	float vx = player_position.x - enemy_position.x;
-	float vz = player_position.z - enemy_position.z;
-	float distSq = vx * vx + vz * vz;
-	if (distSq > owner->GetAttackRange() * owner->GetAttackRange())
-	{
-		owner->GetStateMachine()->ChangeSubState(static_cast<int>(Enemy::Battle::Pursuit));
-	}
-	if (health != owner->GetHealth())
-	{
-		owner->GetStateMachine()->ChangeSubState(static_cast<int>(Enemy::Battle::Hit));
-	}
-	health = owner->GetHealth();
-    owner->Turn(elapsedTime, vx, vz, owner->GetTurnSpeed());
+	//DirectX::XMFLOAT3 player_position = Player::Instance().GetPosition();
+	//DirectX::XMFLOAT3 enemy_position = owner->GetPosition();
+	//owner->SetTargetPosition(player_position);
+	//float vx = player_position.x - enemy_position.x;
+	//float vz = player_position.z - enemy_position.z;
+	//float distSq = vx * vx + vz * vz;
+	//if (distSq > owner->GetAttackRange() * owner->GetAttackRange())
+	//{
+	//	owner->GetStateMachine()->ChangeSubState(static_cast<int>(Enemy::Battle::Pursuit));
+	//}
+	//if (health != owner->GetHealth())
+	//{
+	//	owner->GetStateMachine()->ChangeSubState(static_cast<int>(Enemy::Battle::Hit));
+	//}
+	//health = owner->GetHealth();
+ //   owner->Turn(elapsedTime, vx, vz, owner->GetTurnSpeed());
 }
 
 void BattleIdleState::Exit()

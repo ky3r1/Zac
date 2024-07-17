@@ -233,7 +233,8 @@ void LambertShader::Begin(ID3D11DeviceContext* dc, const RenderContext& rc)
 	DirectX::XMMATRIX V = DirectX::XMLoadFloat4x4(&rc.view);
 	DirectX::XMMATRIX P = DirectX::XMLoadFloat4x4(&rc.projection);
 	DirectX::XMStoreFloat4x4(&scene_constant.view_projection, V * P);
-	scene_constant.camera_position = { Camera::Instance().GetEye().x,Camera::Instance().GetEye().y,Camera::Instance().GetEye().z,0 };
+	Camera& camera_i =CameraManager::Instance().GetMainCamera();
+	scene_constant.camera_position = { camera_i.GetEye().x,camera_i.GetEye().y,camera_i.GetEye().z,0 };
 
 	light_constant.directional_light_direction = rc.lightDirection;
 	light_constant.directional_light_color = { 1,1,1,1 };
