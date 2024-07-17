@@ -3,6 +3,7 @@
 #include "Camera.h"
 #include "Player.h"
 #include "Input/Input.h"
+#include "CameraController.h"
 
 // コンストラクタ
 Player::Player()
@@ -17,7 +18,8 @@ Player::~Player()
 void Player::Start()
 {
 	movement = GetActor()->GetComponent<Movement>();
-
+	movement.get()->SetMoveSpeed(15.0f);
+	GetActor().get()->SetScale(DirectX::XMFLOAT3(5.0f, 5.0f, 5.0f));
 	// 適当にモーション再生
 	Model* model = GetActor()->GetModel();
 	if (model != nullptr)
@@ -35,6 +37,11 @@ void Player::Update(float elapsedTime)
 	CameraControl(elapsedTime);
 	CharacterControl(elapsedTime);
 
+
+}
+
+void Player::DrawDebug()
+{
 	// デバッグ球描画
 	DirectX::XMFLOAT3 position = GetActor()->GetPosition();
 	DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(1, 0, 0, 1);
@@ -106,48 +113,7 @@ void Player::CharacterControl(float elapsedTime)
 // カメラ操作
 void Player::CameraControl(float elapsedTime)
 {
-	GamePad& gamePad = Input::Instance().GetGamePad();
-	float ax = gamePad.GetAxisRX();
-	float ay = gamePad.GetAxisRY();
-
-	float lengthSq = ax * ax + ay * ay;
-	if (lengthSq > 0.1f)
-	{
-		float speed = cameraRollSpeed * elapsedTime;
-
-		cameraAngle.x += ay * speed;
-		cameraAngle.y += ax * speed;
-
-		if (cameraAngle.x < cameraMinPitch)
-		{
-			cameraAngle.x = cameraMinPitch;
-		}
-		if (cameraAngle.x > cameraMaxPitch)
-		{
-			cameraAngle.x = cameraMaxPitch;
-		}
-		if (cameraAngle.y < -DirectX::XM_PI)
-		{
-			cameraAngle.y += DirectX::XM_2PI;
-		}
-		if (cameraAngle.y > DirectX::XM_PI)
-		{
-			cameraAngle.y -= DirectX::XM_2PI;
-		}
-	}
-
-	DirectX::XMVECTOR Offset = DirectX::XMVectorSet(0.0f, characterHeight, 0.0f, 0.0f);
-	DirectX::XMVECTOR Target = DirectX::XMLoadFloat3(&GetActor()->GetPosition());
-	DirectX::XMVECTOR Focus = DirectX::XMVectorAdd(Target, Offset);
-	DirectX::XMMATRIX Transform = DirectX::XMMatrixRotationRollPitchYaw(cameraAngle.x, cameraAngle.y, cameraAngle.z);
-	DirectX::XMVECTOR Range = DirectX::XMVectorSet(0.0f, 0.0f, -cameraRange, 0.0f);
-	DirectX::XMVECTOR Vec = DirectX::XMVector3TransformCoord(Range, Transform);
-	DirectX::XMVECTOR Eye = DirectX::XMVectorAdd(Focus, Vec);
-
-	DirectX::XMFLOAT3 eye, focus;
-	DirectX::XMStoreFloat3(&eye, Eye);
-	DirectX::XMStoreFloat3(&focus, Focus);
-
-	Camera& camera = CameraManager::Instance().GetMainCamera();
-	camera.SetLookAt(eye, focus, DirectX::XMFLOAT3(0, 1, 0));
+	CameraController camera_c;
+	//camera_c.Update(GetActor()->GetPosition());
+	camera_c.UpdateKey(elapsedTime, GetActor().get()->GetPosition());
 }

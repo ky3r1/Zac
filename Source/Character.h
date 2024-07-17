@@ -1,9 +1,10 @@
-#pragma once
+ï»¿#pragma once
 
 #include "All.h"
 #include "Input/Input.h"
 #include "StageMain.h"
 #include "Effect.h"
+#include "Component.h"
 
 #define FRONT 1
 #define BACK -1
@@ -14,179 +15,18 @@ struct DelayTime
     bool checker = false;
 };
 
-//ƒLƒƒƒ‰ƒNƒ^[
-class Character
+//ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼
+class Character :public Component
 {
 public:
-    Character(){}
-    virtual ~Character(){}
+    // ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+    Character() {}
+    // ãƒ†ã‚™ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+    virtual ~Character() {}
 
-    virtual void Update(float elapsedTime);
+    // é–‹å§‹å‡¦ç†
+    virtual void Start() override;
 
-    //s—ñXVˆ—
-    void UpdateTransform();
-
-    //ƒ_ƒ[ƒW‚ğ—^‚¦‚é
-    bool ApplyDamage(int damage, float invincibleTime);
-
-    //ÕŒ‚‚ğ—^‚¦‚é
-    void AddImpulse(const DirectX::XMFLOAT3& impulse);
-
-    //ƒfƒoƒbƒO—pGUI
-    virtual void DrawDebugGUI();
-
-    //‰Šú‰»
-    virtual void Clear();
-protected:
-
-    //‚’¼‘¬—Íˆ—
-    void UpdateVerticalVelocity(float elapsedFrame);
-
-    //‚’¼ˆÚ“®XVˆ—
-    virtual void UpdateVerticalMove(float elapsedTime);
-
-    //…•½‘¬—ÍXVˆ—
-    void UpdateHorizontalVelocity(float elapsedFrame);
-
-    //…•½ˆÚ“®XVˆ—
-    void UpdateHorizontalMove(float elapsedTime);
-
-    // 3D‚ğ2D‚É•ÏŠ·
-    void ProjectileDirection(ID3D11DeviceContext* dc, const DirectX::XMFLOAT4X4& view, const DirectX::XMFLOAT4X4& projection);
-
-    //DelayTime‚ÌXV
-    void UpdateDelayTime(DelayTime& delay,int delaytime);
-
-    //’e‚ÆƒLƒƒƒ‰ƒNƒ^[‚ÌÕ“Ë”»’è
-    void CollisionProjectileVsCharacter(Character* character, Effect hiteffect);
-
-    //’eŠÛ”­Ëˆ—
-    virtual void ProjectileStraightShotting(float angle, int vector);
-
-public:
-    //ù‰ñˆ—
-    void Turn(float elapsedTime, float vx, float vz, float speed);
-
-protected:
-    //ˆÚ“®ˆ—
-    //void Move(float elapsedTime, float vx, float vz, float speed);
-    void Move(float vx, float vz, float speed);
-
-    //ƒWƒƒƒ“ƒvˆ—
-    void Jump(float speed);
-
-    //‘¬—Íˆ—XV
-    void UpdateVelocity(float elapsedTime);
-
-    //–³“GŠÔXV
-    void UpdateInvincibleTime(float elapsedTime);
-
-    //Ú’n‚µ‚½‚Æ‚«‚ÉŒÄ‚Î‚ê‚é
-    virtual void OnLanding() {}
-
-    //ƒ_ƒ[ƒW‚ğó‚¯‚½‚ÉŒÄ‚Î‚ê‚é
-    virtual void OnDamaged() {}
-
-    //€–S‚µ‚½‚Æ‚«‚ÉŒÄ‚Î‚ê‚é
-    virtual void OnDead() {}
-public:
-    /////////////////////ƒQƒbƒ^[EƒZƒbƒ^[//////////////////////////
-
-    //ƒ‚ƒfƒ‹‚ÌƒQƒbƒ^[EƒZƒbƒ^[
-    Model* GetModel() { return model; }
-    void SetModel(Model* m) { model = m; }
-
-    //position‚ÌƒQƒbƒ^[EƒZƒbƒ^[
-    const DirectX::XMFLOAT3& GetPosition() const { return position; }
-    void SetPosition(const DirectX::XMFLOAT3& position) { this->position = position; }
-
-    //angle‚ÌƒQƒbƒ^[EƒZƒbƒ^[
-    const DirectX::XMFLOAT3& GetAngle() const { return angle; }
-    void SetAngle(const DirectX::XMFLOAT3& angle) { this->angle = angle; }
-
-    //scale‚ÌƒQƒbƒ^[EƒZƒbƒ^[
-    const DirectX::XMFLOAT3& GetScale() const { return scale; }
-    void SetScale(const DirectX::XMFLOAT3& scale) { this->scale = scale; }
-
-    //radius‚ÌƒQƒbƒ^[
-    float GetRadius() const { return radius; }
-
-    //isGround‚ÌƒQƒbƒ^[
-    bool IsGround()const { return isGround; }
-
-    //height‚ÌƒQƒbƒ^[
-    float GetHeight() const { return height; }
-
-    //health‚ÌƒQƒbƒ^[
-    int GetHealth()const { return health; }
-
-    //maxHealthƒQƒbƒ^[
-    int GetMaxHealth()const { return maxHealth; }
-
-    //category‚ÌƒQƒbƒ^[
-    int GetCategory()const { return category; }
-
-    //weight‚ÌƒQƒbƒ^[EƒZƒbƒ^[
-    float GetWeight()const { return weight; }
-    void SetWeight(float w) { weight = w; }
-
-    // UŒ‚”ÍˆÍ‚ÌƒQƒbƒ^[EƒZƒbƒ^[
-    float GetAttackRange() { return attack_range; }
-    void SetAttackRange(float a) { attack_range = a; }
-
-    //ƒ^[ƒ“ƒXƒs[ƒh‚ÌƒQƒbƒ^[
-    float GetTurnSpeed() { return turnSpeed; }
-
-    //ƒXƒNƒŠ[ƒ“À•W‚ÌƒQƒbƒ^[EƒZƒbƒ^[
-    void SetScreenPos(DirectX::XMFLOAT3 sp) { screen_pos = sp; }
-    DirectX::XMFLOAT3 GetScreenPos() { return screen_pos; }
-
-    //lineEffect‚ÌƒQƒbƒ^[/ƒZƒbƒ^[
-    void SetLineEffect(Effect* e) { lineEffect.reset(e);}
-    Effect* GetLineEffect() { return lineEffect.get(); } 
-protected:
-    Model* model = nullptr;
-    //Effect* hitEffect = nullptr;
-    std::unique_ptr<Effect>hitEffect=nullptr;
-    std::unique_ptr<Effect>lineEffect = nullptr;
-    DirectX::XMFLOAT3   position = { 0,0,0 };
-    DirectX::XMFLOAT3   screen_pos = { 0,0,0 };
-    DirectX::XMFLOAT3   angle = { 0,0,0 };
-    DirectX::XMFLOAT3   scale = { 1,1,1 };
-    DirectX::XMFLOAT4   color = { 1,1,1,1 };
-    DirectX::XMFLOAT4X4 transform = {
-        1,0,0,0,
-        0,1,0,0,
-        0,0,1,0,
-        0,0,0,1
-    };
-    float radius = 0.5f;
-    float weight = 0.0f;
-    DelayTime hit_delay;
-
-    float       gravity = -1.0f;
-    DirectX::XMFLOAT3 velocity = { 0,0,0 };
-    bool        isGround = false;
-    float       height = 2.0f;
-    int         health = 5;
-    int         maxHealth = 5;
-    float       invincibleTimer = 1.0f;
-    float       friction = 0.5f;
-    float       acceleration = 1.0f;
-    float       maxMoveSpeed = 5.0f;
-    float       moveVecX = 0.0f;
-    float       moveVecZ = 0.0f;
-    float       airControl = 0.3f;
-    float       stepOffset = 1.0f;
-    float       slopeRate = 1.0f;
-    int         category = 0;
-    float       turnSpeed = DirectX::XMConvertToRadians(360);
-    int         projectile_category = 0;
-
-    float       invincible_timer = 0.1f;
-    bool        invincible = false;
-    int         count = 0;
-
-    //UŒ‚”ÍˆÍ
-    float		attack_range = 1.5f;
+    // æ›´æ–°å‡¦ç†
+    virtual void Update(float elapsedTime) override;
 };

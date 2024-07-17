@@ -5,10 +5,6 @@
 
 //CharacterInclude
 #include "EnemyManager.h"
-#include "Enemy01.h"
-#include "Enemy02.h"
-#include "Enemy03.h"
-#include "EnemyBoss.h"
 #include "EffectManager.h"
 #include "MouseManager.h"
 
@@ -82,7 +78,7 @@ void SceneGame::Initialize()
 #endif // HPGAUGE
 	DirectX::XMFLOAT3 position = { 0,0,0 };
 	//if(player)position = player->GetPosition();
-
+	
 	// カメラ設定
 	camera.SetPerspectiveFov(
 		DirectX::XMConvertToRadians(45),	// 画角
@@ -98,8 +94,6 @@ void SceneGame::Initialize()
 	camera_controller.SyncCameraToController(camera);
 
 #ifdef ALLENEMY
-	int index = 0;
-	spown = std::unique_ptr<Spown>(new Spown());
 #ifdef ENEMY01
 	while (index < 1)
 	{
@@ -171,7 +165,6 @@ void SceneGame::Initialize()
 // 終了化
 void SceneGame::Finalize()
 {
-	//Player::Instance().Clear();
 	//エネミー終了化
 	EnemyManager::Instance().clear();
 	//ステージ終了化
@@ -268,7 +261,7 @@ void SceneGame::Render()
 	{
 #ifdef  DEBUGIMGUI
 		//プレイヤーデバッグプリミティブ描画
-		//Player::Instance().DrawDebugPrimitive();
+		ActorManager::Instance().DrawDebug();
 		//エネミーデバッグプリミティブ描画
 		EnemyManager::Instance().DrawDebugPrimitive();
 		// ラインレンダラ描画実行
@@ -329,7 +322,7 @@ void SceneGame::Render()
 	if (checker_actor)
 	{
 		ActorManager::Instance().DrawDetail();
-		ActorManager::Instance().DrawLister();
+		ActorManager::Instance().DrawLister("Player");
 	}
 	//if (checker_player)Player::Instance().DrawDebugGUI();
 	if (checker_enemy)	EnemyManager::Instance().DrawDebugGUI();
@@ -342,17 +335,17 @@ void SceneGame::Render()
 //エネミーHPゲージ描画
 void SceneGame::RenderEnemyGauge(ID3D11DeviceContext* dc, const DirectX::XMFLOAT4X4& view, const DirectX::XMFLOAT4X4& projection)
 {
-	//すべての敵の頭上にHPゲージを表示
-	EnemyManager& enemyManager = EnemyManager::Instance();
-	int enemyCount = enemyManager.GetEnemyCount();
-	DirectX::XMFLOAT4 color = { 1,0,1,1 }; //ゲージの色
-	for (int i = 0; i < enemyCount; ++i)
-	{
-		Enemy* enemy = enemyManager.GetEnemy(i);
-		DirectX::XMFLOAT3 enemy_position = enemy->GetPosition();
-		enemy_position.y += 3.0f;
-		CharacterGauge(dc, view, projection, enemy_position, enemy->GetHealth(), color);
-	}
+	////すべての敵の頭上にHPゲージを表示
+	//EnemyManager& enemyManager = EnemyManager::Instance();
+	//int enemyCount = enemyManager.GetEnemyCount();
+	//DirectX::XMFLOAT4 color = { 1,0,1,1 }; //ゲージの色
+	//for (int i = 0; i < enemyCount; ++i)
+	//{
+	//	Enemy* enemy = enemyManager.GetEnemy(i);
+	//	DirectX::XMFLOAT3 enemy_position = enemy->GetPosition();
+	//	enemy_position.y += 3.0f;
+	//	CharacterGauge(dc, view, projection, enemy_position, enemy->GetHealth(), color);
+	//}
 }
 
 //プレイヤーHPゲージ描画

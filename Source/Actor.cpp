@@ -60,6 +60,15 @@ void Actor::OnGUI()
 	if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		ImGui::InputFloat3("Position", &position.x);
+		ImGui::InputFloat3("Rotation", &rotation.x);
+		ImGui::InputFloat3("Scale", &scale.x);
+		
+        if (ImGui::Button("Reset"))
+        {
+            position = { 0.0f, 0.0f, 0.0f };
+            rotation = { 0.0f, 0.0f, 0.0f, 1.0f };
+            scale = { 1.0f, 1.0f, 1.0f };
+        }
 	}
 
 	// コンポーネント
@@ -74,6 +83,14 @@ void Actor::OnGUI()
 			component->DrawImGui();
 			//ImGui::PopID();
 		}
+	}
+}
+
+void Actor::DrawDebug()
+{
+	for (std::shared_ptr<Component>& component : components)
+	{
+		component->DrawDebug();
 	}
 }
 
@@ -184,7 +201,7 @@ void ActorManager::Render(ID3D11DeviceContext* dc, Shader* shader)
 }
 
 // リスター描画
-void ActorManager::DrawLister()
+void ActorManager::DrawLister(char* filter)
 {
 	ImGui::SetNextWindowPos(ImVec2(30, 50), ImGuiCond_FirstUseEver);
 	ImGui::SetNextWindowSize(ImVec2(300, 300), ImGuiCond_FirstUseEver);
@@ -194,24 +211,27 @@ void ActorManager::DrawLister()
 	{
 		for (std::shared_ptr<Actor>& actor : updateActors)
 		{
-			ImGuiTreeNodeFlags nodeFlags = ImGuiTreeNodeFlags_Leaf;
-
-			if (selectionActors.find(actor) != selectionActors.end())
+			if (filter == actor->GetName())
 			{
-				nodeFlags |= ImGuiTreeNodeFlags_Selected;
+				ImGuiTreeNodeFlags nodeFlags = ImGuiTreeNodeFlags_Leaf;
+
+				if (selectionActors.find(actor) != selectionActors.end())
+				{
+					nodeFlags |= ImGuiTreeNodeFlags_Selected;
+				}
+
+				ImGui::TreeNodeEx(actor.get(), nodeFlags, actor->GetName());
+
+				if (ImGui::IsItemClicked())
+				{
+					// 単一選択だけ対応しておく
+					ImGuiIO& io = ImGui::GetIO();
+					selectionActors.clear();
+					selectionActors.insert(actor);
+				}
+
+				ImGui::TreePop();
 			}
-
-			ImGui::TreeNodeEx(actor.get(), nodeFlags, actor->GetName());
-
-			if (ImGui::IsItemClicked())
-			{
-				// 単一選択だけ対応しておく
-				ImGuiIO& io = ImGui::GetIO();
-				selectionActors.clear();
-				selectionActors.insert(actor);
-			}
-
-			ImGui::TreePop();
 		}
 	}
 	ImGui::End();
@@ -233,4 +253,12 @@ void ActorManager::DrawDetail()
 		}
 	}
 	ImGui::End();
+}
+
+void ActorManager::DrawDebug()
+{
+	for (std::shared_ptr<Actor>& actor : updateActors)
+	{
+		actor.get()->DrawDebug();
+	}
 }

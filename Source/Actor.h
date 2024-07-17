@@ -22,6 +22,8 @@ public:
 	// GUI表示
 	virtual void OnGUI();
 
+    virtual void DrawDebug();
+
 	//////////////////////////////////////////////////////////////////////////
 	//							セッター・ゲッター							//
 	//////////////////////////////////////////////////////////////////////////
@@ -84,9 +86,7 @@ private:
 	DirectX::XMFLOAT3	scale = DirectX::XMFLOAT3(1, 1, 1);
 	DirectX::XMFLOAT4	color=DirectX::XMFLOAT4(1, 1, 1, 1);
 	DirectX::XMFLOAT4X4	transform = DirectX::XMFLOAT4X4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
-
 	std::unique_ptr<Model>	model;
-
 	std::vector<std::shared_ptr<Component>>	components;
 };
 
@@ -120,8 +120,10 @@ public:
 	void Render(ID3D11DeviceContext* dc, Shader* shader);
 
 public:
-	void DrawLister();
+	void DrawLister(char *filter);
 	void DrawDetail();
+
+	void DrawDebug();
 
 private:
 	std::vector<std::shared_ptr<Actor>>		startActors;

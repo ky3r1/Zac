@@ -66,6 +66,7 @@ public:
 
     // ƒƒCƒ“ƒJƒƒ‰æ“¾
     Camera& GetMainCamera() { return mainCamera; }
+    void DrawImGui();
 
 private:
     Camera		mainCamera;

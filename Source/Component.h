@@ -19,6 +19,9 @@ public:
 	// GUI描画
 	virtual void DrawImGui() {}
 
+	//デバッグプリミティブ描画
+	virtual void DrawDebug(){}
+
 	// アクター設定
 	void SetActor(std::shared_ptr<Actor> actor) { this->actor = actor; }
 

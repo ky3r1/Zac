@@ -20,6 +20,14 @@ public:
     // 旋回
     void Turn(const DirectX::XMFLOAT3& direction, float elapsedTime);
 
+    //セッター・ゲッター
+    //移動速度
+    float GetMoveSpeed()const { return moveSpeed; }
+    void SetMoveSpeed(float value) { moveSpeed = value; }
+    //旋回速度
+    float GetTurnSpeed()const { return turnSpeed; }
+    void SetTurnSpeed(float value) { turnSpeed = value; }
+
 private:
     float		moveSpeed = 5.0f;
     float		turnSpeed = 6.28f;

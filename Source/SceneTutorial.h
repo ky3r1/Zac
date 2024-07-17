@@ -5,7 +5,7 @@
 #include "CameraController.h"
 #include "Scene.h"
 #include "Graphics/Sprite.h"
-#include "Enemy01.h"
+//#include "Enemy01.h"
 
 // ƒQ[ƒ€ƒV[ƒ“
 class SceneTutorial : public Scene

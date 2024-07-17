@@ -27,9 +27,6 @@
     <Filter Include="System">
       <UniqueIdentifier>{1cf43c7d-539e-41f6-aa5a-2a825fe46fd2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Stage">
-      <UniqueIdentifier>{ec65c4ca-6a60-4d92-8c92-c3796c1e0bc8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Camera">
       <UniqueIdentifier>{b1acef27-0afb-4f25-8746-efb6361e4acb}</UniqueIdentifier>
     </Filter>
@@ -71,6 +68,9 @@
     </Filter>
     <Filter Include="Component\Behaviour">
       <UniqueIdentifier>{ecca378b-05cb-4fd2-b1d1-bef1516987d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Stage">
+      <UniqueIdentifier>{ec65c4ca-6a60-4d92-8c92-c3796c1e0bc8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -201,18 +201,15 @@
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="Source\Stage.h">
-      <Filter>Stage</Filter>
+      <Filter>Component\Stage</Filter>
     </ClInclude>
     <ClInclude Include="Source\StageManager.h">
-      <Filter>Stage</Filter>
+      <Filter>Component\Stage</Filter>
     </ClInclude>
     <ClInclude Include="Source\Mathf.h">
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="Source\EnemyManager.h">
-      <Filter>Component\Character\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Enemy01.h">
       <Filter>Component\Character\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Source\Player.h">
@@ -249,16 +246,7 @@
       <Filter>EnemyControl\SearchSystem</Filter>
     </ClInclude>
     <ClInclude Include="Source\StageMain.h">
-      <Filter>Stage</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Enemy02.h">
-      <Filter>Component\Character\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Enemy03.h">
-      <Filter>Component\Character\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\EnemyBoss.h">
-      <Filter>Component\Character\Enemy</Filter>
+      <Filter>Component\Stage</Filter>
     </ClInclude>
     <ClInclude Include="Source\Spown.h">
       <Filter>EnemyControl\Spawn</Filter>
@@ -389,10 +377,10 @@
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="Source\Stage.cpp">
-      <Filter>Stage</Filter>
+      <Filter>Component\Stage</Filter>
     </ClCompile>
     <ClCompile Include="Source\StageManager.cpp">
-      <Filter>Stage</Filter>
+      <Filter>Component\Stage</Filter>
     </ClCompile>
     <ClCompile Include="Source\Mathf.cpp">
       <Filter>System</Filter>
@@ -401,9 +389,6 @@
       <Filter>Component\Character\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Source\EnemyManager.cpp">
-      <Filter>Component\Character\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Enemy01.cpp">
       <Filter>Component\Character\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Source\Player.cpp">
@@ -446,16 +431,7 @@
       <Filter>EnemyControl\SearchSystem</Filter>
     </ClCompile>
     <ClCompile Include="Source\StageMain.cpp">
-      <Filter>Stage</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Enemy02.cpp">
-      <Filter>Component\Character\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Enemy03.cpp">
-      <Filter>Component\Character\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\EnemyBoss.cpp">
-      <Filter>Component\Character\Enemy</Filter>
+      <Filter>Component\Stage</Filter>
     </ClCompile>
     <ClCompile Include="Source\Spown.cpp">
       <Filter>EnemyControl\Spawn</Filter>

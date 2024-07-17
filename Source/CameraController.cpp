@@ -156,6 +156,62 @@ void CameraController::Update(DirectX::XMFLOAT3 target)
 	CameraManager::Instance().GetMainCamera().SetLookAt(eye, target, DirectX::XMFLOAT3(0, 1, 0));
 }
 
+void CameraController::UpdateKey(float elapsedTime, DirectX::XMFLOAT3 target)
+{
+	GamePad& gamePad = Input::Instance().GetGamePad();
+	float ax = gamePad.GetAxisRX();
+	float ay = gamePad.GetAxisRY();
+
+	DirectX::XMFLOAT3	angle = DirectX::XMFLOAT3(0, 0, 0);
+
+	static DirectX::XMFLOAT3	cameraAngle = DirectX::XMFLOAT3(0, 0, 0);
+	static float				cameraRollSpeed = DirectX::XMConvertToRadians(90);
+	static float				cameraMaxPitch = DirectX::XMConvertToRadians(45);
+	static float				cameraMinPitch = DirectX::XMConvertToRadians(-45);
+	static float				cameraRange = 100.0f;
+	static 	float				characterHeight = 10.0f;
+	float lengthSq = ax * ax + ay * ay;
+	if (lengthSq > 0.1f)
+	{
+		float speed = cameraRollSpeed * elapsedTime;
+
+		cameraAngle.x += ay * speed;
+		cameraAngle.y += ax * speed;
+
+		if (cameraAngle.x < cameraMinPitch)
+		{
+			cameraAngle.x = cameraMinPitch;
+		}
+		if (cameraAngle.x > cameraMaxPitch)
+		{
+			cameraAngle.x = cameraMaxPitch;
+		}
+		if (cameraAngle.y < -DirectX::XM_PI)
+		{
+			cameraAngle.y += DirectX::XM_2PI;
+		}
+		if (cameraAngle.y > DirectX::XM_PI)
+		{
+			cameraAngle.y -= DirectX::XM_2PI;
+		}
+	}
+
+	DirectX::XMVECTOR Offset = DirectX::XMVectorSet(0.0f, characterHeight, 0.0f, 0.0f);
+	DirectX::XMVECTOR Target = DirectX::XMLoadFloat3(&target);
+	DirectX::XMVECTOR Focus = DirectX::XMVectorAdd(Target, Offset);
+	DirectX::XMMATRIX Transform = DirectX::XMMatrixRotationRollPitchYaw(cameraAngle.x, cameraAngle.y, cameraAngle.z);
+	DirectX::XMVECTOR Range = DirectX::XMVectorSet(0.0f, 0.0f, -cameraRange, 0.0f);
+	DirectX::XMVECTOR Vec = DirectX::XMVector3TransformCoord(Range, Transform);
+	DirectX::XMVECTOR Eye = DirectX::XMVectorAdd(Focus, Vec);
+
+	DirectX::XMFLOAT3 eye, focus;
+	DirectX::XMStoreFloat3(&eye, Eye);
+	DirectX::XMStoreFloat3(&focus, Focus);
+
+	Camera& camera = CameraManager::Instance().GetMainCamera();
+	camera.SetLookAt(eye, focus, DirectX::XMFLOAT3(0, 1, 0));
+}
+
 void CameraController::DrawDebugGUI()
 {
 	if (ImGui::Begin("Camera", nullptr, ImGuiWindowFlags_None))

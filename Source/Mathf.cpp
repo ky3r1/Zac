@@ -33,6 +33,24 @@ float Mathf::Dot(DirectX::XMFLOAT3 A, DirectX::XMFLOAT3 B)
     return DirectX::XMVectorGetX(DirectX::XMVector3Dot(a, b));
 }
 
+//角度
+float Mathf::Angle(DirectX::XMFLOAT3 A, DirectX::XMFLOAT3 B)
+{
+    DirectX::XMVECTOR a, b;
+    a = DirectX::XMLoadFloat3(&A);
+    b = DirectX::XMLoadFloat3(&B);
+    return DirectX::XMVectorGetX(DirectX::XMVector3AngleBetweenNormals(a, b));
+}
+
+//距離
+float Mathf::Distance(DirectX::XMFLOAT3 A, DirectX::XMFLOAT3 B)
+{
+DirectX::XMVECTOR a, b;
+    a = DirectX::XMLoadFloat3(&A);
+    b = DirectX::XMLoadFloat3(&B);
+    return DirectX::XMVectorGetX(DirectX::XMVector3Length(DirectX::XMVectorSubtract(a, b)));
+}
+
 //線形補完
 float Mathf::Lerp(float a, float b, float t)
 {
@@ -47,15 +65,4 @@ float Mathf::RandomRange(float min, float max)
 
 	// min～maxまでのランダム値に変換
 	return min + (max - min) * value;
-}
-
-// 2つのXMFLOAT3の間の長さを返す関数
-float Mathf::Pythagoras(DirectX::XMFLOAT3 A, DirectX::XMFLOAT3 B)
-{
-    DirectX::XMVECTOR AV = DirectX::XMLoadFloat3(&A);
-    DirectX::XMVECTOR BV = DirectX::XMLoadFloat3(&B);
-    DirectX::XMVECTOR Dir = {};
-    Dir = DirectX::XMVectorSubtract(AV, BV);
-    Dir = DirectX::XMVector3Length(Dir);
-    return DirectX::XMVectorGetX(Dir);
 }

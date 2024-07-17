@@ -13,12 +13,15 @@ public:
     //内積
     static float Dot(DirectX::XMFLOAT3 A, DirectX::XMFLOAT3 B);
 
+    // 2つのXMFLOAT3の間の角度を返す関数
+    static float Angle(DirectX::XMFLOAT3 A, DirectX::XMFLOAT3 B);
+
+	//点から点の距離
+    static float Distance(DirectX::XMFLOAT3 A, DirectX::XMFLOAT3 B);
+
 	//線形補完
 	static float Lerp(float a, float b, float t);
 
 	// 指定範囲のランダム値をfloat型で計算する
 	static float RandomRange(float min, float max);
-
-	// 2つのXMFLOAT3の間の長さを返す関数
-	static float Pythagoras(DirectX::XMFLOAT3 A,DirectX::XMFLOAT3 B);
 };

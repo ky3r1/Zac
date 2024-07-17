@@ -59,3 +59,29 @@ void Camera::SetPerspectiveFov(float fovY, float aspect, float nearZ, float farZ
 	DirectX::XMStoreFloat4x4(&projection, Projection);
 }
 
+void CameraManager::DrawImGui()
+{
+	ImGui::SetNextWindowPos(ImVec2(950, 50), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowSize(ImVec2(300, 300), ImGuiCond_FirstUseEver);
+
+	DirectX::XMFLOAT3 eye = mainCamera.GetEye();
+    DirectX::XMFLOAT3 focus = mainCamera.GetFocus();
+    DirectX::XMFLOAT3 up = mainCamera.GetUp();
+	DirectX::XMFLOAT3 right = mainCamera.GetRight();
+	DirectX::XMFLOAT3 front = mainCamera.GetFront();
+	//DirectX::XMFLOAT3 distance = mainCamera.GetDistance();
+
+	if (ImGui::Begin("MainCamera", nullptr, ImGuiWindowFlags_None))
+	{
+		// トランスフォーム
+		if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			ImGui::InputFloat3("Eye", &eye.x);
+			ImGui::InputFloat3("focus", &focus.x);
+			ImGui::InputFloat3("up", &up.x);
+			ImGui::InputFloat3("up", &right.x);
+			ImGui::InputFloat3("up", &front.x);
+		}
+	}
+	ImGui::End();
+}

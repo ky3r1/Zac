@@ -10,19 +10,13 @@
 
 #include "Component.h"
 #include "Movement.h"
+#include "Character.h"
 
-
-class Player : public Component
+class Player : public Character
 {
 public:
 	Player();
 	~Player() override;
-	// インスタンス取得
-	static Player& Instance()
-	{
-		static Player instance;
-		return instance;
-	}
 
 	// 名前取得
 	const char* GetName() const override { return "Player"; }
@@ -32,6 +26,8 @@ public:
 
 	// 更新処理
 	void Update(float elapsedTime) override;
+
+	void DrawDebug() override;
 
 private:
 	// キャラクター操作
