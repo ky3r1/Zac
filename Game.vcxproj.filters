@@ -24,9 +24,6 @@
     <Filter Include="Input">
       <UniqueIdentifier>{1922815d-5a70-4f38-9fbd-fb6e72c44df0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Character">
-      <UniqueIdentifier>{23ac5688-7b77-4141-aa44-acb9b22da345}</UniqueIdentifier>
-    </Filter>
     <Filter Include="System">
       <UniqueIdentifier>{1cf43c7d-539e-41f6-aa5a-2a825fe46fd2}</UniqueIdentifier>
     </Filter>
@@ -38,15 +35,6 @@
     </Filter>
     <Filter Include="Scene">
       <UniqueIdentifier>{130cae6d-7b04-48a3-ad16-bcb5e7ddec5d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Character\Enemy">
-      <UniqueIdentifier>{359f6794-b7b3-4d3b-9131-757fe05c61ea}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Character\Player">
-      <UniqueIdentifier>{586e89f3-e571-4887-bbad-e3063f9e8e0c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Character\Projectile">
-      <UniqueIdentifier>{3a4daa95-d8ff-4d37-8758-65b321fa7eb7}</UniqueIdentifier>
     </Filter>
     <Filter Include="ClassDiagram">
       <UniqueIdentifier>{cd684424-64ac-47eb-8246-e92123ea7eea}</UniqueIdentifier>
@@ -68,6 +56,21 @@
     </Filter>
     <Filter Include="Component">
       <UniqueIdentifier>{5216ba32-ad0f-4ef2-ae93-937c64bd62be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Character">
+      <UniqueIdentifier>{23ac5688-7b77-4141-aa44-acb9b22da345}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Character\Enemy">
+      <UniqueIdentifier>{359f6794-b7b3-4d3b-9131-757fe05c61ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Character\Player">
+      <UniqueIdentifier>{586e89f3-e571-4887-bbad-e3063f9e8e0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Character\Projectile">
+      <UniqueIdentifier>{3a4daa95-d8ff-4d37-8758-65b321fa7eb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Behaviour">
+      <UniqueIdentifier>{ecca378b-05cb-4fd2-b1d1-bef1516987d2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -159,7 +162,7 @@
       <Filter>Camera</Filter>
     </ClInclude>
     <ClInclude Include="Source\Character.h">
-      <Filter>Character</Filter>
+      <Filter>Component\Character</Filter>
     </ClInclude>
     <ClInclude Include="Source\Collision.h">
       <Filter>System</Filter>
@@ -207,28 +210,28 @@
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="Source\EnemyManager.h">
-      <Filter>Character\Enemy</Filter>
+      <Filter>Component\Character\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Source\Enemy01.h">
-      <Filter>Character\Enemy</Filter>
+      <Filter>Component\Character\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Source\Player.h">
-      <Filter>Character\Player</Filter>
+      <Filter>Component\Character\Player</Filter>
     </ClInclude>
     <ClInclude Include="Source\Projectile.h">
-      <Filter>Character\Projectile</Filter>
+      <Filter>Component\Character\Projectile</Filter>
     </ClInclude>
     <ClInclude Include="Source\ProjectileHoming.h">
-      <Filter>Character\Projectile</Filter>
+      <Filter>Component\Character\Projectile</Filter>
     </ClInclude>
     <ClInclude Include="Source\ProjectileManager.h">
-      <Filter>Character\Projectile</Filter>
+      <Filter>Component\Character\Projectile</Filter>
     </ClInclude>
     <ClInclude Include="Source\ProjectileStraight.h">
-      <Filter>Character\Projectile</Filter>
+      <Filter>Component\Character\Projectile</Filter>
     </ClInclude>
     <ClInclude Include="Source\Enemy.h">
-      <Filter>Character\Enemy</Filter>
+      <Filter>Component\Character\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Source\Graphics\ResourceManager.h">
       <Filter>Graphics</Filter>
@@ -249,13 +252,13 @@
       <Filter>Stage</Filter>
     </ClInclude>
     <ClInclude Include="Source\Enemy02.h">
-      <Filter>Character\Enemy</Filter>
+      <Filter>Component\Character\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Source\Enemy03.h">
-      <Filter>Character\Enemy</Filter>
+      <Filter>Component\Character\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Source\EnemyBoss.h">
-      <Filter>Character\Enemy</Filter>
+      <Filter>Component\Character\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Source\Spown.h">
       <Filter>EnemyControl\Spawn</Filter>
@@ -274,6 +277,15 @@
     </ClInclude>
     <ClInclude Include="Source\EffectManager.h">
       <Filter>System\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Actor.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Movement.h">
+      <Filter>Component\Behaviour</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -341,7 +353,7 @@
       <Filter>Camera</Filter>
     </ClCompile>
     <ClCompile Include="Source\Character.cpp">
-      <Filter>Character</Filter>
+      <Filter>Component\Character</Filter>
     </ClCompile>
     <ClCompile Include="Source\Collision.cpp">
       <Filter>System</Filter>
@@ -386,28 +398,28 @@
       <Filter>System</Filter>
     </ClCompile>
     <ClCompile Include="Source\Enemy.cpp">
-      <Filter>Character\Enemy</Filter>
+      <Filter>Component\Character\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Source\EnemyManager.cpp">
-      <Filter>Character\Enemy</Filter>
+      <Filter>Component\Character\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Source\Enemy01.cpp">
-      <Filter>Character\Enemy</Filter>
+      <Filter>Component\Character\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Source\Player.cpp">
-      <Filter>Character\Player</Filter>
+      <Filter>Component\Character\Player</Filter>
     </ClCompile>
     <ClCompile Include="Source\Projectile.cpp">
-      <Filter>Character\Projectile</Filter>
+      <Filter>Component\Character\Projectile</Filter>
     </ClCompile>
     <ClCompile Include="Source\ProjectileHoming.cpp">
-      <Filter>Character\Projectile</Filter>
+      <Filter>Component\Character\Projectile</Filter>
     </ClCompile>
     <ClCompile Include="Source\ProjectileManager.cpp">
-      <Filter>Character\Projectile</Filter>
+      <Filter>Component\Character\Projectile</Filter>
     </ClCompile>
     <ClCompile Include="Source\ProjectileStraight.cpp">
-      <Filter>Character\Projectile</Filter>
+      <Filter>Component\Character\Projectile</Filter>
     </ClCompile>
     <ClCompile Include="Source\Graphics\ResourceManager.cpp">
       <Filter>Graphics</Filter>
@@ -437,13 +449,13 @@
       <Filter>Stage</Filter>
     </ClCompile>
     <ClCompile Include="Source\Enemy02.cpp">
-      <Filter>Character\Enemy</Filter>
+      <Filter>Component\Character\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Source\Enemy03.cpp">
-      <Filter>Character\Enemy</Filter>
+      <Filter>Component\Character\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Source\EnemyBoss.cpp">
-      <Filter>Character\Enemy</Filter>
+      <Filter>Component\Character\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Source\Spown.cpp">
       <Filter>EnemyControl\Spawn</Filter>
@@ -459,6 +471,12 @@
     </ClCompile>
     <ClCompile Include="Source\EffectManager.cpp">
       <Filter>System\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Actor.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Movement.cpp">
+      <Filter>Component\Behaviour</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
