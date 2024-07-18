@@ -26,4 +26,21 @@ class Enemy : public Character
 public:
 	Enemy() {}
     ~Enemy() override {}
+	// 名前取得
+	virtual const char* GetName() const override { return "Enemy"; }
+
+	// 開始処理
+	void Start() override;
+
+	// 更新処理
+	void Update(float elapsedTime) override;
+
+	// GUI描画
+	virtual void DrawImGui() override;
+
+	void DrawDebug() override;
+private:
+	// キャラクター操作
+	void Move(float elapsedTime);
+private:
 };

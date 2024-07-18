@@ -1,24 +1,30 @@
-#pragma once
+ï»¿#pragma once
 //#include"Graphics/Shader.h"
 #include"Graphics/Model.h"
 //#include "Collision.h"
 #include "Stage.h"
 
-//ƒXƒe[ƒW
+//ã‚¹ãƒ†ãƒ¼ã‚¸
 class StageMain:public Stage 
 {
 public:
+    //åå‰å–å¾—
+    const char* GetName()const override { return "StageMain"; }
+
+    // ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
     StageMain();
-    ~StageMain()override;
+    // ãƒ†ã‚™ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+    ~StageMain();
+    // åˆæœŸåŒ–
+    void Start() override;
+    // æ›´æ–°
+    void Update(float elapsedTime) override;
 
-    //XVˆ—
-    void Update(float elapsedTime)override;
-    //•`‰æˆ—
-    void Render(ID3D11DeviceContext* dc, Shader* shader)override;
+    // ãƒ‡ãƒãƒƒã‚°ãƒ—ãƒªãƒŸãƒ†ã‚£ãƒ–æç”»
+    void DrawDebug() override;
+    //Imguiæç”»
+    void DrawImGui() override;
 
-    //ƒŒƒCƒLƒƒƒXƒg
-    bool RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit)override;
-
-    //ƒfƒoƒbƒO—pGUI
-    void DrawDebugGUI()override;
+    //// åå‰å–å¾—
+    //const char* GetName() const override { return "Player"; }
 };

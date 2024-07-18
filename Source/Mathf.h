@@ -18,10 +18,17 @@ public:
 
 	//点から点の距離
     static float Distance(DirectX::XMFLOAT3 A, DirectX::XMFLOAT3 B);
+	static DirectX::XMFLOAT3 Distance3(DirectX::XMFLOAT3 A, DirectX::XMFLOAT3 B);
 
 	//線形補完
 	static float Lerp(float a, float b, float t);
 
 	// 指定範囲のランダム値をfloat型で計算する
 	static float RandomRange(float min, float max);
+
+	//+演算
+	static DirectX::XMFLOAT3 Add(DirectX::XMFLOAT3 A, DirectX::XMFLOAT3 B);
+	//-演算
+	static DirectX::XMFLOAT3 Subtruct(DirectX::XMFLOAT3 A, DirectX::XMFLOAT3 B);
+
 };

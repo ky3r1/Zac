@@ -5,9 +5,7 @@
 #include "StageMain.h"
 #include "Effect.h"
 #include "Component.h"
-
-#define FRONT 1
-#define BACK -1
+#include "Movement.h"
 
 struct DelayTime
 {
@@ -29,4 +27,12 @@ public:
 
     // 更新処理
     virtual void Update(float elapsedTime) override;
+
+    //Imgui描画
+    virtual void DrawImGui() override;
+
+    //デバッグプリミティブ描画
+    virtual void DrawDebug() override;
+protected:
+    std::shared_ptr<Movement>	movement;
 };

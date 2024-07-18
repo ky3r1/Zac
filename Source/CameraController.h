@@ -20,6 +20,7 @@ public:
 
 	//デバッグ用Imgui表示
     void DrawDebugGUI();
+private:
 
 private:
 	DirectX::XMFLOAT3		eye;

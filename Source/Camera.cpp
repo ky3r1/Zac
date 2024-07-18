@@ -71,16 +71,16 @@ void CameraManager::DrawImGui()
 	DirectX::XMFLOAT3 front = mainCamera.GetFront();
 	//DirectX::XMFLOAT3 distance = mainCamera.GetDistance();
 
-	if (ImGui::Begin("MainCamera", nullptr, ImGuiWindowFlags_None))
+	if (ImGui::Begin("Camera", nullptr, ImGuiWindowFlags_None))
 	{
 		// トランスフォーム
-		if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
+		if (ImGui::CollapsingHeader("MainCamera", ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			ImGui::InputFloat3("Eye", &eye.x);
-			ImGui::InputFloat3("focus", &focus.x);
-			ImGui::InputFloat3("up", &up.x);
-			ImGui::InputFloat3("up", &right.x);
-			ImGui::InputFloat3("up", &front.x);
+			ImGui::InputFloat3("Focus", &focus.x);
+			ImGui::InputFloat3("Up", &up.x);
+			ImGui::InputFloat3("Right", &right.x);
+			ImGui::InputFloat3("Front", &front.x);
 		}
 	}
 	ImGui::End();

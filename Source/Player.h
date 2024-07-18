@@ -27,6 +27,10 @@ public:
 	// 更新処理
 	void Update(float elapsedTime) override;
 
+	//Imgui描画
+	void DrawImGui() override;
+
+	//デバッグプリミティブ描画
 	void DrawDebug() override;
 
 private:
@@ -35,18 +39,4 @@ private:
 
 	// カメラ操作
 	void CameraControl(float elapsedTime);
-
-private:
-	std::shared_ptr<Movement>	movement;
-
-	//GamePad				gamePad;
-
-	DirectX::XMFLOAT3	angle = DirectX::XMFLOAT3(0, 0, 0);
-
-	DirectX::XMFLOAT3	cameraAngle = DirectX::XMFLOAT3(0, 0, 0);
-	float				cameraRollSpeed = DirectX::XMConvertToRadians(90);
-	float				cameraMaxPitch = DirectX::XMConvertToRadians(45);
-	float				cameraMinPitch = DirectX::XMConvertToRadians(-45);
-	float				cameraRange = 100.0f;
-	float				characterHeight = 10.0f;
 };

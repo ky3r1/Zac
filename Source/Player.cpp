@@ -19,7 +19,6 @@ void Player::Start()
 {
 	movement = GetActor()->GetComponent<Movement>();
 	movement.get()->SetMoveSpeed(15.0f);
-	GetActor().get()->SetScale(DirectX::XMFLOAT3(5.0f, 5.0f, 5.0f));
 	// 適当にモーション再生
 	Model* model = GetActor()->GetModel();
 	if (model != nullptr)
@@ -36,8 +35,10 @@ void Player::Update(float elapsedTime)
 
 	CameraControl(elapsedTime);
 	CharacterControl(elapsedTime);
+}
 
-
+void Player::DrawImGui()
+{
 }
 
 void Player::DrawDebug()

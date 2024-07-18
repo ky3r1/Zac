@@ -137,6 +137,9 @@ void CameraController::Update(DirectX::XMFLOAT3 target)
 	Up = DirectX::XMVector3TransformNormal(DirectX::XMVectorSet(0, 1, 0, 0), World);
 
 	// Œ‹‰Ê‚ðŠi”[
+	DirectX::XMFLOAT4X4 view, projection;
+    DirectX::XMStoreFloat4x4(&view, View);
+    DirectX::XMStoreFloat4x4(&projection, World);
 	DirectX::XMStoreFloat3(&eye, Eye);
 	DirectX::XMStoreFloat3(&up, Up);
 	DirectX::XMStoreFloat3(&right, Right);
@@ -216,7 +219,7 @@ void CameraController::DrawDebugGUI()
 {
 	if (ImGui::Begin("Camera", nullptr, ImGuiWindowFlags_None))
 	{
-		if (ImGui::TreeNode("CameraController"))
+		if (ImGui::CollapsingHeader("CameraController", ImGuiTreeNodeFlags_DefaultOpen))
 		{	
 			ImGui::InputFloat3("Eye", &eye.x);
 			ImGui::InputFloat3("Focus", &focus.x);
@@ -224,7 +227,6 @@ void CameraController::DrawDebugGUI()
 			ImGui::SliderFloat3("Right", &right.x, -1, 1);
 			ImGui::SliderFloat("Distance", &distance, 0, 100);
 			ImGui::SliderFloat3("angle", &angle.x, -3.14f, 3.14f * 0.5f);
-			ImGui::TreePop();
 		}
 	}
 	ImGui::End();

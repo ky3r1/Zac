@@ -14,7 +14,7 @@
 #include "SceneResult.h"
 
 //StageIncldue
-#include "StageManager.h"
+//#include "StageManager.h"
 #include "StageMain.h"
 //#include "StageMapChip.h"
 //#include "StageMapChip.h"
@@ -34,27 +34,19 @@ void SceneGame::Initialize()
 
 	//ステージ初期化
 #ifdef ALLSTAGE
-	//Main
-	StageManager& stageManager = StageManager::Instance();
-	StageMain* stageMain = new StageMain();
-	stageManager.Register(stageMain);
-
-#ifdef STAGEMOVE
-	for (int index = 0; index < 1; ++index)
+	// ステージ
 	{
-		StageMoveFloor* stageMoveFloor = new StageMoveFloor(index);
-		stageManager.Register(stageMoveFloor);
-	}
-#endif // STAGEMOVE
+		const char* filename = "Data/Model/Stage/stage01.mdl";
+		std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
+		actor->LoadModel(filename);
+		actor->SetName("MainStage");
+		actor->SetPosition(DirectX::XMFLOAT3(0, 0, 0));
+		actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
+		actor->SetScale(DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f));
+		actor->SetActorType(ActorType::Stage);
 
-#ifdef STAGEWALL
-	for (int index = 0; index < 2; ++index)
-	{
-		StageWall* stageWall = new StageWall(index);
-		stageManager.Register(stageWall);
+		actor->AddComponent<StageMain>();
 	}
-#endif // STAGEWALL
-
 #endif // ALLSTAGE
 
 
@@ -67,7 +59,8 @@ void SceneGame::Initialize()
 		actor->SetName("Player");
 		actor->SetPosition(DirectX::XMFLOAT3(0, 0, 0));
 		actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
-		actor->SetScale(DirectX::XMFLOAT3(0.1f, 0.1f, 0.1f));
+		actor->SetScale(DirectX::XMFLOAT3(5.0f, 5.0f, 5.0f));
+		actor->SetActorType(ActorType::Player);
 		actor->AddComponent<Movement>();
 		actor->AddComponent<Player>();
 	}
@@ -94,70 +87,48 @@ void SceneGame::Initialize()
 	camera_controller.SyncCameraToController(camera);
 
 #ifdef ALLENEMY
-#ifdef ENEMY01
-	while (index < 1)
+	// Enemy
 	{
-		//if (index < 3)color = 1;
-		Enemy01* slime = new Enemy01(ENEMYCATEGORY);
-		switch (index)
-		{
-		case 0:
-			slime->SetPosition(DirectX::XMFLOAT3(5.0f, 0, 25));
-			slime->SetWeight(0.0f);
-			break;
-		case 1:
-			slime->SetPosition(DirectX::XMFLOAT3(10.0f, 0, 25));
-			slime->SetWeight(1.0f);
-			break;
-		case 2:
-			slime->SetPosition(DirectX::XMFLOAT3(-5.0f, 0, 25));
-			slime->SetWeight(2.0f);
-			break;
-		case 3:
-			slime->SetPosition(DirectX::XMFLOAT3(-10.0f, 0, 25));
-			slime->SetWeight(3.0f);
-			break;
-		case 4:
-			slime->SetPosition(DirectX::XMFLOAT3(0.0f, 0, 25));
-			slime->SetWeight(4.0f);
-			break;
-			//default:
-			//	slime->SetPosition(DirectX::XMFLOAT3(0.0f, 0, 5));
-	  //          break;
-		}
-		EnemyManager::Instance().Register(slime);
-		index++;
+		const char* filename = "Data/Model/Slime/Slime.mdl";
+		std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
+		actor->LoadModel(filename);
+		actor->SetName("Enemy00");
+		actor->SetPosition(DirectX::XMFLOAT3(0, 0, 20));
+		actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
+		actor->SetScale(DirectX::XMFLOAT3(0.05f, 0.05f, 0.05f));
+		actor->SetActorType(ActorType::Enemy);
+		actor->AddComponent<Movement>();
+		actor->AddComponent<Enemy>();
+		//EnemyManager::Instance().Register(actor);
 	}
-	index = 0;
+
+	// Enemy
+	{
+		const char* filename = "Data/Model/Slime/Slime.mdl";
+		std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
+		actor->LoadModel(filename);
+		actor->SetName("Enemy01");
+		actor->SetPosition(DirectX::XMFLOAT3(0, 0, -20));
+		actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
+		actor->SetScale(DirectX::XMFLOAT3(0.05f, 0.05f, 0.05f));
+		actor->SetColor(DirectX::XMFLOAT4(0.0f, 0.05f, 1.05f,1.0f));
+        actor->SetActorType(ActorType::Enemy);
+		actor->AddComponent<Movement>();
+		actor->AddComponent<Enemy>();
+		//EnemyManager::Instance().Register(actor);
+	}
+
+#ifdef ENEMY01
+	
 #endif // ENEMY01
 #ifdef ENEMY02
-	while (index < 1)
-	{
-		Enemy02* slime = new Enemy02(ENEMYCATEGORY);
-		slime->SetPosition(DirectX::XMFLOAT3(10.0f, 0, 20));
-		EnemyManager::Instance().Register(slime);
-		index++;
-	}
-	index = 0;
+
 #endif // ENEMY02
 #ifdef ENEMY03
-	while (index < 1)
-	{
-		Enemy03* jammo = new Enemy03(ENEMYCATEGORY);
-		jammo->SetPosition(DirectX::XMFLOAT3(0.0f, 0, 20));
-		EnemyManager::Instance().Register(jammo);
-		index++;
-	}
-	index = 0;
+
 #endif // ENEMY03
 #ifdef ENEMYBOSS
-	while (index < 1)
-	{
-		EnemyBoss* boss = new EnemyBoss(ENEMYCATEGORY);
-		boss->SetPosition(DirectX::XMFLOAT3(0.0f, 0, 20));
-		EnemyManager::Instance().Register(boss);
-		index++;
-	}
+
 #endif // ENEMYBOSS
 #endif // ALLENEMY
 }
@@ -168,24 +139,12 @@ void SceneGame::Finalize()
 	//エネミー終了化
 	EnemyManager::Instance().clear();
 	//ステージ終了化
-	StageManager::Instance().Clear();
+	//StageManager::Instance().Clear();
 }
 
 // 更新処理
 void SceneGame::Update(float elapsedTime)
 {
-	////カメラコントローラー更新処理
-	//DirectX::XMFLOAT3 target = Player::Instance().GetPosition();
-	//target.y += 0.5f;
-	//cameraController->SetTarget(target);
-	//cameraController->Update(elapsedTime);
-	
-	// カメラ更新処理
-	//camera_controller.Update(player.get()->GetPosition());
-	camera_controller.SyncControllerToCamera(camera);
-
-	StageManager::Instance().Update(elapsedTime);
-
 	Graphics& graphics = Graphics::Instance();
 	ID3D11DeviceContext* dc = graphics.GetDeviceContext();
 	//MouseManager::GetInstance().MouseTransform(dc, Camera::Instance().GetView(), Camera::Instance().GetProjection());
@@ -194,6 +153,9 @@ void SceneGame::Update(float elapsedTime)
     //プレイヤー更新処理
 	ActorManager::Instance().Update(elapsedTime);
 	//if(Player::Instance().GetHealth() <= 0)SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult(false)));
+	Actor* actor = ActorManager::Instance().GetActor("Player");
+	//カメラ更新処理
+	camera_controller.Update(actor->GetPosition());
 #endif //  ALLPLAYER
 
 #ifdef SPOWNENEMY
@@ -238,7 +200,7 @@ void SceneGame::Render()
 		Shader* shader = graphics.GetShader();
 		shader->Begin(dc, rc);
 		//ステージ描画
-		StageManager::Instance().Render(dc, shader);
+		//StageManager::Instance().Render(dc, shader);
 
 		//エネミー描画
 		EnemyManager::Instance().Render(dc, shader);
@@ -287,27 +249,24 @@ void SceneGame::Render()
 	}
 
 #ifdef DEBUGIMGUI
-	static bool checker_camera = false;
-	static bool checker_actor = false;
-	static bool checker_enemy = false;
-	static bool checker_projectile = false;
-	static bool checker_stage = false;
-	static bool checker_control= false;
+	static bool checker_camera[2] = {};
+	static bool checker_actor[5] = {};
+	static bool checker_control = {};
 	if (ImGui::BeginMainMenuBar())
 	{
 		if (ImGui::BeginMenu("Camera"))
 		{
-			ImGui::MenuItem("CameraController", "", &checker_camera);
+			ImGui::MenuItem("MainCamera", "", &checker_camera[0]);
+			ImGui::MenuItem("CameraController", "", &checker_camera[1]);
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Actor"))
 		{
-			ImGui::MenuItem("AllAactor", "", &checker_actor);
-			ImGui::EndMenu();
-		}
-		if (ImGui::BeginMenu("Stage"))
-		{
-			ImGui::MenuItem("Stage", "", &checker_stage);
+			ImGui::MenuItem("All", "", &checker_actor[0]);
+			ImGui::MenuItem("Player", "", &checker_actor[1]);
+			ImGui::MenuItem("Enemy", "", &checker_actor[2]);
+			ImGui::MenuItem("Stage", "", &checker_actor[3]);
+			ImGui::MenuItem("Object", "", &checker_actor[4]);
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Control"))
@@ -318,16 +277,33 @@ void SceneGame::Render()
 		ImGui::EndMainMenuBar();
 	}
     // デバッグGUI描画
-    if (checker_camera)camera_controller.DrawDebugGUI();
-	if (checker_actor)
+    if (checker_camera[0])CameraManager::Instance().DrawImGui();
+	if (checker_camera[1])camera_controller.DrawDebugGUI();
+	if (checker_actor[0])
 	{
 		ActorManager::Instance().DrawDetail();
-		ActorManager::Instance().DrawLister("Player");
+		ActorManager::Instance().DrawLister(ActorType::All);
 	}
-	//if (checker_player)Player::Instance().DrawDebugGUI();
-	if (checker_enemy)	EnemyManager::Instance().DrawDebugGUI();
-	if(checker_projectile)ProjectileManager::Instance().DrawDebugGUI();
-	if (checker_stage)StageManager::Instance().DrawDebugGUI();
+	if (checker_actor[1])
+	{
+		ActorManager::Instance().DrawDetail();
+		ActorManager::Instance().DrawLister(ActorType::Player);
+	}
+	if (checker_actor[2])
+	{
+		ActorManager::Instance().DrawDetail();
+		ActorManager::Instance().DrawLister(ActorType::Enemy);
+	}	
+	if (checker_actor[3])
+	{
+		ActorManager::Instance().DrawDetail();
+		ActorManager::Instance().DrawLister(ActorType::Stage);
+	}
+	if (checker_actor[4])
+	{
+		ActorManager::Instance().DrawDetail();
+		ActorManager::Instance().DrawLister(ActorType::Object);
+	}
 	if(checker_control)spown->DrawDebugGUI();
 #endif // DebugImGui
 }
@@ -473,7 +449,7 @@ void SceneGame::CrickEnemyAdd(ID3D11DeviceContext* dc, const DirectX::XMFLOAT4X4
 		DirectX::XMStoreFloat3(&world_position_end, WorldPosition);
 
 		HitResult hit;
-		StageMain stage_main;
+		//StageMain stage_main;
 		//if (stage_main.RayCast(world_position_start, world_position_end, hit))
 		//{
 		//	EnemyManager& enemyManager = EnemyManager::Instance();

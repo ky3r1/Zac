@@ -50,6 +50,15 @@ DirectX::XMVECTOR a, b;
     b = DirectX::XMLoadFloat3(&B);
     return DirectX::XMVectorGetX(DirectX::XMVector3Length(DirectX::XMVectorSubtract(a, b)));
 }
+DirectX::XMFLOAT3 Mathf::Distance3(DirectX::XMFLOAT3 A, DirectX::XMFLOAT3 B)
+{
+    DirectX::XMVECTOR a, b;
+    DirectX::XMFLOAT3 result;
+    a = DirectX::XMLoadFloat3(&A);
+    b = DirectX::XMLoadFloat3(&B);
+    DirectX::XMStoreFloat3(&result, DirectX::XMVector3Length(DirectX::XMVectorSubtract(a, b)));
+    return result;
+}
 
 //ê¸å`ï‚äÆ
 float Mathf::Lerp(float a, float b, float t)
@@ -65,4 +74,24 @@ float Mathf::RandomRange(float min, float max)
 
 	// minÅ`maxÇ‹Ç≈ÇÃÉâÉìÉ_ÉÄílÇ…ïœä∑
 	return min + (max - min) * value;
+}
+
+DirectX::XMFLOAT3 Mathf::Add(DirectX::XMFLOAT3 A, DirectX::XMFLOAT3 B)
+{
+    DirectX::XMVECTOR a, b;
+    DirectX::XMFLOAT3 result;
+    a = DirectX::XMLoadFloat3(&A);
+    b = DirectX::XMLoadFloat3(&B);
+    DirectX::XMStoreFloat3(&result, DirectX::XMVectorAdd(a,b));
+    return result;
+}
+
+DirectX::XMFLOAT3 Mathf::Subtruct(DirectX::XMFLOAT3 A, DirectX::XMFLOAT3 B)
+{
+    DirectX::XMVECTOR a, b;
+    DirectX::XMFLOAT3 result;
+    a = DirectX::XMLoadFloat3(&A);
+    b = DirectX::XMLoadFloat3(&B);
+    DirectX::XMStoreFloat3(&result, DirectX::XMVectorSubtract(a, b));
+    return result;
 }

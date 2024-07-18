@@ -1,13 +1,17 @@
 #pragma once
 
 #include "All.h"
+#include "Component.h"
 
 //カメラ
-class Camera
+class Camera /*: public Component*/
 {
 public:
     //コンストラクタ
     Camera();
+
+    // 名前取得
+    //virtual const char* GetName() const override { return "Camera"; }
 
     //指定方向を向く
     void SetLookAt(const DirectX::XMFLOAT3& eye, const DirectX::XMFLOAT3& focus, const DirectX::XMFLOAT3& up);

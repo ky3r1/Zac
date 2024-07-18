@@ -3,20 +3,11 @@
 #include"Graphics/Model.h"
 #include "All.h"
 
-struct HitResult
-{
-    DirectX::XMFLOAT3 position = { 0,0,0 }; //レイとポリゴンの交点
-    DirectX::XMFLOAT3 normal = { 0,0,0 };   //衝突したポリゴンの法線ベクトル
-    float             distance = 0.0f;      //レイの始点から交点までの距離
-    int               materialIndex = -1;   //衝突したポリゴンのマテリアル番号
-    DirectX::XMFLOAT3 rotation = { 0,0,0 };   //角度
-};
-
 //コリジョン
-class Collision
+static class Collision
 {
 public:
-    //球と球の交差判定
+    //円柱と円柱の交差判定
     static bool IntersectCylinderVsSphere(
         const DirectX::XMFLOAT3& positionA,
         float radiusA,

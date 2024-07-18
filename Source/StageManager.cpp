@@ -11,10 +11,10 @@ void StageManager::Update(float elapsedTime)
 //描画処理
 void StageManager::Render(ID3D11DeviceContext* dc, Shader* shader)
 {
-	for (Stage* stage : stages)
-	{
-		stage->Render(dc, shader);
-	}
+	//for (Stage* stage : stages)
+	//{
+	//	stage->Render(dc, shader);
+	//}
 }
 //ステージ登録
 void StageManager::Register(Stage* stage)
@@ -29,13 +29,13 @@ void StageManager::Remove(Stage* stage)
 
 void StageManager::DrawDebugGUI()
 {
-	ImGui::Begin("Stage");
-	ImGui::SetNextTreeNodeOpen(true);
-	for (Stage* stage : stages)
-	{
-		stage->DrawDebugGUI();
-	}
-	ImGui::End();
+	//ImGui::Begin("Stage");
+	//ImGui::SetNextTreeNodeOpen(true);
+	//for (Stage* stage : stages)
+	//{
+	//	stage->DrawDebugGUI();
+	//}
+	//ImGui::End();
 }
 
 //ステージ全削除
@@ -53,16 +53,16 @@ void StageManager::Clear()
 bool StageManager::RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit)
 {
 	bool result = false;
-	float distance = FLT_MAX;
-	for (Stage* stage : stages)
-	{
-		if (!stage->RayCast(start, end, hit)) continue;
+	//float distance = FLT_MAX;
+	//for (Stage* stage : stages)
+	//{
+	//	if (!stage->RayCast(start, end, hit)) continue;
 
-		if (hit.distance < distance)
-		{
-			distance = hit.distance;
-			result = true;
-		}
-	}
+	//	if (hit.distance < distance)
+	//	{
+	//		distance = hit.distance;
+	//		result = true;
+	//	}
+	//}
 	return result;
 }

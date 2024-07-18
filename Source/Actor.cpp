@@ -1,9 +1,10 @@
 #include "Actor.h"
 #include "Component.h"
+#include "Mathf.h"
 
 // 開始処理
 void Actor::Start()
-{
+{	
 	for (std::shared_ptr<Component>& component : components)
 	{
 		component->Start();
@@ -18,7 +19,6 @@ void Actor::Update(float elapsedTime)
 	{
 		model->UpdateAnimation(elapsedTime);
 	}
-
 	for (std::shared_ptr<Component>& component : components)
 	{
 		component->Update(elapsedTime);
@@ -29,18 +29,18 @@ void Actor::Update(float elapsedTime)
 void Actor::UpdateTransform()
 {
 	// ワールド行列の更新
-	DirectX::XMVECTOR Q = DirectX::XMLoadFloat4(&rotation);
-	DirectX::XMMATRIX S = DirectX::XMMatrixScaling(scale.x, scale.y, scale.z);
+	DirectX::XMVECTOR Q = DirectX::XMLoadFloat4(&parameter.rotation);
+	DirectX::XMMATRIX S = DirectX::XMMatrixScaling(parameter.scale.x, parameter.scale.y, parameter.scale.z);
 	DirectX::XMMATRIX R = DirectX::XMMatrixRotationQuaternion(Q);
-	DirectX::XMMATRIX T = DirectX::XMMatrixTranslation(position.x, position.y, position.z);
+	DirectX::XMMATRIX T = DirectX::XMMatrixTranslation(parameter.collision_cylinder.sphere.position.x, parameter.collision_cylinder.sphere.position.y, parameter.collision_cylinder.sphere.position.z);
 
 	DirectX::XMMATRIX W = S * R * T;
-	DirectX::XMStoreFloat4x4(&transform, W);
+	DirectX::XMStoreFloat4x4(&parameter.transform, W);
 
 	// モデルの行列更新
 	if (model != nullptr)
 	{
-		model->UpdateTransform(transform);
+		model->UpdateTransform(parameter.transform);
 	}
 }
 
@@ -49,25 +49,47 @@ void Actor::OnGUI()
 	// 名前
 	{
 		char buffer[1024];
-		::strncpy_s(buffer, sizeof(buffer), GetName(), sizeof(buffer));
+		::strncpy_s(buffer, sizeof(buffer), GetName().c_str(), sizeof(buffer));
 		if (ImGui::InputText("Name", buffer, sizeof(buffer), ImGuiInputTextFlags_EnterReturnsTrue))
 		{
 			SetName(buffer);
 		}
 	}
 
+	{
+		// デバッグ文字列表示の変更
+		std::string type_str = "";
+		// 現在のステート番号に合わせてデバッグ文字列をstrに格納
+		switch (type) 
+		{
+		case ActorType::Player:
+			type_str = "Player";
+			break;
+		case ActorType::Enemy:
+			type_str = "Enemy";
+			break;
+		case ActorType::Object:
+			type_str = "Object";
+			break;
+		case ActorType::None:
+			type_str = "None";
+			break;
+		}
+		ImGui::Text(u8"ActorType:%s", type_str.c_str());
+	}
+
 	// トランスフォーム
 	if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
 	{
-		ImGui::InputFloat3("Position", &position.x);
-		ImGui::InputFloat3("Rotation", &rotation.x);
-		ImGui::InputFloat3("Scale", &scale.x);
+		ImGui::InputFloat3("Position", &parameter.collision_cylinder.sphere.position.x);
+		ImGui::InputFloat3("Rotation", &parameter.rotation.x);
+		ImGui::InputFloat3("Scale", &parameter.scale.x);
 		
         if (ImGui::Button("Reset"))
         {
-            position = { 0.0f, 0.0f, 0.0f };
-            rotation = { 0.0f, 0.0f, 0.0f, 1.0f };
-            scale = { 1.0f, 1.0f, 1.0f };
+			parameter.collision_cylinder.sphere.position = { 0.0f, 0.0f, 0.0f };
+			parameter.rotation = { 0.0f, 0.0f, 0.0f, 1.0f };
+			parameter.scale = { 1.0f, 1.0f, 1.0f };
         }
 	}
 
@@ -200,8 +222,40 @@ void ActorManager::Render(ID3D11DeviceContext* dc, Shader* shader)
 
 }
 
+Actor* ActorManager::GetActor(std::string name)
+{
+	for (std::shared_ptr<Actor> actor : updateActors)
+	{
+		if (actor->GetName() == name)
+		{
+			return actor.get();
+		}
+	}
+	return nullptr;
+}
+
+Actor* ActorManager::GetNearActor(Actor origin, ActorType filter)
+{
+	float min = FLT_MAX;
+	float distance=0.0f;
+    Actor* minActor = nullptr;
+	for (std::shared_ptr<Actor> actor : updateActors)
+	{
+		if (actor->GetActorType() == filter||filter==ActorType::All)
+        {
+            distance = Mathf::Distance(origin.GetPosition(), actor->GetPosition());
+            if (distance < min)
+            {
+                min = distance;
+                minActor = actor.get();
+            }
+        }
+	}
+	return minActor;
+}
+
 // リスター描画
-void ActorManager::DrawLister(char* filter)
+void ActorManager::DrawLister(ActorType filter)
 {
 	ImGui::SetNextWindowPos(ImVec2(30, 50), ImGuiCond_FirstUseEver);
 	ImGui::SetNextWindowSize(ImVec2(300, 300), ImGuiCond_FirstUseEver);
@@ -211,7 +265,7 @@ void ActorManager::DrawLister(char* filter)
 	{
 		for (std::shared_ptr<Actor>& actor : updateActors)
 		{
-			if (filter == actor->GetName())
+			if (filter == ActorType::All||filter == actor.get()->GetActorType())
 			{
 				ImGuiTreeNodeFlags nodeFlags = ImGuiTreeNodeFlags_Leaf;
 
@@ -220,7 +274,7 @@ void ActorManager::DrawLister(char* filter)
 					nodeFlags |= ImGuiTreeNodeFlags_Selected;
 				}
 
-				ImGui::TreeNodeEx(actor.get(), nodeFlags, actor->GetName());
+				ImGui::TreeNodeEx(actor.get(), nodeFlags, actor->GetName().c_str());
 
 				if (ImGui::IsItemClicked())
 				{
@@ -241,7 +295,7 @@ void ActorManager::DrawLister(char* filter)
 void ActorManager::DrawDetail()
 {
 	ImGui::SetNextWindowPos(ImVec2(950, 50), ImGuiCond_FirstUseEver);
-	ImGui::SetNextWindowSize(ImVec2(300, 300), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowSize(ImVec2(600, 600), ImGuiCond_FirstUseEver);
 
 	hiddenDetail = !ImGui::Begin("Actor Detail", nullptr, ImGuiWindowFlags_None);
 	if (!hiddenDetail)
