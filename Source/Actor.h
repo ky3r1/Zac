@@ -8,6 +8,7 @@ enum class ActorType
 	Enemy,
 	Stage,
 	Object,
+	Camera,
 	None,
 	All,
 };
@@ -46,12 +47,13 @@ public:
 	// GUI表示
 	virtual void OnGUI();
 
-    virtual void DrawDebug();
+	virtual void DrawDebug();
 
 	//////////////////////////////////////////////////////////////////////////
 	//							セッター・ゲッター							//
 	//////////////////////////////////////////////////////////////////////////
-	// 名前のセッター・ゲッター
+
+		// 名前のセッター・ゲッター
 	void SetName(const char* name) { this->name = name; }
 	const std::string GetName() const { return name; }
 
@@ -68,8 +70,8 @@ public:
 	const DirectX::XMFLOAT3& GetScale() const { return parameter.scale; }
 
 	//色のセッター・ゲッター
-    void SetColor(const DirectX::XMFLOAT4& color) { this->parameter.color = color; }
-    const DirectX::XMFLOAT4& GetColor() const { return parameter.color; }
+	void SetColor(const DirectX::XMFLOAT4& color) { this->parameter.color = color; }
+	const DirectX::XMFLOAT4& GetColor() const { return parameter.color; }
 
 	// 行列のゲッター
 	const DirectX::XMFLOAT4X4& GetTransform() const { return parameter.transform; }
@@ -109,7 +111,7 @@ private:
 	std::string			name;
 	Parameter			parameter;
 
-	//エネミー、プレイヤー、オブジェクト、なしの4種類
+	// フィルター用のタイプ
 	ActorType type = ActorType::None;
 
 	std::unique_ptr<Model>	model;
@@ -150,6 +152,9 @@ public:
 
 	// 近くのアクターを取得
 	Actor* GetNearActor(Actor origin, ActorType filter);
+
+	// アクター数を取得
+	int GetActorCount(ActorType filter);
 
 public:
 	void DrawLister(ActorType filter);

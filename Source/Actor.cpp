@@ -68,11 +68,20 @@ void Actor::OnGUI()
 		case ActorType::Enemy:
 			type_str = "Enemy";
 			break;
+		case ActorType::Stage:
+			type_str = "Stage";
+			break;
 		case ActorType::Object:
 			type_str = "Object";
 			break;
+		case ActorType::Camera:
+			type_str = "Camera";
+			break;
 		case ActorType::None:
 			type_str = "None";
+			break;
+		default:
+			type_str = "Unknown";
 			break;
 		}
 		ImGui::Text(u8"ActorType:%s", type_str.c_str());
@@ -253,6 +262,21 @@ Actor* ActorManager::GetNearActor(Actor origin, ActorType filter)
 	}
 	return minActor;
 }
+
+int ActorManager::GetActorCount(ActorType filter)
+{
+	int count = 0;
+	for (std::shared_ptr<Actor> actor : updateActors)
+	{
+		if (actor->GetActorType() == filter || filter == ActorType::All)
+		{
+            count++;
+		}
+	}
+	return count;
+}
+
+
 
 // ÉäÉXÉ^Å[ï`âÊ
 void ActorManager::DrawLister(ActorType filter)

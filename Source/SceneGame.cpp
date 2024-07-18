@@ -252,6 +252,7 @@ void SceneGame::Render()
 	static bool checker_camera[2] = {};
 	static bool checker_actor[5] = {};
 	static bool checker_control = {};
+	static bool actor_open = {};
 	if (ImGui::BeginMainMenuBar())
 	{
 		if (ImGui::BeginMenu("Camera"))
@@ -276,6 +277,7 @@ void SceneGame::Render()
 		}
 		ImGui::EndMainMenuBar();
 	}
+
     // デバッグGUI描画
     if (checker_camera[0])CameraManager::Instance().DrawImGui();
 	if (checker_camera[1])camera_controller.DrawDebugGUI();
@@ -284,25 +286,58 @@ void SceneGame::Render()
 		ActorManager::Instance().DrawDetail();
 		ActorManager::Instance().DrawLister(ActorType::All);
 	}
-	if (checker_actor[1])
+	if (checker_actor[1]&&!checker_actor[0])
 	{
 		ActorManager::Instance().DrawDetail();
 		ActorManager::Instance().DrawLister(ActorType::Player);
 	}
-	if (checker_actor[2])
+	if (checker_actor[2] && !checker_actor[0])
 	{
 		ActorManager::Instance().DrawDetail();
 		ActorManager::Instance().DrawLister(ActorType::Enemy);
 	}	
-	if (checker_actor[3])
+	if (checker_actor[3] && !checker_actor[0])
 	{
 		ActorManager::Instance().DrawDetail();
 		ActorManager::Instance().DrawLister(ActorType::Stage);
 	}
-	if (checker_actor[4])
+	if (checker_actor[4] && !checker_actor[0])
 	{
 		ActorManager::Instance().DrawDetail();
 		ActorManager::Instance().DrawLister(ActorType::Object);
+	}
+	for (int i = 0; i < sizeof(checker_actor); i++)
+	{
+		if (checker_actor[i])
+		{
+			actor_open = true;
+			break;
+		}
+		else actor_open = false;
+	}
+	if (actor_open)
+	{
+		if (ImGui::Begin("Actor Lister", nullptr, ImGuiWindowFlags_None))
+		{
+			if (ImGui::Button("Close"))
+			{
+				for (int i = 0; i < sizeof(checker_actor); i++)
+				{
+					checker_actor[i] = false;
+					
+				}
+				actor_open = false;
+			}
+			//if (ImGui::Button("AllOpen"))
+			//{
+			//	for (int i = 0; i < sizeof(checker_actor); i++)
+			//	{
+			//		checker_actor[i] = true;
+
+			//	}
+			//}
+		}
+		ImGui::End();
 	}
 	if(checker_control)spown->DrawDebugGUI();
 #endif // DebugImGui
