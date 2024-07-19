@@ -48,118 +48,119 @@ void CameraController::SyncControllerToCamera(Camera& camera)
 }
 
 // 更新処理
-void CameraController::Update(DirectX::XMFLOAT3 target)
+void CameraController::Update(DirectX::XMFLOAT3 target, Camera& camera)
 {
-	//// デバッグウインドウ操作中は処理しない
-	//if (ImGui::IsWindowFocused(ImGuiFocusedFlags_AnyWindow))
-	//{
-	//	return;
-	//}
+	// デバッグウインドウ操作中は処理しない
+	if (ImGui::IsWindowFocused(ImGuiFocusedFlags_AnyWindow))
+	{
+		return;
+	}
 
-	//// IMGUIのマウス入力値を使ってカメラ操作する
-	//ImGuiIO io = ImGui::GetIO();
+	// IMGUIのマウス入力値を使ってカメラ操作する
+	ImGuiIO io = ImGui::GetIO();
 
-	//// マウスカーソルの移動量を求める
-	//float moveX = io.MouseDelta.x * 0.02f;
-	//float moveY = io.MouseDelta.y * 0.02f;
+	// マウスカーソルの移動量を求める
+	float moveX = io.MouseDelta.x * 0.02f;
+	float moveY = io.MouseDelta.y * 0.02f;
 
-	//// マウス左ボタン押下中
-	//if (io.MouseDown[ImGuiMouseButton_Right])
-	//{
-	//	// Y軸回転
-	//	angle.y += moveX * 0.5f;
-	//	if (angle.y > DirectX::XM_PI)
-	//	{
-	//		angle.y -= DirectX::XM_2PI;
-	//	}
-	//	else if (angle.y < -DirectX::XM_PI)
-	//	{
-	//		angle.y += DirectX::XM_2PI;
-	//	}
-	//	// X軸回転
-	//	angle.x += moveY * 0.5f;
-	//	if (angle.x > DirectX::XM_PI)
-	//	{
-	//		angle.x -= DirectX::XM_2PI;
-	//	}
-	//	else if (angle.x < -DirectX::XM_PI)
-	//	{
-	//		angle.x += DirectX::XM_2PI;
-	//	}
-	//}
-	//// マウス中ボタン押下中
-	//else if (io.MouseDown[ImGuiMouseButton_Middle])
-	//{
-	//	// 平行移動
-	//	float s = distance * 0.035f;
-	//	float x = moveX * s;
-	//	float y = moveY * s;
+	// マウス左ボタン押下中
+	if (io.MouseDown[ImGuiMouseButton_Right])
+	{
+		// Y軸回転
+		angle.y += moveX * 0.5f;
+		if (angle.y > DirectX::XM_PI)
+		{
+			angle.y -= DirectX::XM_2PI;
+		}
+		else if (angle.y < -DirectX::XM_PI)
+		{
+			angle.y += DirectX::XM_2PI;
+		}
+		// X軸回転
+		angle.x += moveY * 0.5f;
+		if (angle.x > DirectX::XM_PI)
+		{
+			angle.x -= DirectX::XM_2PI;
+		}
+		else if (angle.x < -DirectX::XM_PI)
+		{
+			angle.x += DirectX::XM_2PI;
+		}
+	}
+	// マウス中ボタン押下中
+	else if (io.MouseDown[ImGuiMouseButton_Middle])
+	{
+		// 平行移動
+		float s = distance * 0.035f;
+		float x = moveX * s;
+		float y = moveY * s;
 
-	//	focus.x -= right.x * x;
-	//	focus.y -= right.y * x;
-	//	focus.z -= right.z * x;
+		focus.x -= right.x * x;
+		focus.y -= right.y * x;
+		focus.z -= right.z * x;
 
-	//	focus.x += up.x * y;
-	//	focus.y += up.y * y;
-	//	focus.z += up.z * y;
-	//}
-	//// マウス右ボタン押下中
-	//else if (io.MouseDown[ImGuiMouseButton_Left] && io.MouseDown[ImGuiMouseButton_Right])
-	//{
-	//	// ズーム
-	//	distance += (-moveY - moveX) * distance * 0.1f;
-	//}
-	//// マウスホイール
-	//else if (io.MouseWheel != 0)
-	//{
-	//	// ズーム
-	//	distance -= io.MouseWheel * distance * 0.1f;
-	//}
+		focus.x += up.x * y;
+		focus.y += up.y * y;
+		focus.z += up.z * y;
+	}
+	// マウス右ボタン押下中
+	else if (io.MouseDown[ImGuiMouseButton_Left] && io.MouseDown[ImGuiMouseButton_Right])
+	{
+		// ズーム
+		distance += (-moveY - moveX) * distance * 0.1f;
+	}
+	// マウスホイール
+	else if (io.MouseWheel != 0)
+	{
+		// ズーム
+		distance -= io.MouseWheel * distance * 0.1f;
+	}
 
-	//float sx = ::sinf(angle.x);
-	//float cx = ::cosf(angle.x);
-	//float sy = ::sinf(angle.y);
-	//float cy = ::cosf(angle.y);
+	float sx = ::sinf(angle.x);
+	float cx = ::cosf(angle.x);
+	float sy = ::sinf(angle.y);
+	float cy = ::cosf(angle.y);
 
-	//// カメラの方向を算出
-	//DirectX::XMVECTOR Front = DirectX::XMVectorSet(-cx * sy, -sx, -cx * cy, 0.0f);
-	//DirectX::XMVECTOR Right = DirectX::XMVectorSet(cy, 0, -sy, 0.0f);
-	//DirectX::XMVECTOR Up = DirectX::XMVector3Cross(Right, Front);
-	//// カメラの視点＆注視点を算出
-	//DirectX::XMVECTOR Focus = DirectX::XMLoadFloat3(&focus);
-	//DirectX::XMVECTOR Distance = DirectX::XMVectorSet(distance, distance, distance, 0.0f);
-	//DirectX::XMVECTOR Eye = DirectX::XMVectorSubtract(Focus, DirectX::XMVectorMultiply(Front, Distance));
-	//// ビュー行列からワールド行列を算出
-	//DirectX::XMMATRIX View = DirectX::XMMatrixLookAtLH(Eye, Focus, Up);
-	//DirectX::XMMATRIX World = DirectX::XMMatrixTranspose(View);
-	//// ワールド行列から方向を算出
-	//Right = DirectX::XMVector3TransformNormal(DirectX::XMVectorSet(1, 0, 0, 0), World);
-	//Up = DirectX::XMVector3TransformNormal(DirectX::XMVectorSet(0, 1, 0, 0), World);
+	// カメラの方向を算出
+	DirectX::XMVECTOR Front = DirectX::XMVectorSet(-cx * sy, -sx, -cx * cy, 0.0f);
+	DirectX::XMVECTOR Right = DirectX::XMVectorSet(cy, 0, -sy, 0.0f);
+	DirectX::XMVECTOR Up = DirectX::XMVector3Cross(Right, Front);
+	// カメラの視点＆注視点を算出
+	DirectX::XMVECTOR Focus = DirectX::XMLoadFloat3(&focus);
+	DirectX::XMVECTOR Distance = DirectX::XMVectorSet(distance, distance, distance, 0.0f);
+	DirectX::XMVECTOR Eye = DirectX::XMVectorSubtract(Focus, DirectX::XMVectorMultiply(Front, Distance));
+	// ビュー行列からワールド行列を算出
+	DirectX::XMMATRIX View = DirectX::XMMatrixLookAtLH(Eye, Focus, Up);
+	DirectX::XMMATRIX World = DirectX::XMMatrixTranspose(View);
+	// ワールド行列から方向を算出
+	Right = DirectX::XMVector3TransformNormal(DirectX::XMVectorSet(1, 0, 0, 0), World);
+	Up = DirectX::XMVector3TransformNormal(DirectX::XMVectorSet(0, 1, 0, 0), World);
 
-	//// 結果を格納
-	//DirectX::XMFLOAT4X4 view, projection;
- //   DirectX::XMStoreFloat4x4(&view, View);
- //   DirectX::XMStoreFloat4x4(&projection, World);
-	//DirectX::XMStoreFloat3(&eye, Eye);
-	//DirectX::XMStoreFloat3(&up, Up);
-	//DirectX::XMStoreFloat3(&right, Right);
+	// 結果を格納
+	DirectX::XMFLOAT4X4 view, projection;
+    DirectX::XMStoreFloat4x4(&view, View);
+    DirectX::XMStoreFloat4x4(&projection, World);
+	DirectX::XMStoreFloat3(&eye, Eye);
+	DirectX::XMStoreFloat3(&up, Up);
+	DirectX::XMStoreFloat3(&right, Right);
 
-	////回転行列から前方向ベクトルを取り出す
-	//Front = World.r[2];
-	//DirectX::XMFLOAT3 front;
-	//DirectX::XMStoreFloat3(&front, Front);
+	//回転行列から前方向ベクトルを取り出す
+	Front = World.r[2];
+	DirectX::XMFLOAT3 front;
+	DirectX::XMStoreFloat3(&front, Front);
 
-	////注視点から後ろベクトル方向に一定距離離れたカメラ視点を求める
-	////DirectX::XMFLOAT3 eye;
-	//eye.x = target.x - front.x * distance / 1.0f;
-	//eye.y = target.y - front.y * distance / 1.0f;
-	//eye.z = target.z - front.z * distance / 1.0f;
+	//注視点から後ろベクトル方向に一定距離離れたカメラ視点を求める
+	//DirectX::XMFLOAT3 eye;
+	eye.x = target.x - front.x * distance / 1.0f;
+	eye.y = target.y - front.y * distance / 1.0f;
+	eye.z = target.z - front.z * distance / 1.0f;
 
-	////カメラの視点と注視点を設定
+	//カメラの視点と注視点を設定
 	//CameraManager::Instance().GetMainCamera().SetLookAt(eye, target, DirectX::XMFLOAT3(0, 1, 0));
+	camera.SetLookAt(eye, target, DirectX::XMFLOAT3(0, 1, 0));
 }
 
-void CameraController::UpdateKey(float elapsedTime, DirectX::XMFLOAT3 target)
+void CameraController::UpdateKey(float elapsedTime, DirectX::XMFLOAT3 target, Camera& camera)
 {
 	GamePad& gamePad = Input::Instance().GetGamePad();
 	float ax = gamePad.GetAxisRX();
@@ -210,8 +211,8 @@ void CameraController::UpdateKey(float elapsedTime, DirectX::XMFLOAT3 target)
 	DirectX::XMFLOAT3 eye, focus;
 	DirectX::XMStoreFloat3(&eye, Eye);
 	DirectX::XMStoreFloat3(&focus, Focus);
-	Camera* camera = ActorManager::Instance().GetActor("MainCamera")->GetComponent<Camera>().get();
-	camera->SetLookAt(eye, focus, DirectX::XMFLOAT3(0, 1, 0));
+	//Camera* camera = ActorManager::Instance().GetActor("MainCamera")->GetComponent<Camera>().get();
+	camera.SetLookAt(eye, focus, DirectX::XMFLOAT3(0, 1, 0));
 }
 
 void CameraController::DrawDebugGUI()

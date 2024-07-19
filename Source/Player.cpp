@@ -118,5 +118,5 @@ void Player::CameraControl(float elapsedTime)
 {
 	CameraController camera_c;
 	//camera_c.Update(GetActor()->GetPosition());
-	camera_c.UpdateKey(elapsedTime, GetActor().get()->GetPosition());
+	//camera_c.UpdateKey(elapsedTime, GetActor().get()->GetPosition());
 }

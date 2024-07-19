@@ -148,6 +148,10 @@ void SceneGame::Update(float elapsedTime)
 	Actor* player=ActorManager::Instance().GetActor("Player");
 	if (player->GetComponent<Player>()->GetHealth() <= 0)SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult(true)));
 	
+	CameraController camera_controller;
+	Camera* camera = ActorManager::Instance().GetActor("MainCamera")->GetComponent<Camera>().get();
+	camera_controller.UpdateKey(elapsedTime,player->GetPosition(), *camera);
+
 
 	////カメラ更新処理
 	//camera_controller.Update(player->GetPosition());
