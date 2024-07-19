@@ -3,21 +3,22 @@
 #include"Graphics/Model.h"
 #include "All.h"
 
+enum class Axis2D
+{
+    X_Y,
+    Y_Z,
+    Z_X,
+    NONE
+};
+
 //ƒRƒŠƒWƒ‡ƒ“
 static class Collision
 {
 public:
     //‰~’Œ‚Æ‰~’Œ‚ÌŒğ·”»’è
-    static bool IntersectCylinderVsSphere(
-        const DirectX::XMFLOAT3& positionA,
-        float radiusA,
-        float heightA,
-        float weightA,
-        const DirectX::XMFLOAT3& positionB,
-        float radiusB,
-        float heightB,
-        float weightB,
-        DirectX::XMFLOAT3& outPositionB
+    static bool IntersectCylinderVsCylinder(
+        Cylinder& A,
+        Cylinder& B
     );
 
     //‹…‚Æ‰~’Œ‚ÌŒğ·”»’è
@@ -52,12 +53,28 @@ public:
     );
 
     //bottom_left_front`top_right_back“à‚ÌXZ•½–Ê‚É‚Émove_pos‚ª“ü‚é‚Ætrue‚ğ•Ô‚·
-    static bool InXYPoint(
+    static bool InPoint2D(
         DirectX::XMFLOAT3 bottom_left_front,
         DirectX::XMFLOAT3 top_right_back,
-        DirectX::XMFLOAT3 move_pos
+        DirectX::XMFLOAT3 move_pos,
+        Axis2D axis
     );
 
     //“_‚ª‰~“à‚É“ü‚Á‚Ä‚¢‚é‚©
     static bool PointInsideCircle(DirectX::XMFLOAT3 point, DirectX::XMFLOAT3 center, float radius);
+
+    static void UpdateCylinder(
+        DirectX::XMFLOAT3 p,
+        float r,
+        float w,
+        float h,
+        Cylinder& c
+    );
+
+    static void UpdateSphere(
+        DirectX::XMFLOAT3 p,
+        float r,
+        float w,
+        Sphere& s
+    );
 };

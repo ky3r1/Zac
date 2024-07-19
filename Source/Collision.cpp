@@ -1,17 +1,19 @@
 #include "Collision.h"
 
 //円柱と円柱の交差判定
-bool Collision::IntersectCylinderVsSphere(
-    const DirectX::XMFLOAT3& positionA,
-    float radiusA,
-    float heightA,
-    float weightA,
-    const DirectX::XMFLOAT3& positionB,
-    float radiusB,
-    float heightB,
-    float weightB,
-    DirectX::XMFLOAT3& outPositionB)
+bool Collision::IntersectCylinderVsCylinder(
+    Cylinder& A,
+    Cylinder& B)
 {
+    DirectX::XMFLOAT3 positionA(A.sphere.position.x, A.sphere.position.y, A.sphere.position.z);
+    DirectX::XMFLOAT3 positionB(B.sphere.position.x, B.sphere.position.y, B.sphere.position.z);
+    float radiusA = A.sphere.radius;
+    float radiusB = B.sphere.radius;
+    float weightA = A.sphere.weight;
+    float weightB = B.sphere.weight;
+    float heightA = A.height;
+    float heightB = B.height;
+
     //Aの足元がBの頭より上なら当たってない
     if (positionA.y > positionB.y + heightB)
     {
@@ -45,24 +47,31 @@ bool Collision::IntersectCylinderVsSphere(
         // 当たってない
         return false;
     }
+    //正規化
+    Vec = DirectX::XMVector3Normalize(Vec);
+    // めり込み量を求める
+    float diff = range - lengthSq;
+    Vec = DirectX::XMVectorScale(Vec, diff);
 
-    // A が B を押し出す（B は下に押し出してはいけない）
+    // ２つの球の重さから押し出し比率を求める
+    float rateA = weightA / (weightA + weightB);
+    float rateB = 1.0f - rateA;
 
-    // あたっている場合
+    // 球Bの補正後の座標
+    DirectX::XMVECTOR VelocityB = DirectX::XMVectorScale(Vec, rateA);
+    PositionB = DirectX::XMVectorAdd(PositionB, VelocityB);
 
-    // Vec 方向の単位ベクトル（Normalize）を取得
-    Vec = DirectX::XMVector2Normalize(Vec);
-    // 上記のベクトルを range 分スケール
-    Vec = DirectX::XMVectorScale(Vec, range);
-    // そのベクトルを位置 A （PositionA）からの足した位置に移動
-    Vec = DirectX::XMVectorAdd(PositionA, Vec);
-    // 出力用の位置（outPositionB）に代入する
-    DirectX::XMFLOAT2 resultPos;
-    DirectX::XMStoreFloat2(&resultPos, Vec);
+    // 球Aの補正後の座標
+    DirectX::XMVECTOR VelocityA = DirectX::XMVectorScale(Vec, rateB);
+    PositionA = DirectX::XMVectorSubtract(PositionA, VelocityA);
 
-    outPositionB.x = resultPos.x;
-    outPositionB.y = positionB.y;
-    outPositionB.z = resultPos.y;
+    DirectX::XMFLOAT2 position;
+    DirectX::XMStoreFloat2(&position, PositionA);
+    B.sphere.position.x = position.x;
+    B.sphere.position.z = position.y;
+    DirectX::XMStoreFloat2(&position, PositionB);
+    A.sphere.position.x = position.x;
+    A.sphere.position.z = position.y;
 
     return true;
 }
@@ -319,13 +328,49 @@ bool Collision::InPoint(DirectX::XMFLOAT3 bottom_left_front, DirectX::XMFLOAT3 t
     return false;
 }
 
-bool Collision::InXYPoint(DirectX::XMFLOAT3 bottom_left_front, DirectX::XMFLOAT3 top_right_back, DirectX::XMFLOAT3 move_pos)
+bool Collision::InPoint2D(DirectX::XMFLOAT3 bottom_left_front, DirectX::XMFLOAT3 top_right_back, DirectX::XMFLOAT3 move_pos, Axis2D axis)
 {
-    //X軸、Z軸それぞれの範囲内に入っているかの判定
+    //2軸それぞれの範囲内に入っているかの判定
     //bottom_left_front < top_right_backじゃないと通らない
-    if (bottom_left_front.x<move_pos.x && top_right_back.x>move_pos.x)
+    if (bottom_left_front.x < top_right_back.x)
     {
-        if (bottom_left_front.z<move_pos.z && top_right_back.z>move_pos.z)
+        if (bottom_left_front.y < top_right_back.y)
+        {
+            if (bottom_left_front.z < top_right_back.z)
+            {
+                _ASSERT_EXPR(true, "2軸それぞれの範囲内に入っているかの判定に失敗しました");
+            }
+        }
+    }
+    DirectX::XMFLOAT2 bp = {};
+    DirectX::XMFLOAT2 tp = {};
+    DirectX::XMFLOAT2 mp = {};
+    switch (axis)
+    {
+    case Axis2D::X_Y:
+        bp = { bottom_left_front.x,bottom_left_front.y };
+        tp = { top_right_back.x,top_right_back.y };
+        mp = { move_pos.x,move_pos.y };
+        break;
+    case Axis2D::Y_Z:
+        bp = { bottom_left_front.y,bottom_left_front.z };
+        tp = { top_right_back.y,top_right_back.z };
+        mp = { move_pos.y,move_pos.z };
+        break;
+    case Axis2D::Z_X:
+        bp = { bottom_left_front.z,bottom_left_front.x };
+        tp = { top_right_back.z,top_right_back.x };
+        mp = { move_pos.z,move_pos.x };
+        break;
+    default:
+        bp = {};
+        tp = {};
+        mp = {};
+        break;
+    }
+    if (bp.x<mp.x && tp.x>mp.x)
+    {
+        if (bp.y<mp.y && tp.y>mp.y)
         {
             return true;
         }
@@ -338,4 +383,19 @@ bool Collision::PointInsideCircle(DirectX::XMFLOAT3 point, DirectX::XMFLOAT3 cen
     float distance = sqrt(pow(point.x - center.x, 2) + pow(point.z - center.z, 2));
 
     return distance <= radius;
+}
+
+void Collision::UpdateCylinder(DirectX::XMFLOAT3 p, float r, float w, float h, Cylinder& c)
+{
+    c.sphere.position = p;
+    c.sphere.radius = r;
+    c.sphere.weight = w;
+    c.height = h;
+}
+
+void Collision::UpdateSphere(DirectX::XMFLOAT3 p, float r, float w, Sphere& s)
+{
+    s.position = p;
+    s.radius = r;
+    s.weight = w;
 }
