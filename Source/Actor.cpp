@@ -145,6 +145,13 @@ std::shared_ptr<Actor> ActorManager::Create()
 	return actor;
 }
 
+void ActorManager::Clear()
+{
+	startActors.clear();
+	updateActors.clear();
+	removeActors.clear();
+}
+
 // çÌèú
 void ActorManager::Remove(std::shared_ptr<Actor> actor)
 {
@@ -231,19 +238,6 @@ void ActorManager::Render(ID3D11DeviceContext* dc, Shader* shader)
 
 }
 
-template<class T>
-T* ActorManager::GetActor(std::string name)
-{
-	for (std::shared_ptr<T> actor : updateActors)
-	{
-		if (actor->GetName() == name)
-		{
-			return actor.get();
-		}
-	}
-	return nullptr;
-}
-
 Actor* ActorManager::GetActor(std::string name)
 {
 	for (std::shared_ptr<Actor> actor : updateActors)
@@ -256,11 +250,11 @@ Actor* ActorManager::GetActor(std::string name)
 	return nullptr;
 }
 
-Actor* ActorManager::GetNearActor(Actor origin, ActorType filter)
+bool ActorManager::GetNearActor(Actor origin, Actor* result,ActorType filter)
 {
 	float min = FLT_MAX;
 	float distance=0.0f;
-    Actor* minActor = nullptr;
+	result = nullptr;
 	for (std::shared_ptr<Actor> actor : updateActors)
 	{
 		if (actor->GetActorType() == filter||filter==ActorType::All)
@@ -269,11 +263,15 @@ Actor* ActorManager::GetNearActor(Actor origin, ActorType filter)
             if (distance < min)
             {
                 min = distance;
-                minActor = actor.get();
+				result = actor.get();
             }
         }
 	}
-	return minActor;
+	if(result!=nullptr)
+    {
+		return true;
+    }
+	return false;
 }
 
 int ActorManager::GetActorCount(ActorType filter)

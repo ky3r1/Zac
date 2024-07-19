@@ -44,7 +44,6 @@ void SceneGame::Initialize()
 		actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
 		actor->SetScale(DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f));
 		actor->SetActorType(ActorType::Stage);
-
 		actor->AddComponent<StageMain>();
 	}
 #endif // ALLSTAGE
@@ -129,6 +128,9 @@ void SceneGame::Finalize()
 	EnemyManager::Instance().clear();
 	//ステージ終了化
 	//StageManager::Instance().Clear();
+	ActorManager::Instance().Clear();
+	for (int i = 0; i < sizeof(checker_actor); i++)checker_actor[i] = false;
+	checker_control = false;
 }
 
 // 更新処理
@@ -144,6 +146,8 @@ void SceneGame::Update(float elapsedTime)
 	//if(Player::Instance().GetHealth() <= 0)SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult(false)));
 	//Player* player = ActorManager::Instance().GetActor<Player>("Player");
 	Actor* player=ActorManager::Instance().GetActor("Player");
+	if (player->GetComponent<Player>()->GetHealth() <= 0)SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult(true)));
+	
 
 	////カメラ更新処理
 	//camera_controller.Update(player->GetPosition());
@@ -182,7 +186,6 @@ void SceneGame::Render()
 
 	//カメラパラメータ設定
 	Actor* camera = ActorManager::Instance().GetActor("MainCamera");
-	
 	rc.view = camera->GetComponent<Camera>()->GetView();
 	rc.projection = camera->GetComponent<Camera>()->GetProjection();
 
@@ -241,8 +244,8 @@ void SceneGame::Render()
 	}
 
 #ifdef DEBUGIMGUI
-	static bool checker_actor[6] = {};
-	static bool checker_control = {};
+	//static bool checker_actor[6] = {};
+	//static bool checker_control = {};
 	static bool actor_open = {};
 	if (ImGui::BeginMainMenuBar())
 	{
@@ -313,7 +316,6 @@ void SceneGame::Render()
 				for (int i = 0; i < sizeof(checker_actor); i++)
 				{
 					checker_actor[i] = false;
-					
 				}
 				actor_open = false;
 			}

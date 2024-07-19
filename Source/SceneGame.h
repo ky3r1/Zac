@@ -38,4 +38,7 @@ private:
 	std::unique_ptr<Font> font;
 
 	int mapcategory = 0;
+
+	bool checker_actor[6] = {};
+	bool checker_control = {};
 };

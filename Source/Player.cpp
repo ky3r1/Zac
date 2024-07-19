@@ -8,6 +8,7 @@
 // コンストラクタ
 Player::Player()
 {
+	current_health = max_health;
 }
 
 Player::~Player()
@@ -39,6 +40,7 @@ void Player::Update(float elapsedTime)
 
 void Player::DrawImGui()
 {
+	Character::DrawImGui();
 }
 
 void Player::DrawDebug()
@@ -59,9 +61,9 @@ void Player::CharacterControl(float elapsedTime)
 	float lengthSq = ax * ax + ay * ay;
 	if (lengthSq > 0.1f)
 	{
-		Camera& camera = CameraManager::Instance().GetMainCamera();
-		const DirectX::XMFLOAT3& cameraRight = camera.GetRight();
-		const DirectX::XMFLOAT3& cameraFront = camera.GetFront();
+		Camera* camera = ActorManager::Instance().GetActor("MainCamera")->GetComponent<Camera>().get();
+		const DirectX::XMFLOAT3& cameraRight = camera->GetRight();
+		const DirectX::XMFLOAT3& cameraFront = camera->GetFront();
 
 		DirectX::XMFLOAT3 direction;
 		direction.x = (cameraRight.x * ax) + (cameraFront.x * ay);

@@ -1,5 +1,6 @@
 #include "misc.h"
 #include "Graphics/LambertShader.h"
+#include "Actor.h"
 #include "Camera.h"
 #include "Graphics/texture.h"
 
@@ -233,8 +234,9 @@ void LambertShader::Begin(ID3D11DeviceContext* dc, const RenderContext& rc)
 	DirectX::XMMATRIX V = DirectX::XMLoadFloat4x4(&rc.view);
 	DirectX::XMMATRIX P = DirectX::XMLoadFloat4x4(&rc.projection);
 	DirectX::XMStoreFloat4x4(&scene_constant.view_projection, V * P);
-	Camera& camera_i =CameraManager::Instance().GetMainCamera();
-	scene_constant.camera_position = { camera_i.GetEye().x,camera_i.GetEye().y,camera_i.GetEye().z,0 };
+	//Camera& camera_i =CameraManager::Instance().GetMainCamera();
+	Camera* main_camera = ActorManager::Instance().GetActor("MainCamera")->GetComponent<Camera>().get();
+	scene_constant.camera_position = { main_camera->GetEye().x,main_camera->GetEye().y,main_camera->GetEye().z,0 };
 
 	light_constant.directional_light_direction = rc.lightDirection;
 	light_constant.directional_light_color = { 1,1,1,1 };

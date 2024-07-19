@@ -18,7 +18,7 @@ class Character :public Component
 {
 public:
     // コンストラクタ
-    Character() {}
+    Character();
     // デストラクタ
     virtual ~Character() {}
 
@@ -33,6 +33,14 @@ public:
 
     //デバッグプリミティブ描画
     virtual void DrawDebug() override;
+
+    // 体力セッター・ゲッター
+    void SetHealth(float health) { current_health = health; }
+    float GetHealth() { return current_health; }
+
+
 protected:
     std::shared_ptr<Movement>	movement;
+    float max_health = 10;
+    float current_health = max_health;
 };

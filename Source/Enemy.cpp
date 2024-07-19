@@ -21,6 +21,7 @@ void Enemy::Update(float elapsedTime)
 
 void Enemy::DrawImGui()
 {
+    Character::DrawImGui();
 }
 
 void Enemy::DrawDebug()

@@ -84,7 +84,6 @@ public:
 	void SetActorType(ActorType type) { this->type = type; }
 	ActorType GetActorType() const { return type; }
 
-
 	// コンポーネント追加
 	template<class T, class... Args>
 	std::shared_ptr<T> AddComponent(Args... args)
@@ -135,6 +134,9 @@ public:
 	// 作成
 	std::shared_ptr<Actor> Create();
 
+	//全削除
+    void Clear();
+
 	// 削除
 	void Remove(std::shared_ptr<Actor> actor);
 
@@ -148,13 +150,10 @@ public:
 	void Render(ID3D11DeviceContext* dc, Shader* shader);
 
 	// 検索
-	template<class T>
-	T* GetActor(std::string name);
-
 	Actor* GetActor(std::string name);
 
 	// 近くのアクターを取得
-	Actor* GetNearActor(Actor origin, ActorType filter);
+	bool GetNearActor(Actor origin,Actor* result, ActorType filter);
 
 	// アクター数を取得
 	int GetActorCount(ActorType filter);
