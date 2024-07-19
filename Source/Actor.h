@@ -148,6 +148,9 @@ public:
 	void Render(ID3D11DeviceContext* dc, Shader* shader);
 
 	// 検索
+	template<class T>
+	T* GetActor(std::string name);
+
 	Actor* GetActor(std::string name);
 
 	// 近くのアクターを取得

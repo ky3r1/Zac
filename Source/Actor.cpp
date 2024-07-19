@@ -231,6 +231,19 @@ void ActorManager::Render(ID3D11DeviceContext* dc, Shader* shader)
 
 }
 
+template<class T>
+T* ActorManager::GetActor(std::string name)
+{
+	for (std::shared_ptr<T> actor : updateActors)
+	{
+		if (actor->GetName() == name)
+		{
+			return actor.get();
+		}
+	}
+	return nullptr;
+}
+
 Actor* ActorManager::GetActor(std::string name)
 {
 	for (std::shared_ptr<Actor> actor : updateActors)

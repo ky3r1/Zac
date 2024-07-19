@@ -19,9 +19,7 @@ public:
 	void UpdateKey(float elapsedTime,DirectX::XMFLOAT3 target);
 
 	//デバッグ用Imgui表示
-    void DrawDebugGUI();
-private:
-
+	void DrawDebugGUI();
 private:
 	DirectX::XMFLOAT3		eye;
 	DirectX::XMFLOAT3		focus;

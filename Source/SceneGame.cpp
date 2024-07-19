@@ -69,22 +69,13 @@ void SceneGame::Initialize()
 #ifdef HPGAUGE
 	gauge = std::unique_ptr<Sprite>(new Sprite);
 #endif // HPGAUGE
-	DirectX::XMFLOAT3 position = { 0,0,0 };
-	//if(player)position = player->GetPosition();
-	
-	// カメラ設定
-	camera.SetPerspectiveFov(
-		DirectX::XMConvertToRadians(45),	// 画角
-		screenWidth / screenHeight,			// 画面アスペクト比
-		0.1f,								// ニアクリップ
-		1000.0f								// ファークリップ
-	);
-	camera.SetLookAt(
-		{ position.x, position.y + 12, position.z + 12 },	// 視点
-		{ position.x, position.y, position.z },				// 注視点
-		{ 0, 1, 0 }			// 上ベクトル
-	);
-	camera_controller.SyncCameraToController(camera);
+	// カメラ
+	{
+		std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
+		actor->SetName("MainCamera");
+		actor->SetActorType(ActorType::Camera);
+		actor->AddComponent<Camera>();
+	}
 
 #ifdef ALLENEMY
 	// Enemy
@@ -99,7 +90,6 @@ void SceneGame::Initialize()
 		actor->SetActorType(ActorType::Enemy);
 		actor->AddComponent<Movement>();
 		actor->AddComponent<Enemy>();
-		//EnemyManager::Instance().Register(actor);
 	}
 
 	// Enemy
@@ -115,7 +105,6 @@ void SceneGame::Initialize()
         actor->SetActorType(ActorType::Enemy);
 		actor->AddComponent<Movement>();
 		actor->AddComponent<Enemy>();
-		//EnemyManager::Instance().Register(actor);
 	}
 
 #ifdef ENEMY01
@@ -153,9 +142,11 @@ void SceneGame::Update(float elapsedTime)
     //プレイヤー更新処理
 	ActorManager::Instance().Update(elapsedTime);
 	//if(Player::Instance().GetHealth() <= 0)SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult(false)));
-	Actor* actor = ActorManager::Instance().GetActor("Player");
-	//カメラ更新処理
-	camera_controller.Update(actor->GetPosition());
+	//Player* player = ActorManager::Instance().GetActor<Player>("Player");
+	Actor* player=ActorManager::Instance().GetActor("Player");
+
+	////カメラ更新処理
+	//camera_controller.Update(player->GetPosition());
 #endif //  ALLPLAYER
 
 #ifdef SPOWNENEMY
@@ -190,9 +181,10 @@ void SceneGame::Render()
 	rc.lightDirection = { 0.0f, -1.0f, 0.0f, 0.0f };	// ライト方向（下方向）
 
 	//カメラパラメータ設定
-	Camera& camera = CameraManager::Instance().GetMainCamera();
-	rc.view = camera.GetView();
-	rc.projection = camera.GetProjection();
+	Actor* camera = ActorManager::Instance().GetActor("MainCamera");
+	
+	rc.view = camera->GetComponent<Camera>()->GetView();
+	rc.projection = camera->GetComponent<Camera>()->GetProjection();
 
 
 	// 3Dモデル描画
@@ -249,25 +241,19 @@ void SceneGame::Render()
 	}
 
 #ifdef DEBUGIMGUI
-	static bool checker_camera[2] = {};
-	static bool checker_actor[5] = {};
+	static bool checker_actor[6] = {};
 	static bool checker_control = {};
 	static bool actor_open = {};
 	if (ImGui::BeginMainMenuBar())
 	{
-		if (ImGui::BeginMenu("Camera"))
-		{
-			ImGui::MenuItem("MainCamera", "", &checker_camera[0]);
-			ImGui::MenuItem("CameraController", "", &checker_camera[1]);
-			ImGui::EndMenu();
-		}
 		if (ImGui::BeginMenu("Actor"))
 		{
-			ImGui::MenuItem("All", "", &checker_actor[0]);
+			ImGui::MenuItem("All",    "", &checker_actor[0]);
 			ImGui::MenuItem("Player", "", &checker_actor[1]);
-			ImGui::MenuItem("Enemy", "", &checker_actor[2]);
-			ImGui::MenuItem("Stage", "", &checker_actor[3]);
-			ImGui::MenuItem("Object", "", &checker_actor[4]);
+			ImGui::MenuItem("Enemy",  "", &checker_actor[2]);
+			ImGui::MenuItem("Stage",  "", &checker_actor[3]);
+			ImGui::MenuItem("Camera", "", &checker_actor[4]);
+			ImGui::MenuItem("Object", "", &checker_actor[5]);
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Control"))
@@ -279,8 +265,6 @@ void SceneGame::Render()
 	}
 
     // デバッグGUI描画
-    if (checker_camera[0])CameraManager::Instance().DrawImGui();
-	if (checker_camera[1])camera_controller.DrawDebugGUI();
 	if (checker_actor[0])
 	{
 		ActorManager::Instance().DrawDetail();
@@ -302,6 +286,11 @@ void SceneGame::Render()
 		ActorManager::Instance().DrawLister(ActorType::Stage);
 	}
 	if (checker_actor[4] && !checker_actor[0])
+	{
+		ActorManager::Instance().DrawDetail();
+		ActorManager::Instance().DrawLister(ActorType::Camera);
+	}
+	if (checker_actor[5] && !checker_actor[0])
 	{
 		ActorManager::Instance().DrawDetail();
 		ActorManager::Instance().DrawLister(ActorType::Object);

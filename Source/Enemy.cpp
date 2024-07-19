@@ -33,6 +33,8 @@ void Enemy::DrawDebug()
 
 void Enemy::Move(float elapsedTime)
 {
+    //Player* player = ActorManager::Instance().GetActor<Player>("Player");
+    //DirectX::XMFLOAT3 target = player->GetActor()->GetPosition();
     Actor* player = ActorManager::Instance().GetActor("Player");
     DirectX::XMFLOAT3 target = player->GetPosition();
     //DirectX::XMFLOAT3 distance=Mathf::Distance3(GetActor().get()->GetPosition(), target);

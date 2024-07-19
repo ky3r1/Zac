@@ -4,14 +4,14 @@
 #include "Component.h"
 
 //カメラ
-class Camera /*: public Component*/
+class Camera : public Component
 {
 public:
     //コンストラクタ
     Camera();
 
-    // 名前取得
-    //virtual const char* GetName() const override { return "Camera"; }
+    //名前取得
+    virtual const char* GetName() const override { return "Camera"; }
 
     //指定方向を向く
     void SetLookAt(const DirectX::XMFLOAT3& eye, const DirectX::XMFLOAT3& focus, const DirectX::XMFLOAT3& up);
@@ -40,6 +40,8 @@ public:
     //右方向取得
     const DirectX::XMFLOAT3& GetRight() const { return right; }
 
+    //Imgui描画
+    void DrawImGui() override;
 
 private:
     DirectX::XMFLOAT4X4     view;
@@ -52,6 +54,7 @@ private:
     DirectX::XMFLOAT3       front;
     DirectX::XMFLOAT3       right;
 };
+
 
 // カメラマネージャー
 class CameraManager
@@ -70,7 +73,7 @@ public:
 
     // メインカメラ取得
     Camera& GetMainCamera() { return mainCamera; }
-    void DrawImGui();
+    //void DrawImGui();
 
 private:
     Camera		mainCamera;
