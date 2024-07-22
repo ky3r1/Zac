@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "Input/Input.h"
 #include "CameraController.h"
+#include "Collision.h"
 
 // コンストラクタ
 Player::Player()
@@ -13,6 +14,7 @@ Player::Player()
 
 Player::~Player()
 {
+	delete enemy;
 }
 
 // 開始処理
@@ -36,19 +38,38 @@ void Player::Update(float elapsedTime)
 
 	CameraControl(elapsedTime);
 	CharacterControl(elapsedTime);
+	//if (!ActorManager::Instance().GetNearActor(GetActor().get(), *enemy, ActorType::Enemy));
+	enemy=ActorManager::Instance().GetNearActor(GetActor().get(),ActorType::Enemy);
+	//Sphere pc = GetActor()->GetSphere();
+ //   Sphere ec = enemy->GetSphere();
+	//Collision::IntersectSphereVsSphere(pc, ec);
+	//GetActor()->SetSphere(pc);
+	//enemy->SetSphere(ec);
+
+
+	Cylinder pc = GetActor()->GetCylinder();
+	Cylinder ec = enemy->GetCylinder();
+	Collision::IntersectCylinderVsCylinder(pc, ec);
+	GetActor()->SetCylinder(pc);
+	enemy->SetCylinder(ec);
 }
 
 void Player::DrawImGui()
 {
 	Character::DrawImGui();
+	ImGui::Text(u8"NearEnemy:%s", enemy->GetName().c_str());
 }
 
 void Player::DrawDebug()
 {
 	// デバッグ球描画
 	DirectX::XMFLOAT3 position = GetActor()->GetPosition();
+	float radius = GetActor()->GetRadius();
+	float height = GetActor()->GetHeight();
 	DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(1, 0, 0, 1);
-	Graphics::Instance().GetDebugRenderer()->DrawSphere(position, 3.0f, color);
+	Graphics::Instance().GetDebugRenderer()->DrawSphere(position, radius, color);
+	//衝突判定用のデバッグ円柱を描画
+	Graphics::Instance().GetDebugRenderer()->DrawCylinder(position, radius, height, color);
 }
 
 // キャラクター操作

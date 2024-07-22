@@ -28,8 +28,12 @@ void Enemy::DrawDebug()
 {
     // デバッグ球描画
     DirectX::XMFLOAT3 position = GetActor()->GetPosition();
+    float radius = GetActor()->GetRadius();
+    float height = GetActor()->GetHeight();
     DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(1, 0, 0, 1);
-    Graphics::Instance().GetDebugRenderer()->DrawSphere(position, 3.0f, color);
+    Graphics::Instance().GetDebugRenderer()->DrawSphere(position, radius, color);
+    //衝突判定用のデバッグ円柱を描画
+    Graphics::Instance().GetDebugRenderer()->DrawCylinder(position, radius, height, color);
 }
 
 void Enemy::Move(float elapsedTime)

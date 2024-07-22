@@ -67,11 +67,11 @@ bool Collision::IntersectCylinderVsCylinder(
 
     DirectX::XMFLOAT2 position;
     DirectX::XMStoreFloat2(&position, PositionA);
-    B.sphere.position.x = position.x;
-    B.sphere.position.z = position.y;
-    DirectX::XMStoreFloat2(&position, PositionB);
     A.sphere.position.x = position.x;
     A.sphere.position.z = position.y;
+    DirectX::XMStoreFloat2(&position, PositionB);
+    B.sphere.position.x = position.x;
+    B.sphere.position.z = position.y;
 
     return true;
 }
@@ -79,14 +79,19 @@ bool Collision::IntersectCylinderVsCylinder(
 
 
 bool Collision::IntersectSphereVsCylinder(
-    const DirectX::XMFLOAT3& spherePosition,
-    float sphereRadius,
-    const DirectX::XMFLOAT3& cylinderPosition,
-    float cylinderRadius,
-    float cylinderHeight,
-    DirectX::XMFLOAT3& outCylinderPosition
+    Sphere& sphere,
+    Cylinder& cylinder
 )
 {
+    DirectX::XMFLOAT3 spherePosition = {sphere.position.x, sphere.position.y, sphere.position.z};
+    float sphereRadius = sphere.radius;
+    float sphereWeight = sphere.weight;
+    DirectX::XMFLOAT3 cylinderPosition = {cylinder.sphere.position.x, cylinder.sphere.position.y, cylinder.sphere.position.z};
+    float cylinderRadius = cylinder.sphere.radius;
+    float cylinderHeight = cylinder.height;
+    float cylinderWeight = cylinder.sphere.weight;
+
+
     // 球の頭(.y + radius )が円柱の足元(.y)より下なら false
     if (spherePosition.y + sphereRadius < cylinderPosition.y)
         return false;
@@ -121,24 +126,87 @@ bool Collision::IntersectSphereVsCylinder(
         return false;
     }
 
-    // A が B を押し出す（B は下に押し出してはいけない）
+    //正規化
+    Vec = DirectX::XMVector3Normalize(Vec);
+    // めり込み量を求める
+    float diff = range - lengthSq;
+    Vec = DirectX::XMVectorScale(Vec, diff);
 
-    // あたっている場合
-    // Vec 方向の単位ベクトル（Normalize）を取得
-    Vec = DirectX::XMVector2Normalize(Vec);
-    // 上記のベクトルを range 分スケール
-    Vec = DirectX::XMVectorScale(Vec, range);
-    // そのベクトルを位置 A （PositionA）からの足した位置に移動
-    Vec = DirectX::XMVectorAdd(PositionA, Vec);
-    // 出力用の位置（outPositionB）に代入する
-    DirectX::XMFLOAT2 resultPos;
-    DirectX::XMStoreFloat2(&resultPos, Vec);
+    // ２つの球の重さから押し出し比率を求める
+    float rateA = sphereWeight / (sphereWeight + cylinderWeight);
+    float rateB = 1.0f - rateA;
 
+    // 球Bの補正後の座標
+    DirectX::XMVECTOR VelocityB = DirectX::XMVectorScale(Vec, rateA);
+    PositionB = DirectX::XMVectorAdd(PositionB, VelocityB);
 
-    outCylinderPosition.x = spherePosition.x + resultPos.x;
-    outCylinderPosition.y = cylinderPosition.y;
-    outCylinderPosition.z = spherePosition.z + resultPos.y;
+    // 球Aの補正後の座標
+    DirectX::XMVECTOR VelocityA = DirectX::XMVectorScale(Vec, rateB);
+    PositionA = DirectX::XMVectorSubtract(PositionA, VelocityA);
 
+    DirectX::XMFLOAT2 position;
+    DirectX::XMStoreFloat2(&position, PositionA);
+    cylinder.sphere.position.x = cylinder.sphere.position.x + position.x;
+    cylinder.sphere.position.z = cylinder.sphere.position.z + position.y;
+    DirectX::XMStoreFloat2(&position, PositionB);
+    sphere.position.x = position.x;
+    sphere.position.z = position.y;
+
+    return true;
+}
+
+bool Collision::IntersectSphereVsSphere(Sphere& A, Sphere& B)
+{
+    DirectX::XMFLOAT3 positionA(A.position.x, A.position.y, A.position.z);
+    DirectX::XMFLOAT3 positionB(B.position.x, B.position.y, B.position.z);
+    float radiusA = A.radius;
+    float radiusB = B.radius;
+    float weightA = A.weight;
+    float weightB = B.weight;
+
+    DirectX::XMFLOAT2 posA(positionA.x, positionA.z);
+    DirectX::XMFLOAT2 posB(positionB.x, positionB.z);
+
+    DirectX::XMVECTOR PositionA = DirectX::XMLoadFloat2(&posA);
+    DirectX::XMVECTOR PositionB = DirectX::XMLoadFloat2(&posB);
+
+    DirectX::XMVECTOR Vec = DirectX::XMVectorSubtract(PositionB, PositionA);
+    // Vec の長さを計算(XMVector2LengthSq を利用しても良い)
+    DirectX::XMVECTOR Length = DirectX::XMVector2LengthSq(Vec);
+    float length = 0;
+    DirectX::XMStoreFloat(&length, Length);
+    // radiusA と radiusB の長さ
+    float range = radiusA + radiusB;
+
+    // radisuA + radisuB より大きかったら
+    if (length > range)
+    {
+        // 当たってない
+        return false;
+    }
+
+    // 単位ベクトル化
+    Vec = DirectX::XMVector3Normalize(Vec);
+    // めり込み量を求める
+    float diff = (radiusA + radiusB) - length;
+    Vec = DirectX::XMVectorScale(Vec, diff);
+    // ２つの球の重さから押し出し比率を求める
+    float rateA = weightA / (weightA + weightB);
+    float rateB = 1.0f - rateA;
+    // 球Bの補正後の座標
+    DirectX::XMVECTOR VelocityB = DirectX::XMVectorScale(Vec, rateA);
+    PositionB = DirectX::XMVectorAdd(PositionB, VelocityB);
+    // 球Aの補正後の座標
+    DirectX::XMVECTOR VelocityA = DirectX::XMVectorScale(Vec, rateB);
+    PositionA = DirectX::XMVectorSubtract(PositionA, VelocityA);
+
+    DirectX::XMFLOAT2 position;
+    DirectX::XMStoreFloat2(&position, PositionA);
+    A.position.x = position.x;
+    A.position.z = position.y;
+    DirectX::XMStoreFloat2(&position, PositionB);
+    B.position.x = position.x;
+    B.position.z = position.y;
     return true;
 }
 

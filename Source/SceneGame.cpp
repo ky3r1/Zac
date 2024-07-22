@@ -59,6 +59,9 @@ void SceneGame::Initialize()
 		actor->SetPosition(DirectX::XMFLOAT3(0, 0, 0));
 		actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
 		actor->SetScale(DirectX::XMFLOAT3(5.0f, 5.0f, 5.0f));
+		actor->SetWeight(10.0f);
+		actor->SetRadius(3.0f);
+		actor->SetHeight(5.0f);
 		actor->SetActorType(ActorType::Player);
 		actor->AddComponent<Movement>();
 		actor->AddComponent<Player>();
@@ -86,6 +89,9 @@ void SceneGame::Initialize()
 		actor->SetPosition(DirectX::XMFLOAT3(0, 0, 20));
 		actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
 		actor->SetScale(DirectX::XMFLOAT3(0.05f, 0.05f, 0.05f));
+		actor->SetWeight(9.0f);
+		actor->SetRadius(3.0f);
+		actor->SetHeight(5.0f);
 		actor->SetActorType(ActorType::Enemy);
 		actor->AddComponent<Movement>();
 		actor->AddComponent<Enemy>();
@@ -101,6 +107,9 @@ void SceneGame::Initialize()
 		actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
 		actor->SetScale(DirectX::XMFLOAT3(0.05f, 0.05f, 0.05f));
 		actor->SetColor(DirectX::XMFLOAT4(0.0f, 0.05f, 1.05f,1.0f));
+		actor->SetWeight(9.0f);
+		actor->SetRadius(3.0f);
+		actor->SetHeight(5.0f);
         actor->SetActorType(ActorType::Enemy);
 		actor->AddComponent<Movement>();
 		actor->AddComponent<Enemy>();

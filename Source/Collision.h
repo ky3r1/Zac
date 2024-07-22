@@ -23,12 +23,14 @@ public:
 
     //‹…‚Æ‰~’Œ‚ÌŒğ·”»’è
     static bool IntersectSphereVsCylinder(
-        const DirectX::XMFLOAT3& spherePosition,
-        float sphereRadius,
-        const DirectX::XMFLOAT3& cylinderPosition,
-        float cylinderRadius,
-        float cylinderHeight,
-        DirectX::XMFLOAT3& outCylinderPosition
+        Sphere& sphere,
+        Cylinder& cylinder
+    );
+
+    //‹…‚Æ‹…‚ÌŒğ·”»’è
+    static bool IntersectSphereVsSphere(
+        Sphere& A,
+        Sphere& B
     );
 
     //ƒŒƒC‚Æƒ‚ƒfƒ‹‚ÌŒğ“_”»’è

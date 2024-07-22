@@ -93,6 +93,9 @@ void Actor::OnGUI()
 		ImGui::InputFloat3("Position", &parameter.collision_cylinder.sphere.position.x);
 		ImGui::InputFloat3("Rotation", &parameter.rotation.x);
 		ImGui::InputFloat3("Scale", &parameter.scale.x);
+		ImGui::InputFloat("Radius", &parameter.collision_cylinder.sphere.radius);
+		ImGui::InputFloat("Height", &parameter.collision_cylinder.height);
+		ImGui::InputFloat("Weight", &parameter.collision_cylinder.sphere.weight);
 		
         if (ImGui::Button("Reset"))
         {
@@ -250,28 +253,49 @@ Actor* ActorManager::GetActor(std::string name)
 	return nullptr;
 }
 
-bool ActorManager::GetNearActor(Actor origin, Actor* result,ActorType filter)
+bool ActorManager::GetNearActor(Actor* origin, Actor& result,ActorType filter)
 {
 	float min = FLT_MAX;
 	float distance=0.0f;
-	result = nullptr;
+	Actor* result_copy=nullptr;
 	for (std::shared_ptr<Actor> actor : updateActors)
 	{
 		if (actor->GetActorType() == filter||filter==ActorType::All)
         {
-            distance = Mathf::Distance(origin.GetPosition(), actor->GetPosition());
+            distance = Mathf::Distance(origin->GetPosition(), actor->GetPosition());
             if (distance < min)
             {
                 min = distance;
-				result = actor.get();
+				result_copy = actor.get();
             }
         }
 	}
-	if(result!=nullptr)
+	if(result_copy !=nullptr)
     {
+		//result = *result_copy;
 		return true;
     }
 	return false;
+}
+
+Actor* ActorManager::GetNearActor(Actor* origin, ActorType filter)
+{
+	float min = FLT_MAX;
+	float distance = 0.0f;
+	Actor* result = nullptr;
+	for (std::shared_ptr<Actor> actor : updateActors)
+	{
+		if (actor->GetActorType() == filter || filter == ActorType::All)
+		{
+			distance = Mathf::Distance(origin->GetPosition(), actor->GetPosition());
+			if (distance < min)
+			{
+				min = distance;
+				result = actor.get();
+			}
+		}
+	}
+	return result;
 }
 
 int ActorManager::GetActorCount(ActorType filter)

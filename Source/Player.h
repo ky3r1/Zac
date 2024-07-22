@@ -39,4 +39,6 @@ private:
 
 	// ƒJƒƒ‰‘€ì
 	void CameraControl(float elapsedTime);
+private:
+	Actor* enemy = nullptr;
 };

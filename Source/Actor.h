@@ -47,6 +47,7 @@ public:
 	// GUI表示
 	virtual void OnGUI();
 
+	//デバッグプリミティブ
 	virtual void DrawDebug();
 
 	//////////////////////////////////////////////////////////////////////////
@@ -75,6 +76,27 @@ public:
 
 	// 行列のゲッター
 	const DirectX::XMFLOAT4X4& GetTransform() const { return parameter.transform; }
+
+	//重さ
+    float GetWeight() const { return parameter.collision_cylinder.sphere.weight; }
+	void SetWeight(float weight) { parameter.collision_cylinder.sphere.weight = weight; }
+
+	//高さ
+    float GetHeight() const { return parameter.collision_cylinder.height; }
+    void SetHeight(float height) { parameter.collision_cylinder.height = height; }
+
+	//半径
+    float GetRadius() const { return parameter.collision_cylinder.sphere.radius; }
+    void SetRadius(float radius) { parameter.collision_cylinder.sphere.radius = radius; }
+
+	//Sphere
+    Sphere GetSphere() const { return parameter.collision_cylinder.sphere; }
+    void SetSphere(const Sphere& sphere) { parameter.collision_cylinder.sphere = sphere; }
+
+	//Cylinder
+    Cylinder GetCylinder() const { return parameter.collision_cylinder; }
+    void SetCylinder(const Cylinder& cylinder) { parameter.collision_cylinder = cylinder; }
+
 
 	// モデルのセッター・ゲッター
 	void LoadModel(const char* filename);
@@ -153,7 +175,8 @@ public:
 	Actor* GetActor(std::string name);
 
 	// 近くのアクターを取得
-	bool GetNearActor(Actor origin,Actor* result, ActorType filter);
+	bool GetNearActor(Actor* origin,Actor& result, ActorType filter);
+	Actor* GetNearActor(Actor* origin, ActorType filter);
 
 	// アクター数を取得
 	int GetActorCount(ActorType filter);

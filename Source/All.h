@@ -79,7 +79,7 @@
 //動く床
 //#define STAGEMOVE
 
-static struct HitResult
+struct HitResult
 {
     DirectX::XMFLOAT3 position = { 0,0,0 }; //レイとポリゴンの交点
     DirectX::XMFLOAT3 normal = { 0,0,0 };   //衝突したポリゴンの法線ベクトル
@@ -88,14 +88,14 @@ static struct HitResult
     DirectX::XMFLOAT3 rotation = { 0,0,0 };   //角度
 };
 
-static struct Sphere
+struct Sphere
 {
     DirectX::XMFLOAT3 position = { 0,0,0 };
     float             radius = 0.0f;
     float             weight = 0.0f;
 };
 
-static struct Cylinder
+struct Cylinder
 {
     Sphere            sphere;
     float             height = 0.0f;
