@@ -22,37 +22,41 @@ void Movement::DrawImGui()
 void Movement::Update(float elapsedTime)
 {
 	DirectX::XMFLOAT3 pos=GetActor()->GetPosition();
-	if (velocity.x < 0.0f)
+	//velocity‘Œ¸ˆ—
 	{
-		velocity.x = velocity.x + friction.x;
-		if(velocity.x > 0.0f)velocity.x = 0.0f;
-        
+		if (velocity.x < 0.0f)
+		{
+			velocity.x = velocity.x + friction.x;
+			if (velocity.x > 0.0f)velocity.x = 0.0f;
+
+		}
+		if (velocity.y < 0.0f)
+		{
+			velocity.y = velocity.y + friction.y;
+			if (velocity.y > 0.0f)velocity.y = 0.0f;
+		}
+		if (velocity.z < 0.0f)
+		{
+			velocity.z = velocity.z + friction.z;
+			if (velocity.z > 0.0f)velocity.z = 0.0f;
+		}
+		if (velocity.x > 0.0f)
+		{
+			velocity.x = velocity.x - friction.x;
+			if (velocity.x < 0.0f)velocity.x = 0.0f;
+		}
+		if (velocity.y > 0.0f)
+		{
+			velocity.y = velocity.y - friction.y;
+			if (velocity.y < 0.0f)velocity.y = 0.0f;
+		}
+		if (velocity.z > 0.0f)
+		{
+			velocity.z = velocity.z - friction.z;
+			if (velocity.z < 0.0f)velocity.z = 0.0f;
+		}
 	}
-    if (velocity.y < 0.0f)
-    {
-        velocity.y = velocity.y + friction.y;
-        if (velocity.y > 0.0f)velocity.y = 0.0f;
-    }
-    if (velocity.z < 0.0f)
-    {
-        velocity.z = velocity.z + friction.z;
-        if (velocity.z > 0.0f)velocity.z = 0.0f;
-    }
-    if (velocity.x > 0.0f)
-    {
-        velocity.x = velocity.x - friction.x;
-        if (velocity.x < 0.0f)velocity.x = 0.0f;
-    }
-    if (velocity.y > 0.0f)
-    {
-        velocity.y = velocity.y - friction.y;
-        if (velocity.y < 0.0f)velocity.y = 0.0f;
-    }
-    if (velocity.z > 0.0f)
-    {
-        velocity.z = velocity.z - friction.z;
-        if (velocity.z < 0.0f)velocity.z = 0.0f;
-    }
+
 	pos = Mathf::Add(velocity, pos);
 	now_gravity += gravity;
 	if(now_gravity > MAX_GRAVITY)now_gravity = MAX_GRAVITY;
