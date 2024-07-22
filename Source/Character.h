@@ -43,4 +43,5 @@ protected:
     std::shared_ptr<Movement>	movement;
     float max_health = 10;
     float current_health = max_health;
+    std::unique_ptr<Actor>      near_character;
 };

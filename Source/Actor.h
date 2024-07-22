@@ -54,24 +54,40 @@ public:
 	//							セッター・ゲッター							//
 	//////////////////////////////////////////////////////////////////////////
 
-		// 名前のセッター・ゲッター
+	// 名前のセッター・ゲッター
 	void SetName(const char* name) { this->name = name; }
 	const std::string GetName() const { return name; }
 
 	// 位置のセッター・ゲッター
-	void SetPosition(const DirectX::XMFLOAT3& position) { this->parameter.collision_cylinder.sphere.position = position; }
+	void SetPosition(const DirectX::XMFLOAT3& position) 
+	{ 
+		this->parameter.collision_cylinder.sphere.position = position; 
+		this->parameter_backup.collision_cylinder.sphere.position = position;
+	}
 	const DirectX::XMFLOAT3& GetPosition() const { return parameter.collision_cylinder.sphere.position; }
 
 	// 回転のセッター・ゲッター
-	void SetRotation(const DirectX::XMFLOAT4& rotation) { this->parameter.rotation = rotation; }
+	void SetRotation(const DirectX::XMFLOAT4& rotation)
+	{ 
+		this->parameter.rotation = rotation;
+		this->parameter_backup.rotation = rotation;
+	}
 	const DirectX::XMFLOAT4& GetRotation() const { return parameter.rotation; }
 
 	// スケールのセッター・ゲッター
-	void SetScale(const DirectX::XMFLOAT3& scale) { this->parameter.scale = scale; }
+	void SetScale(const DirectX::XMFLOAT3& scale)
+	{ 
+		this->parameter.scale = scale; 
+        this->parameter_backup.scale = scale;
+	}
 	const DirectX::XMFLOAT3& GetScale() const { return parameter.scale; }
 
 	//色のセッター・ゲッター
-	void SetColor(const DirectX::XMFLOAT4& color) { this->parameter.color = color; }
+	void SetColor(const DirectX::XMFLOAT4& color)
+	{ 
+		this->parameter.color = color; 
+        this->parameter_backup.color = color;
+	}
 	const DirectX::XMFLOAT4& GetColor() const { return parameter.color; }
 
 	// 行列のゲッター
@@ -79,23 +95,43 @@ public:
 
 	//重さ
     float GetWeight() const { return parameter.collision_cylinder.sphere.weight; }
-	void SetWeight(float weight) { parameter.collision_cylinder.sphere.weight = weight; }
+	void SetWeight(float weight) 
+	{
+		parameter.collision_cylinder.sphere.weight = weight;
+        parameter_backup.collision_cylinder.sphere.weight = weight;
+	}
 
 	//高さ
     float GetHeight() const { return parameter.collision_cylinder.height; }
-    void SetHeight(float height) { parameter.collision_cylinder.height = height; }
+    void SetHeight(float height) 
+	{ 
+		parameter.collision_cylinder.height = height;
+        parameter_backup.collision_cylinder.height = height;
+	}
 
 	//半径
     float GetRadius() const { return parameter.collision_cylinder.sphere.radius; }
-    void SetRadius(float radius) { parameter.collision_cylinder.sphere.radius = radius; }
+    void SetRadius(float radius) 
+	{ 
+		parameter.collision_cylinder.sphere.radius = radius;
+        parameter_backup.collision_cylinder.sphere.radius = radius;
+	}
 
 	//Sphere
     Sphere GetSphere() const { return parameter.collision_cylinder.sphere; }
-    void SetSphere(const Sphere& sphere) { parameter.collision_cylinder.sphere = sphere; }
+    void SetSphere(const Sphere& sphere) 
+	{ 
+		parameter.collision_cylinder.sphere = sphere; 
+        parameter_backup.collision_cylinder.sphere = sphere;
+	}
 
 	//Cylinder
     Cylinder GetCylinder() const { return parameter.collision_cylinder; }
-    void SetCylinder(const Cylinder& cylinder) { parameter.collision_cylinder = cylinder; }
+    void SetCylinder(const Cylinder& cylinder) 
+	{
+		parameter.collision_cylinder = cylinder;
+        parameter_backup.collision_cylinder = cylinder;
+	}
 
 
 	// モデルのセッター・ゲッター
@@ -131,6 +167,7 @@ public:
 private:
 	std::string			name;
 	Parameter			parameter;
+	Parameter			parameter_backup;
 
 	// フィルター用のタイプ
 	ActorType type = ActorType::None;
@@ -176,7 +213,8 @@ public:
 
 	// 近くのアクターを取得
 	bool GetNearActor(Actor* origin,Actor& result, ActorType filter);
-	Actor* GetNearActor(Actor* origin, ActorType filter);
+	//Actor* GetNearActor(Actor* origin, ActorType filter);
+	std::unique_ptr<Actor> GetNearActor(Actor* origin, ActorType filter);
 
 	// アクター数を取得
 	int GetActorCount(ActorType filter);

@@ -14,7 +14,6 @@ Player::Player()
 
 Player::~Player()
 {
-	delete enemy;
 }
 
 // 開始処理
@@ -39,25 +38,19 @@ void Player::Update(float elapsedTime)
 	CameraControl(elapsedTime);
 	CharacterControl(elapsedTime);
 	//if (!ActorManager::Instance().GetNearActor(GetActor().get(), *enemy, ActorType::Enemy));
-	enemy=ActorManager::Instance().GetNearActor(GetActor().get(),ActorType::Enemy);
-	//Sphere pc = GetActor()->GetSphere();
- //   Sphere ec = enemy->GetSphere();
-	//Collision::IntersectSphereVsSphere(pc, ec);
-	//GetActor()->SetSphere(pc);
-	//enemy->SetSphere(ec);
-
+	near_character =ActorManager::Instance().GetNearActor(GetActor().get(),ActorType::Enemy);
 
 	Cylinder pc = GetActor()->GetCylinder();
-	Cylinder ec = enemy->GetCylinder();
+	Cylinder ec = near_character->GetCylinder();
 	Collision::IntersectCylinderVsCylinder(pc, ec);
 	GetActor()->SetCylinder(pc);
-	enemy->SetCylinder(ec);
+	near_character->SetCylinder(ec);
+
 }
 
 void Player::DrawImGui()
 {
 	Character::DrawImGui();
-	ImGui::Text(u8"NearEnemy:%s", enemy->GetName().c_str());
 }
 
 void Player::DrawDebug()

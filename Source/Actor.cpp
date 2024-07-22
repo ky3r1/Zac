@@ -99,9 +99,7 @@ void Actor::OnGUI()
 		
         if (ImGui::Button("Reset"))
         {
-			parameter.collision_cylinder.sphere.position = { 0.0f, 0.0f, 0.0f };
-			parameter.rotation = { 0.0f, 0.0f, 0.0f, 1.0f };
-			parameter.scale = { 1.0f, 1.0f, 1.0f };
+			parameter = parameter_backup;
         }
 	}
 
@@ -257,7 +255,7 @@ bool ActorManager::GetNearActor(Actor* origin, Actor& result,ActorType filter)
 {
 	float min = FLT_MAX;
 	float distance=0.0f;
-	Actor* result_copy=nullptr;
+	Actor* result_copy = nullptr;
 	for (std::shared_ptr<Actor> actor : updateActors)
 	{
 		if (actor->GetActorType() == filter||filter==ActorType::All)
@@ -272,17 +270,17 @@ bool ActorManager::GetNearActor(Actor* origin, Actor& result,ActorType filter)
 	}
 	if(result_copy !=nullptr)
     {
-		//result = *result_copy;
+		//result = result_copy;
 		return true;
     }
 	return false;
 }
 
-Actor* ActorManager::GetNearActor(Actor* origin, ActorType filter)
+std::unique_ptr<Actor> ActorManager::GetNearActor(Actor* origin, ActorType filter)
 {
 	float min = FLT_MAX;
 	float distance = 0.0f;
-	Actor* result = nullptr;
+	std::unique_ptr<Actor> result = nullptr;
 	for (std::shared_ptr<Actor> actor : updateActors)
 	{
 		if (actor->GetActorType() == filter || filter == ActorType::All)
@@ -291,7 +289,7 @@ Actor* ActorManager::GetNearActor(Actor* origin, ActorType filter)
 			if (distance < min)
 			{
 				min = distance;
-				result = actor.get();
+				result.reset(actor.get());
 			}
 		}
 	}
