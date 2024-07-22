@@ -64,6 +64,7 @@ void SceneGame::Initialize()
 		actor->SetHeight(5.0f);
 		actor->SetActorType(ActorType::Player);
 		actor->AddComponent<Movement>();
+		actor->AddComponent<VsCollision>();
 		actor->AddComponent<Player>();
 	}
 #endif // PLAYER

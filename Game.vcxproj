@@ -176,6 +176,7 @@
     <ClInclude Include="Source\StateDerived.h" />
     <ClInclude Include="Source\StateMachine.h" />
     <ClInclude Include="Source\Ui.h" />
+    <ClInclude Include="Source\VsCollision.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="External\DirectXTex\WICTextureLoader.cpp" />
@@ -237,6 +238,7 @@
     <ClCompile Include="Source\StateDerived.cpp" />
     <ClCompile Include="Source\StateMachine.cpp" />
     <ClCompile Include="Source\Ui.cpp" />
+    <ClCompile Include="Source\VsCollision.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Shader\Font.hlsli" />

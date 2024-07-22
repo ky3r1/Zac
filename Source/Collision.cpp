@@ -1,6 +1,5 @@
 #include "Collision.h"
 #include "Mathf.h"
-#include "Actor.h"
 
 //‰~’Œ‚Æ‰~’Œ‚ÌŒğ·”»’è
 bool Collision::IntersectCylinderVsCylinder(

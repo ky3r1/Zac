@@ -21,6 +21,8 @@ void Player::Start()
 {
 	movement = GetActor()->GetComponent<Movement>();
 	movement.get()->SetMoveSpeed(15.0f);
+	vs_collision=GetActor()->GetComponent<VsCollision>();
+
 	// 適当にモーション再生
 	Model* model = GetActor()->GetModel();
 	if (model != nullptr)
@@ -37,15 +39,7 @@ void Player::Update(float elapsedTime)
 
 	CameraControl(elapsedTime);
 	CharacterControl(elapsedTime);
-	//if (!ActorManager::Instance().GetNearActor(GetActor().get(), *enemy, ActorType::Enemy));
-	near_character =ActorManager::Instance().GetNearActor(GetActor().get(),ActorType::Enemy);
-
-	Cylinder pc = GetActor()->GetCylinder();
-	Cylinder ec = near_character->GetCylinder();
-	Collision::IntersectCylinderVsCylinder(pc, ec);
-	GetActor()->SetCylinder(pc);
-	near_character->SetCylinder(ec);
-
+	vs_collision->CylinderVsCylinder(ActorType::Enemy);
 }
 
 void Player::DrawImGui()

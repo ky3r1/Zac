@@ -276,11 +276,11 @@ bool ActorManager::GetNearActor(Actor* origin, Actor& result,ActorType filter)
 	return false;
 }
 
-std::unique_ptr<Actor> ActorManager::GetNearActor(Actor* origin, ActorType filter)
+Actor* ActorManager::GetNearActor(Actor* origin, ActorType filter)
 {
 	float min = FLT_MAX;
 	float distance = 0.0f;
-	std::unique_ptr<Actor> result = nullptr;
+	Actor* result = nullptr;
 	for (std::shared_ptr<Actor> actor : updateActors)
 	{
 		if (actor->GetActorType() == filter || filter == ActorType::All)
@@ -289,7 +289,7 @@ std::unique_ptr<Actor> ActorManager::GetNearActor(Actor* origin, ActorType filte
 			if (distance < min)
 			{
 				min = distance;
-				result.reset(actor.get());
+				result=actor.get();
 			}
 		}
 	}

@@ -275,6 +275,9 @@
     <ClInclude Include="Source\Movement.h">
       <Filter>Component\Behaviour</Filter>
     </ClInclude>
+    <ClInclude Include="Source\VsCollision.h">
+      <Filter>Component\Behaviour</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="External\imgui\imgui.cpp">
@@ -452,6 +455,9 @@
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="Source\Movement.cpp">
+      <Filter>Component\Behaviour</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\VsCollision.cpp">
       <Filter>Component\Behaviour</Filter>
     </ClCompile>
   </ItemGroup>

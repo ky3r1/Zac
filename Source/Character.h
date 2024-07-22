@@ -6,6 +6,7 @@
 #include "Effect.h"
 #include "Component.h"
 #include "Movement.h"
+#include "VsCollision.h"
 
 struct DelayTime
 {
@@ -34,14 +35,13 @@ public:
     //デバッグプリミティブ描画
     virtual void DrawDebug() override;
 
+public:
     // 体力セッター・ゲッター
     void SetHealth(float health) { current_health = health; }
     float GetHealth() { return current_health; }
-
-
 protected:
     std::shared_ptr<Movement>	movement;
+    std::shared_ptr<VsCollision>	vs_collision;
     float max_health = 10;
     float current_health = max_health;
-    std::unique_ptr<Actor>      near_character;
 };

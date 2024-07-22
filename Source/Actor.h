@@ -213,8 +213,8 @@ public:
 
 	// 近くのアクターを取得
 	bool GetNearActor(Actor* origin,Actor& result, ActorType filter);
-	//Actor* GetNearActor(Actor* origin, ActorType filter);
-	std::unique_ptr<Actor> GetNearActor(Actor* origin, ActorType filter);
+	Actor* GetNearActor(Actor* origin, ActorType filter);
+	//std::unique_ptr<Actor> GetNearActor(Actor* origin, ActorType filter);
 
 	// アクター数を取得
 	int GetActorCount(ActorType filter);
