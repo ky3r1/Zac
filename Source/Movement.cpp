@@ -1,4 +1,7 @@
 #include "Movement.h"
+#include "Mathf.h"
+
+#define MAX_GRAVITY 5.0f
 
 Movement::Movement()
 {
@@ -12,6 +15,55 @@ void Movement::DrawImGui()
 {
     ImGui::InputFloat("Move Speed", &moveSpeed);
     ImGui::InputFloat("Turn Speed", &turnSpeed);
+	ImGui::InputFloat("Gravity", &gravity);
+	ImGui::InputFloat3("Velocity", &velocity.x);
+}
+
+void Movement::Update(float elapsedTime)
+{
+	DirectX::XMFLOAT3 pos=GetActor()->GetPosition();
+	if (velocity.x < 0.0f)
+	{
+		velocity.x = velocity.x + friction.x;
+		if(velocity.x > 0.0f)velocity.x = 0.0f;
+        
+	}
+    if (velocity.y < 0.0f)
+    {
+        velocity.y = velocity.y + friction.y;
+        if (velocity.y > 0.0f)velocity.y = 0.0f;
+    }
+    if (velocity.z < 0.0f)
+    {
+        velocity.z = velocity.z + friction.z;
+        if (velocity.z > 0.0f)velocity.z = 0.0f;
+    }
+    if (velocity.x > 0.0f)
+    {
+        velocity.x = velocity.x - friction.x;
+        if (velocity.x < 0.0f)velocity.x = 0.0f;
+    }
+    if (velocity.y > 0.0f)
+    {
+        velocity.y = velocity.y - friction.y;
+        if (velocity.y < 0.0f)velocity.y = 0.0f;
+    }
+    if (velocity.z > 0.0f)
+    {
+        velocity.z = velocity.z - friction.z;
+        if (velocity.z < 0.0f)velocity.z = 0.0f;
+    }
+	pos = Mathf::Add(velocity, pos);
+	now_gravity += gravity;
+	if(now_gravity > MAX_GRAVITY)now_gravity = MAX_GRAVITY;
+	pos.y -= now_gravity;
+	if (pos.y < 0.0f)
+	{
+		pos.y = 0.0f;
+		velocity.y = 0;
+		now_gravity = 0;
+	}
+	GetActor()->SetPosition(pos);
 }
 
 void Movement::Move(const DirectX::XMFLOAT3& direction, float elapsedTime)
@@ -20,13 +72,10 @@ void Movement::Move(const DirectX::XMFLOAT3& direction, float elapsedTime)
 	float speed = moveSpeed * elapsedTime;
 	DirectX::XMVECTOR Direction = DirectX::XMLoadFloat3(&direction);
 	DirectX::XMVECTOR Velocity = DirectX::XMVectorScale(Direction, speed);
-	DirectX::XMVECTOR Position = DirectX::XMLoadFloat3(&actor->GetPosition());
-
-	Position = DirectX::XMVectorAdd(Position, Velocity);
-
-	DirectX::XMFLOAT3 position;
-	DirectX::XMStoreFloat3(&position, Position);
-	actor->SetPosition(position);
+	DirectX::XMFLOAT3 v;
+	DirectX::XMStoreFloat3(&v, Velocity);
+	velocity.x=v.x;
+    velocity.z=v.z;
 }
 
 void Movement::MoveLocal(const DirectX::XMFLOAT3& direction, float elapsedTime)
@@ -76,4 +125,9 @@ void Movement::Turn(const DirectX::XMFLOAT3& direction, float elapsedTime)
 	DirectX::XMFLOAT4 rotation;
 	DirectX::XMStoreFloat4(&rotation, Rotation);
 	actor->SetRotation(rotation);
+}
+
+void Movement::Jump()
+{
+	velocity.y += 2.0f;
 }

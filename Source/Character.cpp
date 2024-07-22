@@ -11,6 +11,7 @@ void Character::Start()
 
 void Character::Update(float elapsedTime)
 {
+
 }
 
 void Character::DrawImGui()

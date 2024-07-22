@@ -13,12 +13,18 @@ public:
     //ImGui描画
     void DrawImGui()override;
 
+    // 更新処理
+    virtual void Update(float elapsedTime);
+
     // 移動
     void Move(const DirectX::XMFLOAT3& direction, float elapsedTime);
     void MoveLocal(const DirectX::XMFLOAT3& direction, float elapsedTime);
 
     // 旋回
     void Turn(const DirectX::XMFLOAT3& direction, float elapsedTime);
+
+    //ジャンプ
+    void Jump();
 
     //セッター・ゲッター
     //移動速度
@@ -31,4 +37,8 @@ public:
 private:
     float		moveSpeed = 5.0f;
     float		turnSpeed = 6.28f;
+    DirectX::XMFLOAT3 velocity = {};
+    DirectX::XMFLOAT3 friction = {0.01f,0.01f,0.01f};
+    float       gravity = 0.05f;
+    float       now_gravity = 0;
 };

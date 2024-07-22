@@ -4,7 +4,6 @@
 #include "Player.h"
 #include "Input/Input.h"
 #include "CameraController.h"
-#include "Collision.h"
 
 // コンストラクタ
 Player::Player()
@@ -35,11 +34,15 @@ void Player::Start()
 void Player::Update(float elapsedTime)
 {
 	GamePad& gamePad = Input::Instance().GetGamePad();
-	gamePad.Update();
-
+	//gamePad.Update();
 	CameraControl(elapsedTime);
 	CharacterControl(elapsedTime);
 	vs_collision->CylinderVsCylinder(ActorType::Enemy);
+
+	if (gamePad.GetButtonDown() & GamePad::BTN_X)
+	{
+		movement->Jump();
+	}
 }
 
 void Player::DrawImGui()

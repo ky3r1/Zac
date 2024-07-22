@@ -44,7 +44,6 @@ void VsCollision::SphereVsCylinder(ActorType filter,bool flg)
             actor->SetSphere(ec);
         }
 	}
-
 }
 
 void VsCollision::CylinderVsCylinder(ActorType filter)

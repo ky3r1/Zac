@@ -17,5 +17,4 @@ public:
 
     //void RayCast(const Ray& ray, float& distance);
 private:
-
 };
