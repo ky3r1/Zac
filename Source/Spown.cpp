@@ -6,7 +6,6 @@
 
 #include "Graphics/Sprite.h"
 
-#include "EnemyManager.h"
 #include "Enemy.h"
 
 #define SPOWNDERAY 3*60

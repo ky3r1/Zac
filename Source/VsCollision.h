@@ -22,7 +22,10 @@ public:
     //円柱と球体の衝突判定
     bool CylinderVsCylinder(ActorType filter);
 
-    //レイキャスト
-    bool RayCastDown(ActorType filter);
+    //下方向のレイキャスト
+    bool RayCastAxisY(ActorType filter);
+
+    //横方向のレイキャスト
+    bool RayCastAxisXZ(ActorType filter);
 private:
 };

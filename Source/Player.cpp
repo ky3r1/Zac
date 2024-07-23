@@ -21,7 +21,7 @@ Player::~Player()
 void Player::Start()
 {
 	movement = GetActor()->GetComponent<Movement>();
-	movement.get()->SetMoveSpeed(15.0f);
+	movement.get()->SetMoveSpeed(25.0f);
 	vs_collision=GetActor()->GetComponent<VsCollision>();
 
 	// 適当にモーション再生

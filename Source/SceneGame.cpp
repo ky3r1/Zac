@@ -4,7 +4,6 @@
 #include "Camera.h"
 
 //CharacterInclude
-#include "EnemyManager.h"
 #include "EffectManager.h"
 #include "MouseManager.h"
 
@@ -56,7 +55,7 @@ void SceneGame::Initialize()
 		std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
 		actor->LoadModel(filename);
 		actor->SetName("Player");
-		actor->SetPosition(DirectX::XMFLOAT3(0, 0, 0));
+		actor->SetPosition(DirectX::XMFLOAT3(350, 0, 0));
 		actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
 		actor->SetScale(DirectX::XMFLOAT3(5.0f, 5.0f, 5.0f));
 		actor->SetWeight(10.0f);
@@ -136,8 +135,6 @@ void SceneGame::Initialize()
 // 終了化
 void SceneGame::Finalize()
 {
-	//エネミー終了化
-	EnemyManager::Instance().clear();
 	//ステージ終了化
 	//StageManager::Instance().Clear();
 	ActorManager::Instance().Clear();
@@ -174,8 +171,6 @@ void SceneGame::Update(float elapsedTime)
 	if(spown.get()->GetStageClear())SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult(true)));
 #endif // SPOWNENEMY
 
-	//エネミー更新処理
-	EnemyManager::Instance().Update(elapsedTime);
 
 	//エフェクト更新処理
 	EffectManager::Instance().Update(elapsedTime);
@@ -212,8 +207,6 @@ void SceneGame::Render()
 		//ステージ描画
 		//StageManager::Instance().Render(dc, shader);
 
-		//エネミー描画
-		EnemyManager::Instance().Render(dc, shader);
 
 		//プレイヤー描画
 #ifdef  ALLPLAYER
@@ -234,8 +227,6 @@ void SceneGame::Render()
 #ifdef  DEBUGIMGUI
 		//プレイヤーデバッグプリミティブ描画
 		ActorManager::Instance().DrawDebug();
-		//エネミーデバッグプリミティブ描画
-		EnemyManager::Instance().DrawDebugPrimitive();
 		// ラインレンダラ描画実行
 		graphics.GetLineRenderer()->Render(dc, rc.view, rc.projection);
 		// デバッグレンダラ描画実行

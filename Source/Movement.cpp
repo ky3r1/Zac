@@ -96,11 +96,8 @@ void Movement::Turn(const DirectX::XMFLOAT3& direction, float elapsedTime)
 
 void Movement::Jump()
 {
-	if (on_ground)
-	{
-		velocity.y += 7.0f;
-		on_ground = false;
-	}
+	velocity.y += 7.0f;
+	on_ground = false;
 }
 
 void Movement::AddImpulse(const DirectX::XMFLOAT3& impulse)

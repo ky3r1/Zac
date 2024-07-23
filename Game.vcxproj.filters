@@ -203,14 +203,8 @@
     <ClInclude Include="Source\Stage.h">
       <Filter>Component\Stage</Filter>
     </ClInclude>
-    <ClInclude Include="Source\StageManager.h">
-      <Filter>Component\Stage</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Mathf.h">
       <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\EnemyManager.h">
-      <Filter>Component\Character\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Source\Player.h">
       <Filter>Component\Character\Player</Filter>
@@ -382,16 +376,10 @@
     <ClCompile Include="Source\Stage.cpp">
       <Filter>Component\Stage</Filter>
     </ClCompile>
-    <ClCompile Include="Source\StageManager.cpp">
-      <Filter>Component\Stage</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Mathf.cpp">
       <Filter>System</Filter>
     </ClCompile>
     <ClCompile Include="Source\Enemy.cpp">
-      <Filter>Component\Character\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\EnemyManager.cpp">
       <Filter>Component\Character\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Source\Player.cpp">
