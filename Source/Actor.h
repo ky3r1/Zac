@@ -109,11 +109,23 @@ public:
 	void SetActorType(ActorType type) { this->type = type; }
 	ActorType GetActorType() const { return type; }
 
+	// レイキャストフラグのセッター・ゲッター
+    void SetRaycastFlg(bool flg) { raycast_flg = flg; }
+    bool GetRaycastFlg() const { return raycast_flg; }
+
+	//old_transform
+    void SetOldTransform(const DirectX::XMFLOAT4X4& transform) { old_transform = transform; }
+    const DirectX::XMFLOAT4X4& GetOldTransform() const { return old_transform; }
+
+    //////////////////////////////////////////////////////////////////////////
+    //							コンポーネント							//
+    //////////////////////////////////////////////////////////////////////////
+
 	// コンポーネント追加
 	template<class T, class... Args>
 	std::shared_ptr<T> AddComponent(Args... args)
 	{
-		parameter_backup=parameter;
+		parameter_backup = parameter;
 		std::shared_ptr<T> component = std::make_shared<T>(args...);
 		component->SetActor(shared_from_this());
 		components.emplace_back(component);
@@ -136,6 +148,12 @@ private:
 	std::string			name;
 	Parameter			parameter;
 	Parameter			parameter_backup;
+	bool				raycast_flg = false;
+	DirectX::XMFLOAT4X4 old_transform = { 
+		1,0,0,0,
+		0,1,0,0,
+		0,0,1,0,
+		0,0,0,1 };
 
 	// フィルター用のタイプ
 	ActorType type = ActorType::None;
@@ -183,6 +201,9 @@ public:
 	bool GetNearActor(Actor* origin,Actor& result, ActorType filter);
 	Actor* GetNearActor(Actor* origin, ActorType filter);
 	//std::unique_ptr<Actor> GetNearActor(Actor* origin, ActorType filter);
+
+	//RayCast用アクター取得
+	bool GetNearActorRayCast(DirectX::XMFLOAT3 start, DirectX::XMFLOAT3 end, HitResult& hit_result);
 
 	// アクター数を取得
 	int GetActorCount(ActorType filter);

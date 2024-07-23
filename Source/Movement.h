@@ -24,7 +24,7 @@ public:
     void Turn(const DirectX::XMFLOAT3& direction, float elapsedTime);
 
     //ƒWƒƒƒ“ƒv
-    void Jump();
+    void Jump(float jump_power);
 
     //ÕŒ‚‚ğ‰Á‚¦‚é
     void AddImpulse(const DirectX::XMFLOAT3& impulse);

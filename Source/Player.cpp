@@ -35,12 +35,12 @@ void Player::Start()
 // 更新
 void Player::Update(float elapsedTime)
 {
-	Character::Update(elapsedTime);
 	GamePad& gamePad = Input::Instance().GetGamePad();
 	//gamePad.Update();
 	CharacterControl(elapsedTime);
+	Actor* enemy = nullptr;
 	//プレイヤーとエネミーの当たり判定
-	if (vs_collision->CylinderVsCylinder(ActorType::Enemy))
+	if (vs_collision->CylinderVsCylinder(ActorType::Enemy, &enemy))
 	{
 		if (unbeatable_delay.checker)
 		{
@@ -49,25 +49,27 @@ void Player::Update(float elapsedTime)
 				DirectX::XMFLOAT3 impulse;
 				//吹き飛ばす力
 				const float power = 10.0f;
-				DirectX::XMVECTOR Enemy_Position = DirectX::XMLoadFloat3(&ActorManager::Instance().GetNearActor(GetActor().get(), ActorType::Enemy)->GetPosition());
+				DirectX::XMVECTOR Enemy_Position = DirectX::XMLoadFloat3(&enemy->GetPosition());
 				DirectX::XMVECTOR Player_Position = DirectX::XMLoadFloat3(&GetActor()->GetPosition());
 				DirectX::XMVECTOR Vec = DirectX::XMVectorSubtract(Player_Position, Enemy_Position);
 				Vec = DirectX::XMVector3Normalize(Vec);
 				DirectX::XMFLOAT3 vec;
-                DirectX::XMStoreFloat3(&vec, Vec);
+				DirectX::XMStoreFloat3(&vec, Vec);
 				impulse.x = vec.x * power;
-                impulse.y = vec.y * power;
+				impulse.y = vec.y * power;
 				impulse.z = vec.z * power;
-                movement->AddImpulse(vec);
+				movement->AddImpulse(vec);
 			}
 
 			unbeatable_delay.checker = false;
 		}
 	}
+	//Jump
 	if (gamePad.GetButtonDown() & GamePad::BTN_X)
 	{
-		movement->Jump();
+		movement->Jump(3.0f);
 	}
+	Character::Update(elapsedTime);
 }
 
 void Player::DrawImGui()

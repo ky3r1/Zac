@@ -14,7 +14,7 @@
 
 //StageIncldue
 //#include "StageManager.h"
-#include "StageMain.h"
+//#include "StageMain.h"
 //#include "StageMapChip.h"
 //#include "StageMapChip.h"
 
@@ -22,6 +22,9 @@
 
 #include "Input/Input.h"
 #include "Ui.h"
+
+#include "CameraController.h"
+#include "Object.h"
 
 
 // 初期化
@@ -42,6 +45,7 @@ void SceneGame::Initialize()
 		actor->SetPosition(DirectX::XMFLOAT3(0, 0, 0));
 		actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
 		actor->SetScale(DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f));
+		actor->SetRaycastFlg(true);
 		actor->SetActorType(ActorType::Stage);
 		actor->AddComponent<StageMain>();
 	}
@@ -77,6 +81,22 @@ void SceneGame::Initialize()
 		actor->SetName("MainCamera");
 		actor->SetActorType(ActorType::Camera);
 		actor->AddComponent<Camera>();
+	}
+
+	// Object
+	{
+		const char* filename = "Data/Model/Cube/Cube.mdl";
+		std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
+		actor->LoadModel(filename);
+		actor->SetName("Object00");
+		actor->SetPosition(DirectX::XMFLOAT3(100, 00, 00));
+		actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
+		actor->SetScale(DirectX::XMFLOAT3(20.0f, 20.0f, 20.0f));
+		actor->SetColor(DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
+		actor->SetRaycastFlg(true);
+		actor->SetActorType(ActorType::Object);
+		actor->AddComponent<VsCollision>();
+        actor->AddComponent<Object>();
 	}
 
 #ifdef ALLENEMY

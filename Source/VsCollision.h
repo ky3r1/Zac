@@ -10,22 +10,20 @@ public:
     //名前取得
     const char* GetName()const override { return "VsCollision"; }
 
-    void Update(float elapsedTime) override;
-
     //球体と球体の衝突判定
-    bool SphereVsSphere(ActorType filter);
+    bool SphereVsSphere(ActorType filter,Actor** reactor);
 
     //球体と円柱の衝突判定
     //持ち主がSphereならtrue、持ち主がCylinderならfalse
-    bool SphereVsCylinder(ActorType filter,bool flg);
+    bool SphereVsCylinder(ActorType filter, Actor** reactor,bool flg);
 
     //円柱と球体の衝突判定
-    bool CylinderVsCylinder(ActorType filter);
+    bool CylinderVsCylinder(ActorType filter,Actor** reactor);
 
     //下方向のレイキャスト
-    bool RayCastAxisY(ActorType filter);
+    bool RayCastAxisY();
 
     //横方向のレイキャスト
-    bool RayCastAxisXZ(ActorType filter);
+    bool RayCastAxisXZ();
 private:
 };

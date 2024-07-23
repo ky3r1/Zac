@@ -1,13 +1,9 @@
 #pragma once
 
 #include "Scene.h"
-#include "Player.h"
 #include "Spown.h"
 #include "Graphics/Sprite.h"
 #include "Graphics/Font.h"
-
-#include "Camera.h"
-#include "CameraController.h"
 
 // ÉQÅ[ÉÄÉVÅ[Éì
 class SceneGame : public Scene

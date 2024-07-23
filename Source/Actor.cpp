@@ -1,6 +1,7 @@
 #include "Actor.h"
 #include "Component.h"
 #include "Mathf.h"
+#include "Collision.h"
 
 // 開始処理
 void Actor::Start()
@@ -14,6 +15,7 @@ void Actor::Start()
 // 更新
 void Actor::Update(float elapsedTime)
 {
+	old_transform = parameter.transform;
 	// アニメーションの更新
 	if (model != nullptr)
 	{
@@ -310,6 +312,32 @@ Actor* ActorManager::GetNearActor(Actor* origin, ActorType filter)
 		}
 	}
 	return result;
+}
+
+bool ActorManager::GetNearActorRayCast(DirectX::XMFLOAT3 start, DirectX::XMFLOAT3 end, HitResult& hit_result)
+{
+    float min = FLT_MAX;
+    float distance = 0.0f;
+    Actor* result = nullptr;
+	HitResult local_hit_result;
+    for (std::shared_ptr<Actor> actor : updateActors)
+    {
+		//Actor生成時にRayCastFlgを設定する
+        if (actor->GetRaycastFlg())
+        {
+			if (Collision::IntersectRayVsModel(start, end, actor->GetModel(), local_hit_result))
+			{
+				if (hit_result.distance < min)
+				{
+					min= local_hit_result.distance;
+					hit_result = local_hit_result;
+					result = actor.get();
+				}
+			}
+        }
+    }
+	if (result != nullptr)return true;
+    return false;
 }
 
 int ActorManager::GetActorCount(ActorType filter)

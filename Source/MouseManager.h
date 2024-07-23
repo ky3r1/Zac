@@ -1,7 +1,7 @@
 #pragma once
-
+#include "All.h"
 #include "Input/Input.h"
-#include"StageMain.h"
+//#include"StageMain.h"
 
 
 class MouseManager

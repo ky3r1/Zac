@@ -9,15 +9,10 @@ VsCollision::~VsCollision()
 {
 }
 
-void VsCollision::Update(float elapsedTime)
-{
-	RayCastAxisXZ(ActorType::Stage);
-	RayCastAxisY(ActorType::Stage);
-}
-
-bool VsCollision::SphereVsSphere(ActorType filter)
+bool VsCollision::SphereVsSphere(ActorType filter,Actor** reactor)
 {
 	Actor* actor = ActorManager::Instance().GetNearActor(GetActor().get(), filter);
+	*reactor = actor;
 	Sphere pc = GetActor()->GetSphere();
 	Sphere ec = actor->GetSphere();
 	if (Collision::IntersectSphereVsSphere(pc, ec))
@@ -29,9 +24,10 @@ bool VsCollision::SphereVsSphere(ActorType filter)
 	return false;
 }
 
-bool VsCollision::SphereVsCylinder(ActorType filter,bool flg)
+bool VsCollision::SphereVsCylinder(ActorType filter, Actor** reactor,bool flg)
 {
 	Actor* actor = ActorManager::Instance().GetNearActor(GetActor().get(), filter);
+	*reactor = actor;
 	//Ž‚¿Žå‚ªSphere‚È‚çtrueAŽ‚¿Žå‚ªCylinder‚È‚çfalse
 	if (flg)
 	{
@@ -58,9 +54,10 @@ bool VsCollision::SphereVsCylinder(ActorType filter,bool flg)
 	return false;
 }
 
-bool VsCollision::CylinderVsCylinder(ActorType filter)
+bool VsCollision::CylinderVsCylinder(ActorType filter, Actor** reactor)
 {
-	Actor* actor = ActorManager::Instance().GetNearActor(GetActor().get(), filter);
+	Actor* actor = ActorManager::Instance().GetNearActor(GetActor().get(), filter);	
+	*reactor = actor;
 	Cylinder pc = GetActor()->GetCylinder();
 	Cylinder ec = actor->GetCylinder();
 	if (Collision::IntersectCylinderVsCylinder(pc, ec))
@@ -72,9 +69,8 @@ bool VsCollision::CylinderVsCylinder(ActorType filter)
 	return false;
 }
 
-bool VsCollision::RayCastAxisY(ActorType filter)
+bool VsCollision::RayCastAxisY()
 {
-	Model* model_hit_in_ray = ActorManager::Instance().GetNearActor(GetActor().get(), filter)->GetModel();
 	DirectX::XMFLOAT3 start = { 
 		GetActor()->GetPosition().x,
 		GetActor()->GetPosition().y+ 1.0f,
@@ -88,19 +84,18 @@ bool VsCollision::RayCastAxisY(ActorType filter)
 	};
 
 	HitResult hit_result;
-	if(Collision::IntersectRayVsModel(start, end, model_hit_in_ray, hit_result))
-    {
+	if (ActorManager::Instance().GetNearActorRayCast(start, end, hit_result))
+	{
 		GetActor()->GetComponent<Movement>()->SetOnGround(true);
 		GetActor()->SetPosition(hit_result.position);
 		return true;
-    }
+	}
 	GetActor()->GetComponent<Movement>()->SetOnGround(false);
 	return false;
 }
 
-bool VsCollision::RayCastAxisXZ(ActorType filter)
+bool VsCollision::RayCastAxisXZ()
 {
-	Model* model_hit_in_ray = ActorManager::Instance().GetNearActor(GetActor().get(), filter)->GetModel();
 	DirectX::XMFLOAT3 start = {
 		GetActor()->GetPosition().x,
 		GetActor()->GetPosition().y + 1.0f,
@@ -114,7 +109,7 @@ bool VsCollision::RayCastAxisXZ(ActorType filter)
 	};
 
 	HitResult hit_result;
-	if (Collision::IntersectRayVsModel(start, end, model_hit_in_ray, hit_result))
+	if (ActorManager::Instance().GetNearActorRayCast(start, end, hit_result))
 	{
 		GetActor()->SetPosition(hit_result.position);
 		return true;

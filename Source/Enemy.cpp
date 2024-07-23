@@ -18,11 +18,18 @@ void Enemy::Start()
 void Enemy::Update(float elapsedTime)
 {
     Move(elapsedTime);
+    Actor* dummy = nullptr;
     //エネミー同士の衝突判定
-    if (vs_collision->CylinderVsCylinder(ActorType::Enemy))
+    if (vs_collision->CylinderVsCylinder(ActorType::Enemy,&dummy))
     {
 
     }
+    ////RayCast
+    //{
+    //    vs_collision->RayCastAxisXZ(ActorType::Stage);
+    //    vs_collision->RayCastAxisY(ActorType::Stage);
+    //}
+    Character::Update(elapsedTime);
 }
 
 void Enemy::DrawImGui()

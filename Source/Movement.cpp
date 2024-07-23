@@ -29,6 +29,7 @@ void Movement::Update(float elapsedTime)
 
 
 	pos = Mathf::Add(velocity, pos);
+	//if(pos.y < 0.0f)pos.y = 0.0f;
 	GetActor()->SetPosition(pos);
 }
 
@@ -94,9 +95,9 @@ void Movement::Turn(const DirectX::XMFLOAT3& direction, float elapsedTime)
 	actor->SetRotation(rotation);
 }
 
-void Movement::Jump()
+void Movement::Jump(float jump_power)
 {
-	velocity.y += 7.0f;
+	velocity.y += jump_power;
 	on_ground = false;
 }
 
