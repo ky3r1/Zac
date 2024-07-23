@@ -4,6 +4,8 @@
 #include "Player.h"
 #include "Input/Input.h"
 #include "CameraController.h"
+#include "Enemy.h"
+
 
 // コンストラクタ
 Player::Player()
@@ -33,12 +35,35 @@ void Player::Start()
 // 更新
 void Player::Update(float elapsedTime)
 {
+	Character::Update(elapsedTime);
 	GamePad& gamePad = Input::Instance().GetGamePad();
 	//gamePad.Update();
-	CameraControl(elapsedTime);
 	CharacterControl(elapsedTime);
-	vs_collision->CylinderVsCylinder(ActorType::Enemy);
+	//プレイヤーとエネミーの当たり判定
+	if (vs_collision->CylinderVsCylinder(ActorType::Enemy))
+	{
+		if (unbeatable_delay.checker)
+		{
+			TakeDamage(1.0f);
+			{
+				DirectX::XMFLOAT3 impulse;
+				//吹き飛ばす力
+				const float power = 10.0f;
+				DirectX::XMVECTOR Enemy_Position = DirectX::XMLoadFloat3(&ActorManager::Instance().GetNearActor(GetActor().get(), ActorType::Enemy)->GetPosition());
+				DirectX::XMVECTOR Player_Position = DirectX::XMLoadFloat3(&GetActor()->GetPosition());
+				DirectX::XMVECTOR Vec = DirectX::XMVectorSubtract(Player_Position, Enemy_Position);
+				Vec = DirectX::XMVector3Normalize(Vec);
+				DirectX::XMFLOAT3 vec;
+                DirectX::XMStoreFloat3(&vec, Vec);
+				impulse.x = vec.x * power;
+                impulse.y = vec.y * power;
+				impulse.z = vec.z * power;
+                movement->AddImpulse(vec);
+			}
 
+			unbeatable_delay.checker = false;
+		}
+	}
 	if (gamePad.GetButtonDown() & GamePad::BTN_X)
 	{
 		movement->Jump();
@@ -122,12 +147,4 @@ void Player::CharacterControl(float elapsedTime)
 		actor->SetRotation(rotation);
 #endif
 	}
-}
-
-// カメラ操作
-void Player::CameraControl(float elapsedTime)
-{
-	CameraController camera_c;
-	//camera_c.Update(GetActor()->GetPosition());
-	//camera_c.UpdateKey(elapsedTime, GetActor().get()->GetPosition());
 }

@@ -126,6 +126,21 @@ void Actor::DrawDebug()
 	}
 }
 
+void Actor::UpdateDelayTime(DelayTime& delaytime, float maxtime)
+{
+	//checkerがfalse場合はタイムを減らす
+	//checkerがtrue場合はcheckerをtrueにしてタイムをリセット
+	if (!delaytime.checker)
+	{
+		delaytime.time--;
+	}
+	if (delaytime.time < 0)
+	{
+		delaytime.checker = true;
+		delaytime.time = maxtime;
+	}
+}
+
 // モデルの読み込み
 void Actor::LoadModel(const char* filename)
 {
@@ -285,6 +300,7 @@ Actor* ActorManager::GetNearActor(Actor* origin, ActorType filter)
 	{
 		if (actor->GetActorType() == filter || filter == ActorType::All)
 		{
+			if (origin == actor.get())continue;
 			distance = Mathf::Distance(origin->GetPosition(), actor->GetPosition());
 			if (distance < min)
 			{

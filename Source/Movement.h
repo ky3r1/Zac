@@ -26,6 +26,9 @@ public:
     //ジャンプ
     void Jump();
 
+    //衝撃を加える
+    void AddImpulse(const DirectX::XMFLOAT3& impulse);
+
     //セッター・ゲッター
     //移動速度
     float GetMoveSpeed()const { return moveSpeed; }

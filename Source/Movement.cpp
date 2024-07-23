@@ -135,3 +135,8 @@ void Movement::Jump()
 {
 	velocity.y += 2.0f;
 }
+
+void Movement::AddImpulse(const DirectX::XMFLOAT3& impulse)
+{
+	velocity = Mathf::Add(velocity, impulse);
+}

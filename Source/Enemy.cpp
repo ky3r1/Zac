@@ -5,6 +5,7 @@ void Enemy::Start()
 {
     movement = GetActor()->GetComponent<Movement>();
     movement.get()->SetMoveSpeed(1.0f);
+    vs_collision=GetActor()->GetComponent<VsCollision>();
     //GetActor().get()->SetScale(DirectX::XMFLOAT3(5.0f, 5.0f, 5.0f));
     // 適当にモーション再生
     Model* model = GetActor()->GetModel();
@@ -17,6 +18,11 @@ void Enemy::Start()
 void Enemy::Update(float elapsedTime)
 {
     Move(elapsedTime);
+    //エネミー同士の衝突判定
+    if (vs_collision->CylinderVsCylinder(ActorType::Enemy))
+    {
+
+    }
 }
 
 void Enemy::DrawImGui()

@@ -8,7 +8,7 @@ VsCollision::~VsCollision()
 {
 }
 
-void VsCollision::SphereVsSphere(ActorType filter)
+bool VsCollision::SphereVsSphere(ActorType filter)
 {
 	Actor* actor = ActorManager::Instance().GetNearActor(GetActor().get(), filter);
 	Sphere pc = GetActor()->GetSphere();
@@ -17,10 +17,12 @@ void VsCollision::SphereVsSphere(ActorType filter)
 	{
 		GetActor()->SetSphere(pc);
 		actor->SetSphere(ec);
+		return true;
 	}
+	return false;
 }
 
-void VsCollision::SphereVsCylinder(ActorType filter,bool flg)
+bool VsCollision::SphereVsCylinder(ActorType filter,bool flg)
 {
 	Actor* actor = ActorManager::Instance().GetNearActor(GetActor().get(), filter);
 	//‚¿å‚ªSphere‚È‚çtrueA‚¿å‚ªCylinder‚È‚çfalse
@@ -32,6 +34,7 @@ void VsCollision::SphereVsCylinder(ActorType filter,bool flg)
 		{
 			GetActor()->SetSphere(pc);
 			actor->SetCylinder(ec);
+			return true;
 		}
 	}
 	else
@@ -42,18 +45,22 @@ void VsCollision::SphereVsCylinder(ActorType filter,bool flg)
         {
             GetActor()->SetCylinder(pc);
             actor->SetSphere(ec);
+			return true;
         }
 	}
+	return false;
 }
 
-void VsCollision::CylinderVsCylinder(ActorType filter)
+bool VsCollision::CylinderVsCylinder(ActorType filter)
 {
 	Actor* actor = ActorManager::Instance().GetNearActor(GetActor().get(), filter);
 	Cylinder pc = GetActor()->GetCylinder();
 	Cylinder ec = actor->GetCylinder();
 	if (Collision::IntersectCylinderVsCylinder(pc, ec))
-	{
+	{	
 		GetActor()->SetCylinder(pc);
 		actor->SetCylinder(ec);
+		return true;
 	}
+	return false;
 }

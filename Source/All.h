@@ -100,3 +100,9 @@ struct Cylinder
     Sphere            sphere;
     float             height = 0.0f;
 };
+
+struct DelayTime
+{
+    float time;
+    bool checker = false;
+};

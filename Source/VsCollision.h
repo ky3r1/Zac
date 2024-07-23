@@ -10,10 +10,15 @@ public:
     //–¼‘Oæ“¾
     const char* GetName()const override { return "VsCollision"; }
 
-    void SphereVsSphere(ActorType filter);
+    //‹…‘Ì‚Æ‹…‘Ì‚ÌÕ“Ë”»’è
+    bool SphereVsSphere(ActorType filter);
+
+    //‹…‘Ì‚Æ‰~’Œ‚ÌÕ“Ë”»’è
     //‚¿å‚ªSphere‚È‚çtrueA‚¿å‚ªCylinder‚È‚çfalse
-    void SphereVsCylinder(ActorType filter,bool flg);
-    void CylinderVsCylinder(ActorType filter);
+    bool SphereVsCylinder(ActorType filter,bool flg);
+
+    //‰~’Œ‚Æ‹…‘Ì‚ÌÕ“Ë”»’è
+    bool CylinderVsCylinder(ActorType filter);
 
     //void RayCast(const Ray& ray, float& distance);
 private:

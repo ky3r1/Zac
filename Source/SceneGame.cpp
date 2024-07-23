@@ -87,7 +87,7 @@ void SceneGame::Initialize()
 		std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
 		actor->LoadModel(filename);
 		actor->SetName("Enemy00");
-		actor->SetPosition(DirectX::XMFLOAT3(0, 0, 20));
+		actor->SetPosition(DirectX::XMFLOAT3(10, 0, 00));
 		actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
 		actor->SetScale(DirectX::XMFLOAT3(0.05f, 0.05f, 0.05f));
 		actor->SetWeight(9.0f);
@@ -95,6 +95,7 @@ void SceneGame::Initialize()
 		actor->SetHeight(5.0f);
 		actor->SetActorType(ActorType::Enemy);
 		actor->AddComponent<Movement>();
+		actor->AddComponent<VsCollision>();
 		actor->AddComponent<Enemy>();
 	}
 
@@ -104,15 +105,16 @@ void SceneGame::Initialize()
 		std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
 		actor->LoadModel(filename);
 		actor->SetName("Enemy01");
-		actor->SetPosition(DirectX::XMFLOAT3(0, 0, -20));
+		actor->SetPosition(DirectX::XMFLOAT3(20, 00, 00));
 		actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
 		actor->SetScale(DirectX::XMFLOAT3(0.05f, 0.05f, 0.05f));
 		actor->SetColor(DirectX::XMFLOAT4(0.0f, 0.05f, 1.05f,1.0f));
-		actor->SetWeight(9.0f);
+		actor->SetWeight(5.0f);
 		actor->SetRadius(3.0f);
 		actor->SetHeight(5.0f);
         actor->SetActorType(ActorType::Enemy);
 		actor->AddComponent<Movement>();
+		actor->AddComponent<VsCollision>();
 		actor->AddComponent<Enemy>();
 	}
 
@@ -171,7 +173,6 @@ void SceneGame::Update(float elapsedTime)
     spown->Update(elapsedTime);
 	if(spown.get()->GetStageClear())SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult(true)));
 #endif // SPOWNENEMY
-
 
 	//エネミー更新処理
 	EnemyManager::Instance().Update(elapsedTime);

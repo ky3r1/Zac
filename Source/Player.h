@@ -36,8 +36,5 @@ public:
 private:
 	// キャラクター操作
 	void CharacterControl(float elapsedTime);
-
-	// カメラ操作
-	void CameraControl(float elapsedTime);
 private:
 };

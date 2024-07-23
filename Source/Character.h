@@ -8,12 +8,6 @@
 #include "Movement.h"
 #include "VsCollision.h"
 
-struct DelayTime
-{
-    int time;
-    bool checker = false;
-};
-
 //キャラクター
 class Character :public Component
 {
@@ -34,6 +28,12 @@ public:
 
     //デバッグプリミティブ描画
     virtual void DrawDebug() override;
+    
+    //ダメージを受ける
+    virtual void TakeDamage(float damage);
+
+    //死亡通知
+    bool IsDead() { return current_health <= 0; }
 
 public:
     // 体力セッター・ゲッター
@@ -44,4 +44,6 @@ protected:
     std::shared_ptr<VsCollision>	vs_collision;
     float max_health = 10;
     float current_health = max_health;
+
+    DelayTime unbeatable_delay;
 };
