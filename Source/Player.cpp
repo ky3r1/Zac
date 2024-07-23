@@ -44,7 +44,7 @@ void Player::Update(float elapsedTime)
 	{
 		if (unbeatable_delay.checker)
 		{
-			TakeDamage(1.0f);
+			//TakeDamage(1.0f);
 			{
 				DirectX::XMFLOAT3 impulse;
 				//吹き飛ばす力

@@ -10,6 +10,8 @@ public:
     //名前取得
     const char* GetName()const override { return "VsCollision"; }
 
+    void Update(float elapsedTime) override;
+
     //球体と球体の衝突判定
     bool SphereVsSphere(ActorType filter);
 
@@ -20,6 +22,7 @@ public:
     //円柱と球体の衝突判定
     bool CylinderVsCylinder(ActorType filter);
 
-    //void RayCast(const Ray& ray, float& distance);
+    //レイキャスト
+    bool RayCastDown(ActorType filter);
 private:
 };

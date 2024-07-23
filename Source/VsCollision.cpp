@@ -1,4 +1,5 @@
 #include "VsCollision.h"
+#include "Movement.h"
 
 VsCollision::VsCollision()
 {
@@ -6,6 +7,11 @@ VsCollision::VsCollision()
 
 VsCollision::~VsCollision()
 {
+}
+
+void VsCollision::Update(float elapsedTime)
+{
+	RayCastDown(ActorType::Stage);
 }
 
 bool VsCollision::SphereVsSphere(ActorType filter)
@@ -62,5 +68,31 @@ bool VsCollision::CylinderVsCylinder(ActorType filter)
 		actor->SetCylinder(ec);
 		return true;
 	}
+	return false;
+}
+
+bool VsCollision::RayCastDown(ActorType filter)
+{
+	Model* model_hit_in_ray = ActorManager::Instance().GetNearActor(GetActor().get(), filter)->GetModel();
+	DirectX::XMFLOAT3 start = { 
+		GetActor()->GetPosition().x,
+		GetActor()->GetPosition().y+ 1.0f,
+		GetActor()->GetPosition().z
+	};
+
+	DirectX::XMFLOAT3 end = { 
+		GetActor()->GetPosition().x,
+		GetActor()->GetPosition().y+ GetActor()->GetComponent<Movement>()->GetVelocity().y,
+		GetActor()->GetPosition().z
+	};
+
+	HitResult hit_result;
+	if(Collision::IntersectRayVsModel(start, end, model_hit_in_ray, hit_result))
+    {
+		GetActor()->GetComponent<Movement>()->SetOnGround(true);
+		GetActor()->SetPosition(hit_result.position);
+		return true;
+    }
+	GetActor()->GetComponent<Movement>()->SetOnGround(false);
 	return false;
 }

@@ -1,7 +1,7 @@
 #include "Movement.h"
 #include "Mathf.h"
 
-#define MAX_GRAVITY 5.0f
+#define MAX_GRAVITY 2.0f
 
 Movement::Movement()
 {
@@ -22,51 +22,13 @@ void Movement::DrawImGui()
 void Movement::Update(float elapsedTime)
 {
 	DirectX::XMFLOAT3 pos=GetActor()->GetPosition();
-	//velocityëùå∏èàóù
-	{
-		if (velocity.x < 0.0f)
-		{
-			velocity.x = velocity.x + friction.x;
-			if (velocity.x > 0.0f)velocity.x = 0.0f;
 
-		}
-		if (velocity.y < 0.0f)
-		{
-			velocity.y = velocity.y + friction.y;
-			if (velocity.y > 0.0f)velocity.y = 0.0f;
-		}
-		if (velocity.z < 0.0f)
-		{
-			velocity.z = velocity.z + friction.z;
-			if (velocity.z > 0.0f)velocity.z = 0.0f;
-		}
-		if (velocity.x > 0.0f)
-		{
-			velocity.x = velocity.x - friction.x;
-			if (velocity.x < 0.0f)velocity.x = 0.0f;
-		}
-		if (velocity.y > 0.0f)
-		{
-			velocity.y = velocity.y - friction.y;
-			if (velocity.y < 0.0f)velocity.y = 0.0f;
-		}
-		if (velocity.z > 0.0f)
-		{
-			velocity.z = velocity.z - friction.z;
-			if (velocity.z < 0.0f)velocity.z = 0.0f;
-		}
-	}
+	UpdateAxisX(elapsedTime);
+	UpdateAxisY(elapsedTime);
+	UpdateAxisZ(elapsedTime);
+
 
 	pos = Mathf::Add(velocity, pos);
-	now_gravity += gravity;
-	if(now_gravity > MAX_GRAVITY)now_gravity = MAX_GRAVITY;
-	pos.y -= now_gravity;
-	if (pos.y < 0.0f)
-	{
-		pos.y = 0.0f;
-		velocity.y = 0;
-		now_gravity = 0;
-	}
 	GetActor()->SetPosition(pos);
 }
 
@@ -74,12 +36,13 @@ void Movement::Move(const DirectX::XMFLOAT3& direction, float elapsedTime)
 {
 	std::shared_ptr<Actor> actor = GetActor();
 	float speed = moveSpeed * elapsedTime;
+	const float power = 1.0f;
 	DirectX::XMVECTOR Direction = DirectX::XMLoadFloat3(&direction);
 	DirectX::XMVECTOR Velocity = DirectX::XMVectorScale(Direction, speed);
 	DirectX::XMFLOAT3 v;
 	DirectX::XMStoreFloat3(&v, Velocity);
-	velocity.x=v.x;
-    velocity.z=v.z;
+	velocity.x = +v.x * power;
+	velocity.z = +v.z * power;
 }
 
 void Movement::MoveLocal(const DirectX::XMFLOAT3& direction, float elapsedTime)
@@ -133,10 +96,79 @@ void Movement::Turn(const DirectX::XMFLOAT3& direction, float elapsedTime)
 
 void Movement::Jump()
 {
-	velocity.y += 2.0f;
+	if (on_ground)
+	{
+		velocity.y += 7.0f;
+		on_ground = false;
+	}
 }
 
 void Movement::AddImpulse(const DirectX::XMFLOAT3& impulse)
 {
 	velocity = Mathf::Add(velocity, impulse);
+	//velocity = impulse;
+}
+
+void Movement::UpdateAxisX(float elapsedTime)
+{	
+	//velocityëùå∏èàóù
+	{
+		if (velocity.x < 0.0f)
+		{
+			velocity.x = velocity.x + friction.x;
+			if (velocity.x > 0.0f)velocity.x = 0.0f;
+		}
+		if (velocity.x > 0.0f)
+		{
+			velocity.x = velocity.x - friction.x;
+			if (velocity.x < 0.0f)velocity.x = 0.0f;
+		}
+	}
+}
+
+void Movement::UpdateAxisY(float elapsedTime)
+{
+	//velocityëùå∏èàóù
+	{
+		if (velocity.y < 0.0f)
+		{
+			velocity.y = velocity.y + friction.y;
+			if (velocity.y > 0.0f)velocity.y = 0.0f;
+		}
+		if (velocity.y > 0.0f)
+		{
+			velocity.y = velocity.y - friction.y;
+			if (velocity.y < 0.0f)velocity.y = 0.0f;
+		}
+	}
+	//èdóÕèàóù
+	{
+		{
+			now_gravity += gravity;
+			if (now_gravity > MAX_GRAVITY)now_gravity = MAX_GRAVITY;
+		}
+		if (on_ground)
+		{
+			velocity.y = 0;
+			now_gravity = 0;
+		}
+		velocity.y -= now_gravity;
+	}
+}
+
+void Movement::UpdateAxisZ(float elapsedTime)
+{
+	//velocityëùå∏èàóù
+	{
+		if (velocity.z < 0.0f)
+		{
+			velocity.z = velocity.z + friction.z;
+			if (velocity.z > 0.0f)velocity.z = 0.0f;
+		}
+		if (velocity.z > 0.0f)
+		{
+			velocity.z = velocity.z - friction.z;
+			if (velocity.z < 0.0f)velocity.z = 0.0f;
+		}
+	}
 }
