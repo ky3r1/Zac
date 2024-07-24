@@ -29,6 +29,9 @@ public:
     //衝撃を加える
     void AddImpulse(const DirectX::XMFLOAT3& impulse);
 
+    //velocityを0にする
+    void ResetVelocity();
+
     //法線を使って任意の方向に変える
     void ChangeVector(DirectX::XMFLOAT3& v, DirectX::XMFLOAT3& normal);
 private:
@@ -52,7 +55,7 @@ public:
     void SetNowGravity(float value) { now_gravity = value; }
     //速度
     DirectX::XMFLOAT3 GetVelocity()const { return velocity; }
-    void SetVelocity(const DirectX::XMFLOAT3& value) { velocity = value; }
+    //void SetVelocity(const DirectX::XMFLOAT3& value) { velocity = value; }
     //地面の上
     bool GetOnGround()const { return on_ground; }
     void SetOnGround(bool value) { on_ground = value; }
@@ -64,7 +67,7 @@ private:
     float		turnSpeed = 6.28f;
 
     DirectX::XMFLOAT3 velocity = {};
-    DirectX::XMFLOAT3 friction = { 0.05f,0.05f,0.05f };
+    DirectX::XMFLOAT3 friction = { 0.40f,0.00f,0.40f};
 
     float       gravity = 0.005f;
     float       now_gravity = 0;

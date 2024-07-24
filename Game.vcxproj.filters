@@ -278,6 +278,9 @@
     <ClInclude Include="Source\Object.h">
       <Filter>Component\Object</Filter>
     </ClInclude>
+    <ClInclude Include="Source\AnimationState.h">
+      <Filter>Component\Behaviour</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="External\imgui\imgui.cpp">
@@ -456,6 +459,9 @@
     </ClCompile>
     <ClCompile Include="Source\Object.cpp">
       <Filter>Component\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AnimationState.cpp">
+      <Filter>Component\Behaviour</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

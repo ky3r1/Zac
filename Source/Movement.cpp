@@ -29,8 +29,8 @@ void Movement::DrawImGui()
 void Movement::Update(float elapsedTime)
 {
 	DirectX::XMFLOAT3 pos=GetActor()->GetPosition();
-
 	UpdateAxisX(elapsedTime);
+	//AddImpulse({ 0.1f, 0.0f, 0.1f });
 	UpdateAxisY(elapsedTime);
 	UpdateAxisZ(elapsedTime);
 
@@ -175,7 +175,13 @@ void Movement::Jump(float jump_power)
 void Movement::AddImpulse(const DirectX::XMFLOAT3& impulse)
 {
 	velocity = Mathf::Add(velocity, impulse);
-	//velocity = impulse;
+}
+
+void Movement::ResetVelocity()
+{
+	velocity.x = 0;
+	velocity.y = 0;
+	velocity.z = 0;
 }
 
 void Movement::ChangeVector(DirectX::XMFLOAT3& v, DirectX::XMFLOAT3& normal)
@@ -205,6 +211,7 @@ void Movement::UpdateAxisX(float elapsedTime)
 			if (velocity.x < -MAX_VELOCITY_X * move_vec.x)velocity.x = -MAX_VELOCITY_X * move_vec.x;
 		}
 	}
+
 }
 
 void Movement::UpdateAxisY(float elapsedTime)
@@ -224,12 +231,12 @@ void Movement::UpdateAxisY(float elapsedTime)
 	}
 	//velocityの最大値
 	{
-		if(on_ground)
-		//velocityの最大値を超えないようにする
-		{
-			if (velocity.y >  MAX_VELOCITY_Y*move_vec.y)velocity.y =  MAX_VELOCITY_Y*move_vec.y;
-			if (velocity.y < -MAX_VELOCITY_Y*move_vec.y)velocity.y = -MAX_VELOCITY_Y*move_vec.y;
-		}
+		//if(on_ground)
+		////velocityの最大値を超えないようにする
+		//{
+		//	if (velocity.y >  MAX_VELOCITY_Y*move_vec.y)velocity.y =  MAX_VELOCITY_Y*move_vec.y;
+		//	if (velocity.y < -MAX_VELOCITY_Y*move_vec.y)velocity.y = -MAX_VELOCITY_Y*move_vec.y;
+		//}
 	}
 	//重力処理
 	{
@@ -263,10 +270,10 @@ void Movement::UpdateAxisZ(float elapsedTime)
 	}
 	//velocityの最大値
 	{
-		//velocityの最大値を超えないようにする
-		{
-			if (velocity.z >  MAX_VELOCITY_Z*move_vec.z)velocity.z =  MAX_VELOCITY_Z*move_vec.z;
-			if (velocity.z < -MAX_VELOCITY_Z*move_vec.z)velocity.z = -MAX_VELOCITY_Z*move_vec.z;
-		}
+		////velocityの最大値を超えないようにする
+		//{
+		//	if (velocity.z >  MAX_VELOCITY_Z*move_vec.z)velocity.z =  MAX_VELOCITY_Z*move_vec.z;
+		//	if (velocity.z < -MAX_VELOCITY_Z*move_vec.z)velocity.z = -MAX_VELOCITY_Z*move_vec.z;
+		//}
 	}
 }

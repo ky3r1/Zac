@@ -404,6 +404,12 @@ bool ActorManager::GetNearActorRayCast(DirectX::XMFLOAT3 start, DirectX::XMFLOAT
     return false;
 }
 
+bool ActorManager::GetNearActorRayCast(DirectX::XMFLOAT3 start, DirectX::XMFLOAT3 end, HitResult& hit_result)
+{
+	Actor* result = nullptr;
+	return GetNearActorRayCast(start, end, hit_result, &result);
+}
+
 bool ActorManager::GetNearActorSphereCast(DirectX::XMFLOAT3 start, DirectX::XMFLOAT3 end, float radius, HitResult& hit_result, Actor** reactor)
 {
 	float min = FLT_MAX;

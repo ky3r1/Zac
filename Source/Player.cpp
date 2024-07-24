@@ -27,10 +27,12 @@ void Player::Start()
 
 	// 適当にモーション再生
 	Model* model = GetActor()->GetModel();
-	if (model != nullptr)
-	{
-		model->PlayAnimation(20, true);
-	}
+	animation_state = Anim_Player_Spawn;
+
+	//if (model != nullptr)
+	//{
+	//	model->PlayAnimation(Anim_Player_Spawn, false);
+	//}
 }
 
 // 更新
@@ -151,26 +153,22 @@ DirectX::XMFLOAT3 Player::GetMoveVec()
 
 	//カメラ右方向ベクトルをXZ単位ベクトルに変換
 	float cameraRightX = cameraRight.x;
-	float cameraRightY = cameraRight.y;
 	float cameraRightZ = cameraRight.z;
-	float cameraRightLength = sqrtf(cameraRightX * cameraRightX+ cameraRightY * cameraRightY + cameraRightZ * cameraRightZ);
+	float cameraRightLength = sqrtf(cameraRightX * cameraRightX + cameraRightZ * cameraRightZ);
 	if (cameraRightLength > 0.0f)
 	{
 		//単位ベクトル化
 		cameraRightX /= cameraRightLength;
-		cameraRightY /= cameraRightLength;
 		cameraRightZ /= cameraRightLength;
 	}
 
 	//カメラ前方向ベクトルをXZ単位ベクトルに変換
 	float cameraFrontX = cameraFront.x;
-	float cameraFrontY = cameraFront.y;
 	float cameraFrontZ = cameraFront.z;
-	float cameraFrontLength = sqrtf(cameraFrontX * cameraFrontX + cameraFrontY * cameraFrontY + cameraFrontZ * cameraFrontZ);
+	float cameraFrontLength = sqrtf(cameraFrontX * cameraFrontX  + cameraFrontZ * cameraFrontZ);
 	if (cameraFrontLength > 0.0f)
 	{
 		cameraFrontX /= cameraFrontLength;
-        cameraFrontY /= cameraFrontLength;
 		cameraFrontZ /= cameraFrontLength;
 	}
 

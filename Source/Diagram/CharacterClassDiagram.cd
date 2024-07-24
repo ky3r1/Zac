@@ -13,15 +13,8 @@
   <Class Name="Character">
     <Position X="8.25" Y="1.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AQQBAAAAACAEAAQAAAAQEQQAAAAAAAAAAAAAgiAAKAA=</HashCode>
+      <HashCode>AQQBAAAAACEEAAQAAAAQEQQCAAAAAAAAAAAAgiAAKAA=</HashCode>
       <FileName>Source\Character.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Player">
-    <Position X="4.75" Y="2.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAQAgAAAACAAAAQAAAAAAQAAAAAAAAAAAAAAAQAABBA=</HashCode>
-      <FileName>Source\Player.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Projectile" Collapsed="true">
@@ -78,6 +71,13 @@
     <TypeIdentifier>
       <HashCode>AASAAAAABAAAAAAAAAAAgIAAgAAAAAAAABAAAAAAAAA=</HashCode>
       <FileName>Source\Enemy02.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Player">
+    <Position X="4.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAgAAAACAAAAQEAAAAAQAAAAAAAAAAAAAAAQAABBA=</HashCode>
+      <FileName>Source\Player.h</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Yu Gothic UI" Size="9" />
