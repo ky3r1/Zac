@@ -61,20 +61,16 @@ void SceneGame::Initialize()
 		actor->SetName("Player");
 		actor->SetPosition(DirectX::XMFLOAT3(350, 0, 0));
 		actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
-		actor->SetScale(DirectX::XMFLOAT3(5.0f, 5.0f, 5.0f));
+		actor->SetScale(DirectX::XMFLOAT3(10.0f, 10.0f, 10.0f));
 		actor->SetWeight(10.0f);
-		actor->SetRadius(3.0f);
-		actor->SetHeight(5.0f);
+		actor->SetRadius(5.0f);
+		actor->SetHeight(15.0f);
 		actor->SetActorType(ActorType::Player);
 		actor->AddComponent<Movement>();
 		actor->AddComponent<VsCollision>();
 		actor->AddComponent<Player>();
 	}
 #endif // PLAYER
-
-#ifdef HPGAUGE
-	gauge = std::unique_ptr<Sprite>(new Sprite);
-#endif // HPGAUGE
 	// カメラ
 	{
 		std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
@@ -82,61 +78,175 @@ void SceneGame::Initialize()
 		actor->SetActorType(ActorType::Camera);
 		actor->AddComponent<Camera>();
 	}
-
-	// Object
+#ifdef OBJECT	
 	{
-		const char* filename = "Data/Model/Cube/Cube.mdl";
-		std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
-		actor->LoadModel(filename);
-		actor->SetName("Object00");
-		actor->SetPosition(DirectX::XMFLOAT3(100, 00, 00));
-		actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
-		actor->SetScale(DirectX::XMFLOAT3(20.0f, 20.0f, 20.0f));
-		actor->SetColor(DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
-		actor->SetRaycastFlg(true);
-		actor->SetActorType(ActorType::Object);
-		actor->AddComponent<VsCollision>();
-        actor->AddComponent<Object>();
-	}
+		// Object
+		{
+			const char* filename = "Data/Model/Cube/Cube.mdl";
+			std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
+			actor->LoadModel(filename);
+			actor->SetName("Object00");
+			actor->SetPosition(DirectX::XMFLOAT3(300, 00, 00));
+			actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
+			actor->SetScale(DirectX::XMFLOAT3(20.0f, 20.0f, 20.0f));
+			actor->SetColor(DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
+			actor->SetRaycastFlg(true);
+			actor->SetActorType(ActorType::Object);
+			actor->AddComponent<VsCollision>();
+			actor->AddComponent<Object>();
+		}
+		// Object
+		{
+			const char* filename = "Data/Model/Cube/Cube.mdl";
+			std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
+			actor->LoadModel(filename);
+			actor->SetName("Object01");
+			actor->SetPosition(DirectX::XMFLOAT3(320, 00, 20));
+			actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
+			actor->SetScale(DirectX::XMFLOAT3(20.0f, 20.0f, 20.0f));
+			actor->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f));
+			actor->SetRaycastFlg(true);
+			actor->SetActorType(ActorType::Object);
+			actor->SetFomXZ(FOM::Bounse);
+			actor->SetFomY(FOM::Bounse);
+			actor->AddComponent<VsCollision>();
+			actor->AddComponent<Object>();
+		}
+		// Object
+		{
+			const char* filename = "Data/Model/Cube/Cube.mdl";
+			std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
+			actor->LoadModel(filename);
+			actor->SetName("Object02");
+			actor->SetPosition(DirectX::XMFLOAT3(360, 0.0f, 20));
+			actor->SetRotation(DirectX::XMFLOAT4(3.14f * 0.0f, 3.14f * 0.0f, 3.14f * 0.25f, 1));
+			actor->SetScale(DirectX::XMFLOAT3(20.0f, 20.0f, 20.0f));
+			actor->SetColor(DirectX::XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f));
+			actor->SetRaycastFlg(true);
+			actor->SetActorType(ActorType::Object);
+			actor->AddComponent<VsCollision>();
+			actor->AddComponent<Object>();
+		}
+		// Object
+		{
+			const char* filename = "Data/Model/Cube/Cube.mdl";
+			std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
+			actor->LoadModel(filename);
+			actor->SetName("Object03");
+			actor->SetPosition(DirectX::XMFLOAT3(220, 20, 00));
+			actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
+			actor->SetScale(DirectX::XMFLOAT3(20.0f, 100.0f, 20.0f));
+			actor->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
+			actor->SetRaycastFlg(true);
+			actor->SetActorType(ActorType::Object);
+			actor->SetFomXZ(FOM::Friction);
+			actor->SetFomY(FOM::Friction);
+			actor->AddComponent<VsCollision>();
+			actor->AddComponent<Object>();
+		}
+		// Object
+		{
+			const char* filename = "Data/Model/Cube/Cube.mdl";
+			std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
+			actor->LoadModel(filename);
+			actor->SetName("Object04");
+			actor->SetPosition(DirectX::XMFLOAT3(220, 20, -60));
+			actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
+			actor->SetScale(DirectX::XMFLOAT3(20.0f, 100.0f, 20.0f));
+			actor->SetColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f));
+			actor->SetRaycastFlg(true);
+			actor->SetActorType(ActorType::Object);
+			actor->SetFomXZ(FOM::Friction_One);
+			actor->SetFomY(FOM::Friction_One);
+			actor->AddComponent<VsCollision>();
+			actor->AddComponent<Object>();
+		}
+		// Object
+		{
+			const char* filename = "Data/Model/Cube/Cube.mdl";
+			std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
+			actor->LoadModel(filename);
+			actor->SetName("Object05");
+			actor->SetPosition(DirectX::XMFLOAT3(400, 0.0f, 20));
+			actor->SetRotation(DirectX::XMFLOAT4(3.14f * 0.25f, 3.14f * 0.0f, 3.14f * 0.0f, 1));
+			actor->SetScale(DirectX::XMFLOAT3(20.0f, 20.0f, 20.0f));
+			actor->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f));
+			actor->SetRaycastFlg(true);
+			actor->SetActorType(ActorType::Object);
+			actor->AddComponent<VsCollision>();
+			actor->AddComponent<Object>();
+		}
+		// Object
+		{
+			const char* filename = "Data/Model/Cube/Cube.mdl";
+			std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
+			actor->LoadModel(filename);
+			actor->SetName("Object05");
+			actor->SetPosition(DirectX::XMFLOAT3(380, 0.0f, -100));
+			actor->SetRotation(DirectX::XMFLOAT4(3.14f * 0.25f, 3.14f * 0.0f, 3.14f * 0.25f, 1));
+			actor->SetScale(DirectX::XMFLOAT3(30.0f, 30.0f, 30.0f));
+			actor->SetColor(DirectX::XMFLOAT4(0.0f, 0.5f, 1.0f, 1.0f));
+			actor->SetRaycastFlg(true);
+			actor->SetActorType(ActorType::Object);
+			actor->AddComponent<VsCollision>();
+			actor->AddComponent<Object>();
+		}
+		// Object
+		{
+			const char* filename = "Data/Model/Cube/Cube.mdl";
+			std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
+			actor->LoadModel(filename);
+			actor->SetName("Object05");
+			actor->SetPosition(DirectX::XMFLOAT3(380, 0.0f, 200));
+			actor->SetRotation(DirectX::XMFLOAT4(3.14f * 0.0f, 3.14f * 0.0f, 3.14f * 0.25f, 1));
+			actor->SetScale(DirectX::XMFLOAT3(100.0f, 100.0f, 100.0f));
+			actor->SetColor(DirectX::XMFLOAT4(0.0f, 0.5f, 1.0f, 1.0f));
+			actor->SetRaycastFlg(true);
+			actor->SetActorType(ActorType::Object);
+			actor->AddComponent<VsCollision>();
+			actor->AddComponent<Object>();
+		}
+}
+#endif // OBJECT
 
 #ifdef ALLENEMY
-	// Enemy
 	{
-		const char* filename = "Data/Model/Slime/Slime.mdl";
-		std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
-		actor->LoadModel(filename);
-		actor->SetName("Enemy00");
-		actor->SetPosition(DirectX::XMFLOAT3(10, 0, 00));
-		actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
-		actor->SetScale(DirectX::XMFLOAT3(0.05f, 0.05f, 0.05f));
-		actor->SetWeight(9.0f);
-		actor->SetRadius(3.0f);
-		actor->SetHeight(5.0f);
-		actor->SetActorType(ActorType::Enemy);
-		actor->AddComponent<Movement>();
-		actor->AddComponent<VsCollision>();
-		actor->AddComponent<Enemy>();
+		// Enemy
+		{
+			const char* filename = "Data/Model/Slime/Slime.mdl";
+			std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
+			actor->LoadModel(filename);
+			actor->SetName("Enemy00");
+			actor->SetPosition(DirectX::XMFLOAT3(10, 0, 00));
+			actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
+			actor->SetScale(DirectX::XMFLOAT3(0.05f, 0.05f, 0.05f));
+			actor->SetWeight(9.0f);
+			actor->SetRadius(3.0f);
+			actor->SetHeight(5.0f);
+			actor->SetActorType(ActorType::Enemy);
+			actor->AddComponent<Movement>();
+			actor->AddComponent<VsCollision>();
+			actor->AddComponent<Enemy>();
+		}
+		// Enemy
+		{
+			const char* filename = "Data/Model/Slime/Slime.mdl";
+			std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
+			actor->LoadModel(filename);
+			actor->SetName("Enemy01");
+			actor->SetPosition(DirectX::XMFLOAT3(20, 00, 00));
+			actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
+			actor->SetScale(DirectX::XMFLOAT3(0.05f, 0.05f, 0.05f));
+			actor->SetColor(DirectX::XMFLOAT4(0.0f, 0.05f, 1.05f, 1.0f));
+			actor->SetWeight(5.0f);
+			actor->SetRadius(3.0f);
+			actor->SetHeight(5.0f);
+			actor->SetActorType(ActorType::Enemy);
+			actor->AddComponent<Movement>();
+			actor->AddComponent<VsCollision>();
+			actor->AddComponent<Enemy>();
+		}
 	}
-
-	// Enemy
-	{
-		const char* filename = "Data/Model/Slime/Slime.mdl";
-		std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
-		actor->LoadModel(filename);
-		actor->SetName("Enemy01");
-		actor->SetPosition(DirectX::XMFLOAT3(20, 00, 00));
-		actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
-		actor->SetScale(DirectX::XMFLOAT3(0.05f, 0.05f, 0.05f));
-		actor->SetColor(DirectX::XMFLOAT4(0.0f, 0.05f, 1.05f,1.0f));
-		actor->SetWeight(5.0f);
-		actor->SetRadius(3.0f);
-		actor->SetHeight(5.0f);
-        actor->SetActorType(ActorType::Enemy);
-		actor->AddComponent<Movement>();
-		actor->AddComponent<VsCollision>();
-		actor->AddComponent<Enemy>();
-	}
-
 #ifdef ENEMY01
 	
 #endif // ENEMY01

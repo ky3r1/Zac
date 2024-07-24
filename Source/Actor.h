@@ -12,6 +12,16 @@ enum class ActorType
 	None,
 	All,
 };
+
+enum class FOM//feeling of material(オブジェクトの質感)
+{
+	Normal,//当たったら止まる(Y軸:重力処理〇)
+	Bounse,//当たったら反発する
+	Friction,//摩擦がかかる
+	Friction_One,//当たったら止まる(Y軸:重力処理X) ->Y軸の処理に使うとFrictionと同じ
+	None,
+};
+
 //前方宣言
 class Component;
 
@@ -109,6 +119,14 @@ public:
 	void SetActorType(ActorType type) { this->type = type; }
 	ActorType GetActorType() const { return type; }
 
+	//FOM_Y
+    void SetFomY(FOM f) { fom_Y = f; }
+    FOM GetFomY() const { return fom_Y; }
+
+	//FOM_XZ
+	void SetFomXZ(FOM f) { fom_XZ = f; }
+	FOM GetFomXZ() const { return fom_XZ; }
+
 	// レイキャストフラグのセッター・ゲッター
     void SetRaycastFlg(bool flg) { raycast_flg = flg; }
     bool GetRaycastFlg() const { return raycast_flg; }
@@ -157,6 +175,9 @@ private:
 
 	// フィルター用のタイプ
 	ActorType type = ActorType::None;
+	//質感
+    FOM fom_Y = FOM::Normal;
+	FOM fom_XZ = FOM::Normal;
 
 	std::unique_ptr<Model>	model;
 	std::vector<std::shared_ptr<Component>>	components;
@@ -203,7 +224,9 @@ public:
 	//std::unique_ptr<Actor> GetNearActor(Actor* origin, ActorType filter);
 
 	//RayCast用アクター取得
-	bool GetNearActorRayCast(DirectX::XMFLOAT3 start, DirectX::XMFLOAT3 end, HitResult& hit_result);
+	bool GetNearActorRayCast(DirectX::XMFLOAT3 start, DirectX::XMFLOAT3 end, HitResult& hit_result,Actor** reactor);
+	//SphereCast用アクター取得
+	bool GetNearActorSphereCast(DirectX::XMFLOAT3 start, DirectX::XMFLOAT3 end,float radius, HitResult& hit_result, Actor** reactor);
 
 	// アクター数を取得
 	int GetActorCount(ActorType filter);

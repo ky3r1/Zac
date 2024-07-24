@@ -15,6 +15,15 @@ void Mathf::UpdateTransform(DirectX::XMFLOAT4X4& transform, DirectX::XMFLOAT3 po
     DirectX::XMStoreFloat4x4(&transform, W);
 }
 
+DirectX::XMFLOAT3 Mathf::Normalize(DirectX::XMFLOAT3 A)
+{
+    DirectX::XMVECTOR a= DirectX::XMLoadFloat3(&A);
+    DirectX::XMVector3Normalize(a);
+    DirectX::XMFLOAT3 A_n = {};
+    DirectX::XMStoreFloat3(&A_n, a);
+    return A_n;
+}
+
 //äOêœ
 float Mathf::Cross(DirectX::XMFLOAT3 A, DirectX::XMFLOAT3 B)
 {

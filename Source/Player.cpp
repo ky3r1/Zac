@@ -5,6 +5,7 @@
 #include "Input/Input.h"
 #include "CameraController.h"
 #include "Enemy.h"
+#include "Mathf.h"
 
 
 // コンストラクタ
@@ -21,7 +22,7 @@ Player::~Player()
 void Player::Start()
 {
 	movement = GetActor()->GetComponent<Movement>();
-	movement.get()->SetMoveSpeed(25.0f);
+	movement.get()->SetMoveSpeed(10.0f);
 	vs_collision=GetActor()->GetComponent<VsCollision>();
 
 	// 適当にモーション再生
@@ -67,7 +68,7 @@ void Player::Update(float elapsedTime)
 	//Jump
 	if (gamePad.GetButtonDown() & GamePad::BTN_X)
 	{
-		movement->Jump(3.0f);
+		movement->Jump(5.0f);
 	}
 	Character::Update(elapsedTime);
 }
@@ -92,29 +93,11 @@ void Player::DrawDebug()
 // キャラクター操作
 void Player::CharacterControl(float elapsedTime)
 {
-	GamePad& gamePad = Input::Instance().GetGamePad();
-	float ax = gamePad.GetAxisLX();
-	float ay = gamePad.GetAxisLY();
-
-	float lengthSq = ax * ax + ay * ay;
-	if (lengthSq > 0.1f)
+	DirectX::XMFLOAT3 move_vec=GetMoveVec();
 	{
-		Camera* camera = ActorManager::Instance().GetActor("MainCamera")->GetComponent<Camera>().get();
-		const DirectX::XMFLOAT3& cameraRight = camera->GetRight();
-		const DirectX::XMFLOAT3& cameraFront = camera->GetFront();
-
-		DirectX::XMFLOAT3 direction;
-		direction.x = (cameraRight.x * ax) + (cameraFront.x * ay);
-		direction.y = 0.0f;
-		direction.z = (cameraRight.z * ax) + (cameraFront.z * ay);
-
-		float length = sqrtf(direction.x * direction.x + direction.z * direction.z);
-		direction.x /= length;
-		direction.z /= length;
-
 #if 1
-		movement->Turn(direction, elapsedTime);
-		movement->Move(direction, elapsedTime);
+		movement->Turn(elapsedTime,move_vec.x, move_vec.z);
+		movement->Move(move_vec);
 #else
 		// オイラーで制御する場合
 		std::shared_ptr<Actor>& actor = GetActor();
@@ -149,4 +132,77 @@ void Player::CharacterControl(float elapsedTime)
 		actor->SetRotation(rotation);
 #endif
 	}
+}
+
+DirectX::XMFLOAT3 Player::GetMoveVec()
+{
+	static DirectX::XMFLOAT3 old_position = GetActor()->GetPosition();
+	//入力情報の取得
+	GamePad& gamePad = Input::Instance().GetGamePad();
+	float ax = gamePad.GetAxisLX();
+	float ay = gamePad.GetAxisLY();
+
+	//カメラ方向とスティックの入力によって進行方向を計算する
+	Camera* camera = ActorManager::Instance().GetActor("MainCamera")->GetComponent<Camera>().get();
+	const DirectX::XMFLOAT3& cameraRight = camera->GetRight();
+	const DirectX::XMFLOAT3& cameraFront = camera->GetFront();
+
+	//移動ベクトルはXY平面に水平なベクトルになるようにする
+
+	//カメラ右方向ベクトルをXZ単位ベクトルに変換
+	float cameraRightX = cameraRight.x;
+	float cameraRightY = cameraRight.y;
+	float cameraRightZ = cameraRight.z;
+	float cameraRightLength = sqrtf(cameraRightX * cameraRightX+ cameraRightY * cameraRightY + cameraRightZ * cameraRightZ);
+	if (cameraRightLength > 0.0f)
+	{
+		//単位ベクトル化
+		cameraRightX /= cameraRightLength;
+		cameraRightY /= cameraRightLength;
+		cameraRightZ /= cameraRightLength;
+	}
+
+	//カメラ前方向ベクトルをXZ単位ベクトルに変換
+	float cameraFrontX = cameraFront.x;
+	float cameraFrontY = cameraFront.y;
+	float cameraFrontZ = cameraFront.z;
+	float cameraFrontLength = sqrtf(cameraFrontX * cameraFrontX + cameraFrontY * cameraFrontY + cameraFrontZ * cameraFrontZ);
+	if (cameraFrontLength > 0.0f)
+	{
+		cameraFrontX /= cameraFrontLength;
+        cameraFrontY /= cameraFrontLength;
+		cameraFrontZ /= cameraFrontLength;
+	}
+
+	//スティックの水平入力値をカメラの右方向に反映し、
+	//スティックの垂直入力値をカメラの前方向に反映し、
+	//進行ベクトルを計算する
+	DirectX::XMFLOAT3 vec;
+	vec.x = (cameraRightX * ax) + (cameraFrontX * ay);
+	vec.y = 0;
+	vec.z = (cameraRightZ * ax) + (cameraFrontZ * ay);
+	
+
+	//{
+	//	DirectX::XMFLOAT3 rotation = { GetActor()->GetRotation().x,GetActor()->GetRotation().y,GetActor()->GetRotation().z };
+	//	DirectX::XMVECTOR Normal = DirectX::XMLoadFloat3(&GetActor()->GetComponent<Movement>()->GetNormal());
+	//	DirectX::XMFLOAT3 normal = GetActor()->GetComponent<Movement>()->GetNormal();
+	//	DirectX::XMVECTOR Vec = DirectX::XMLoadFloat3(&vec);
+	//	DirectX::XMVECTOR parallelDirection = DirectX::XMVector3Normalize(DirectX::XMVectorSubtract(Vec, DirectX::XMVectorScale(Normal, DirectX::XMVectorGetX(DirectX::XMVector3Dot(Vec, Normal)))));
+	//	//DirectX::XMStoreFloat3(&vec, parallelDirection);
+
+	//	if (vec.x < 0)normal = DirectX::XMFLOAT3(normal.x*1.0f, normal.y*1.0f, normal.z*1.0f);
+	//	float sub = GetActor()->GetPosition().y - old_position.x;
+	//	if(sub)
+	//	//float VdotN=Mathf::Dot(normal, vec);
+	//	//normal.x *= VdotN;
+	//	//normal.y *= VdotN;
+	//	//normal.z *= VdotN;
+	//	//vec.x -= normal.x;
+	//	//vec.y -= normal.y;
+	//	//vec.z -= normal.z;
+	//}
+	//GetActor()->SetPosition(old_position);
+
+	return vec;
 }

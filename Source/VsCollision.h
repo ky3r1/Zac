@@ -23,7 +23,10 @@ public:
     //下方向のレイキャスト
     bool RayCastAxisY();
 
+    void RayCastAxisYUnder();
+
     //横方向のレイキャスト
     bool RayCastAxisXZ();
 private:
+    float repulsion_coefficient = 0.7f;//反発係数
 };

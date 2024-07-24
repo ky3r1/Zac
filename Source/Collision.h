@@ -41,6 +41,15 @@ public:
         HitResult& result
     );
 
+    //スフィアとモデルの交差判定
+    static bool IntersectSphereVsModel(
+        const DirectX::XMFLOAT3& start,
+        const DirectX::XMFLOAT3& end,
+        float radius,
+        const Model* model,
+        HitResult& result
+    );
+
     //HPbarの位置
     static bool HPbarPoint(
         DirectX::XMFLOAT3 player_position,

@@ -36,5 +36,7 @@ public:
 private:
 	// キャラクター操作
 	void CharacterControl(float elapsedTime);
+
+	DirectX::XMFLOAT3 GetMoveVec();
 private:
 };

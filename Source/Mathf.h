@@ -7,6 +7,9 @@ public:
 	//行列更新
 	static void UpdateTransform(DirectX::XMFLOAT4X4& transform, DirectX::XMFLOAT3 position, DirectX::XMFLOAT3 scale, DirectX::XMFLOAT3 rotation);
 
+	//正規化
+    static DirectX::XMFLOAT3 Normalize(DirectX::XMFLOAT3 A);
+
 	//外積
     static float Cross(DirectX::XMFLOAT3 A, DirectX::XMFLOAT3 B);
 

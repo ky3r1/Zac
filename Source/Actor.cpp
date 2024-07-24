@@ -30,13 +30,18 @@ void Actor::Update(float elapsedTime)
 // 行列の更新
 void Actor::UpdateTransform()
 {
-	// ワールド行列の更新
-	DirectX::XMVECTOR Q = DirectX::XMLoadFloat4(&parameter.rotation);
+	//スケール行列を作成
 	DirectX::XMMATRIX S = DirectX::XMMatrixScaling(parameter.scale.x, parameter.scale.y, parameter.scale.z);
-	DirectX::XMMATRIX R = DirectX::XMMatrixRotationQuaternion(Q);
+	//回転行列を作成
+	DirectX::XMMATRIX X = DirectX::XMMatrixRotationX(parameter.rotation.x);
+	DirectX::XMMATRIX Y = DirectX::XMMatrixRotationY(parameter.rotation.y);
+	DirectX::XMMATRIX Z = DirectX::XMMatrixRotationZ(parameter.rotation.z);
+	DirectX::XMMATRIX R = Y * X * Z;
+	//位置行列を作成
 	DirectX::XMMATRIX T = DirectX::XMMatrixTranslation(parameter.collision_cylinder.sphere.position.x, parameter.collision_cylinder.sphere.position.y, parameter.collision_cylinder.sphere.position.z);
-
+	//3つの行列を組み合わせ、ワールド行列を作成
 	DirectX::XMMATRIX W = S * R * T;
+	//計算したワールド行列を取り出す
 	DirectX::XMStoreFloat4x4(&parameter.transform, W);
 
 	// モデルの行列更新
@@ -88,16 +93,74 @@ void Actor::OnGUI()
 		}
 		ImGui::Text(u8"ActorType:%s", type_str.c_str());
 	}
+	if (raycast_flg)
+	{
+		{
+			// デバッグ文字列表示の変更
+			std::string type_str = "";
+			// 現在のステート番号に合わせてデバッグ文字列をstrに格納
+			switch (fom_Y)
+			{
+			case FOM::Normal:
+				type_str = "Normal";
+				break;
+			case FOM::Bounse:
+				type_str = "Bounse";
+				break;
+			case FOM::Friction:
+				type_str = "Friction";
+				break;
+			case FOM::Friction_One:
+				type_str = "Friction_One";
+				break;
+			case FOM::None:
+				type_str = "None";
+				break;
+			default:
+				type_str = "Unknown";
+				break;
+			}
+			ImGui::Text(u8"FOM Axis-Y:%s", type_str.c_str());
+		}
+		{
+			// デバッグ文字列表示の変更
+			std::string type_str = "";
+			// 現在のステート番号に合わせてデバッグ文字列をstrに格納
+			switch (fom_XZ)
+			{
+			case FOM::Normal:
+				type_str = "Normal";
+				break;
+			case FOM::Bounse:
+				type_str = "Bounse";
+				break;
+			case FOM::Friction:
+				type_str = "Friction";
+				break;
+			case FOM::Friction_One:
+				type_str = "Friction_One";
+				break;
+			case FOM::None:
+				type_str = "None";
+				break;
+			default:
+				type_str = "Unknown";
+				break;
+			}
+			ImGui::Text(u8"FOM Axis-XZ:%s", type_str.c_str());
+		}
+	}
 
 	// トランスフォーム
 	if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
 	{
-		ImGui::InputFloat3("Position", &parameter.collision_cylinder.sphere.position.x);
-		ImGui::InputFloat3("Rotation", &parameter.rotation.x);
-		ImGui::InputFloat3("Scale", &parameter.scale.x);
-		ImGui::InputFloat("Radius", &parameter.collision_cylinder.sphere.radius);
-		ImGui::InputFloat("Height", &parameter.collision_cylinder.height);
-		ImGui::InputFloat("Weight", &parameter.collision_cylinder.sphere.weight);
+		ImGui::InputFloat3("Position_Input", &parameter.collision_cylinder.sphere.position.x);
+		ImGui::SliderFloat3("Position_Slider", &parameter.collision_cylinder.sphere.position.x,-200.0f,200.0f);
+		ImGui::SliderFloat3("Rotation", &parameter.rotation.x, -3.14f, 3.14f);
+		ImGui::SliderFloat3("Scale", &parameter.scale.x, 0.001f, 10.0f);
+		ImGui::SliderFloat("Radius", &parameter.collision_cylinder.sphere.radius, 0.1f, 10.0f);
+		ImGui::SliderFloat("Height", &parameter.collision_cylinder.height, 0.1f, 10.0f);
+		ImGui::SliderFloat("Weight", &parameter.collision_cylinder.sphere.weight, 0.1f, 10.0f);
 		
         if (ImGui::Button("Reset"))
         {
@@ -314,7 +377,7 @@ Actor* ActorManager::GetNearActor(Actor* origin, ActorType filter)
 	return result;
 }
 
-bool ActorManager::GetNearActorRayCast(DirectX::XMFLOAT3 start, DirectX::XMFLOAT3 end, HitResult& hit_result)
+bool ActorManager::GetNearActorRayCast(DirectX::XMFLOAT3 start, DirectX::XMFLOAT3 end, HitResult& hit_result, Actor** reactor)
 {
     float min = FLT_MAX;
     float distance = 0.0f;
@@ -332,12 +395,40 @@ bool ActorManager::GetNearActorRayCast(DirectX::XMFLOAT3 start, DirectX::XMFLOAT
 					min= local_hit_result.distance;
 					hit_result = local_hit_result;
 					result = actor.get();
+					*reactor = actor.get();
 				}
 			}
         }
     }
 	if (result != nullptr)return true;
     return false;
+}
+
+bool ActorManager::GetNearActorSphereCast(DirectX::XMFLOAT3 start, DirectX::XMFLOAT3 end, float radius, HitResult& hit_result, Actor** reactor)
+{
+	float min = FLT_MAX;
+	float distance = 0.0f;
+	Actor* result = nullptr;
+	HitResult local_hit_result;
+	for (std::shared_ptr<Actor> actor : updateActors)
+	{
+		//Actor生成時にRayCastFlgを設定する
+		if (actor->GetRaycastFlg())
+		{
+			if (Collision::IntersectSphereVsModel(start, end,radius, actor->GetModel(), local_hit_result))
+			{
+				if (hit_result.distance < min)
+				{
+					min = local_hit_result.distance;
+					hit_result = local_hit_result;
+					result = actor.get();
+					*reactor = actor.get();
+				}
+			}
+		}
+	}
+	if (result != nullptr)return true;
+	return false;
 }
 
 int ActorManager::GetActorCount(ActorType filter)

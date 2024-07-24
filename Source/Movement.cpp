@@ -1,7 +1,13 @@
 #include "Movement.h"
 #include "Mathf.h"
 
-#define MAX_GRAVITY 2.0f
+#define MAX_GRAVITY 1.0f
+#define MAX_VELOCITY_X 2.00f
+#define MAX_VELOCITY_Y 2.00f
+#define MAX_VELOCITY_Z 2.00f
+#define MAX_VELOCITY_MOVE_X 0.50f
+#define MAX_VELOCITY_MOVE_Y 0.50f
+#define MAX_VELOCITY_MOVE_Z 0.50f
 
 Movement::Movement()
 {
@@ -17,6 +23,7 @@ void Movement::DrawImGui()
     ImGui::InputFloat("Turn Speed", &turnSpeed);
 	ImGui::InputFloat("Gravity", &gravity);
 	ImGui::InputFloat3("Velocity", &velocity.x);
+	ImGui::InputFloat3("Normal", &normal.x);
 }
 
 void Movement::Update(float elapsedTime)
@@ -27,23 +34,71 @@ void Movement::Update(float elapsedTime)
 	UpdateAxisY(elapsedTime);
 	UpdateAxisZ(elapsedTime);
 
+	//スロープの傾斜
+	{
+		//傾斜率の計算
+		float normalLengthXZ = sqrtf(normal.x* normal.x + normal.z * normal.z);
+		slope_rate = 1.0 - (normal.y / (normalLengthXZ + normal.y));
+		DirectX::XMFLOAT2 vel = { velocity.x, velocity.z };
+		DirectX::XMVECTOR velVel = DirectX::XMLoadFloat2(&vel);
+		float length = DirectX::XMVectorGetX(DirectX::XMVector2Length(velVel));
+		//下り坂でガタガタしないようにする
+		if (on_ground && slope_rate > 0.0f)
+		{
+			velocity.y -= length * slope_rate * elapsedTime;
+		}
+	}
+
+
+	//地面の向きに沿うようにXZ軸回転
+	{
+		//Y軸が法線ベクトル方向に向くオイラー角回転を算出
+		float X, Z;
+		X = atan2f(normal.z, normal.y);
+		Z = -atan2f(normal.x, normal.y);
+		float rotation_X = Mathf::Lerp(GetActor()->GetRotation().x, X, 0.1f);
+		float rotation_Z = Mathf::Lerp(GetActor()->GetRotation().z, Z, 0.1f);
+		DirectX::XMFLOAT4 rotation = { rotation_X, GetActor()->GetRotation().y, rotation_Z, GetActor()->GetRotation().w };
+		GetActor()->SetRotation(rotation);
+	}
+
+	
 
 	pos = Mathf::Add(velocity, pos);
 	//if(pos.y < 0.0f)pos.y = 0.0f;
 	GetActor()->SetPosition(pos);
 }
-
-void Movement::Move(const DirectX::XMFLOAT3& direction, float elapsedTime)
+void Movement::Move(DirectX::XMFLOAT3 v)
 {
-	std::shared_ptr<Actor> actor = GetActor();
-	float speed = moveSpeed * elapsedTime;
-	const float power = 1.0f;
-	DirectX::XMVECTOR Direction = DirectX::XMLoadFloat3(&direction);
-	DirectX::XMVECTOR Velocity = DirectX::XMVectorScale(Direction, speed);
-	DirectX::XMFLOAT3 v;
-	DirectX::XMStoreFloat3(&v, Velocity);
-	velocity.x = +v.x * power;
-	velocity.z = +v.z * power;
+	move_vec = { abs(v.x) ,abs(v.y) ,abs(v.z) };
+	DirectX::XMFLOAT3 mv = { v.x * moveSpeed ,v.y * moveSpeed ,v.z * moveSpeed };
+	//移動方向ベクトル
+	//velocity.x += v.x * moveSpeed*0.01f;
+	//velocity.y += v.y * moveSpeed*0.01f;
+	//velocity.z += v.z * moveSpeed*0.01f;
+
+	//velocityの最大値
+	{
+		//velocityの最大値を超えないようにする
+		{
+			if (mv.x >  MAX_VELOCITY_MOVE_X * move_vec.x)mv.x =  MAX_VELOCITY_MOVE_X * move_vec.x;
+			if (mv.x < -MAX_VELOCITY_MOVE_X * move_vec.x)mv.x = -MAX_VELOCITY_MOVE_X * move_vec.x;
+		}
+		{
+			if (mv.y >	MAX_VELOCITY_MOVE_Y * move_vec.y)mv.y =  MAX_VELOCITY_MOVE_Y * move_vec.y;
+			if (mv.y < -MAX_VELOCITY_MOVE_Y * move_vec.y)mv.y = -MAX_VELOCITY_MOVE_Y * move_vec.y;
+		}
+		{
+			if (mv.z >  MAX_VELOCITY_MOVE_Z * move_vec.z)mv.z =  MAX_VELOCITY_MOVE_Z * move_vec.z;
+			if (mv.z < -MAX_VELOCITY_MOVE_Z * move_vec.z)mv.z = -MAX_VELOCITY_MOVE_Z * move_vec.z;
+		}
+	}
+	//移動方向ベクトル
+    {
+        velocity.x += mv.x;
+        velocity.y += mv.y;
+        velocity.z += mv.z;
+    }
 }
 
 void Movement::MoveLocal(const DirectX::XMFLOAT3& direction, float elapsedTime)
@@ -64,35 +119,51 @@ void Movement::MoveLocal(const DirectX::XMFLOAT3& direction, float elapsedTime)
 	actor->SetPosition(position);
 }
 
-void Movement::Turn(const DirectX::XMFLOAT3& direction, float elapsedTime)
+void Movement::Turn(float elapsedTime, float vx, float vz)
 {
 	std::shared_ptr<Actor> actor = GetActor();
-	float speed = turnSpeed * elapsedTime;
-	DirectX::XMVECTOR Direction = DirectX::XMLoadFloat3(&direction);
-	DirectX::XMVECTOR Rotation = DirectX::XMLoadFloat4(&actor->GetRotation());
-	DirectX::XMMATRIX Transform = DirectX::XMMatrixRotationQuaternion(Rotation);
-	DirectX::XMVECTOR OneZ = DirectX::XMVectorSet(0, 0, 1, 0);
-	DirectX::XMVECTOR Front = DirectX::XMVector3TransformNormal(OneZ, Transform);
+	float speed = turnSpeed;
+	speed *= elapsedTime;
 
-	Direction = DirectX::XMVector3Normalize(Direction);
-	DirectX::XMVECTOR Axis = DirectX::XMVector3Cross(Front, Direction);
-	if (DirectX::XMVector3Equal(Axis, DirectX::XMVectorZero()))
+	//進行ベクトルがゼロベクトルの場合は処理する必要なし
+	float length = sqrtf(vx * vx + vz * vz);
+	if (length < 0.0001f) return;
+
+	//進行ベクトルを単位ベクトル化
+	vx /= length;
+	vz /= length;
+
+
+	//自身の回転値から前方向を求める
+	float frontX = sinf(actor->GetRotation().y);
+	float frontZ = cosf(actor->GetRotation().y);
+
+	//回転角を求めるため、2つの単位ベクトルの内積を計算する
+	float dot = (vx * frontX) + (vz * frontZ);
+
+	//内積値は-1.0～1.0で表現されており、2つの単位ベクトルの角度が
+	// 小さいほど1.0に近づくという性質を利用して回転速度を調整する
+	float rot = 1.0 - dot;
+	if (rot > speed) { rot = speed; }
+	//speed *= rot;
+	//左右判定を行うために2つの単位ベクトルの外積を計算する
+	float cross = (vz * frontX) - (vx * frontZ);
+
+	//2Dの外積値が正の場合か負の場合によって左右判定が行える
+	//左右判定を行うことによって左右回転を選択する
+
+	if (cross < 0.0f)
 	{
-		return;
+		float angle_y= actor->GetRotation().y;
+        angle_y += rot;
+		actor->SetRotation({ actor->GetRotation().x, angle_y, actor->GetRotation().z, actor->GetRotation().w });
 	}
-
-	DirectX::XMVECTOR Dot = DirectX::XMVector3Dot(Front, Direction);
-
-	float dot;
-	DirectX::XMStoreFloat(&dot, Dot);
-	speed = (std::min)(1.0f - dot, speed);
-
-	DirectX::XMVECTOR Turn = DirectX::XMQuaternionRotationAxis(Axis, speed);
-	Rotation = DirectX::XMQuaternionMultiply(Rotation, Turn);
-
-	DirectX::XMFLOAT4 rotation;
-	DirectX::XMStoreFloat4(&rotation, Rotation);
-	actor->SetRotation(rotation);
+	else
+	{
+		float angle_y = actor->GetRotation().y;
+		angle_y -= rot;
+		actor->SetRotation({ actor->GetRotation().x, angle_y, actor->GetRotation().z, actor->GetRotation().w });
+	}
 }
 
 void Movement::Jump(float jump_power)
@@ -105,6 +176,10 @@ void Movement::AddImpulse(const DirectX::XMFLOAT3& impulse)
 {
 	velocity = Mathf::Add(velocity, impulse);
 	//velocity = impulse;
+}
+
+void Movement::ChangeVector(DirectX::XMFLOAT3& v, DirectX::XMFLOAT3& normal)
+{
 }
 
 void Movement::UpdateAxisX(float elapsedTime)
@@ -122,6 +197,14 @@ void Movement::UpdateAxisX(float elapsedTime)
 			if (velocity.x < 0.0f)velocity.x = 0.0f;
 		}
 	}
+	//velocityの最大値
+	{
+		//velocityの最大値を超えないようにする
+		{
+			if (velocity.x >  MAX_VELOCITY_X * move_vec.x)velocity.x =  MAX_VELOCITY_X * move_vec.x;
+			if (velocity.x < -MAX_VELOCITY_X * move_vec.x)velocity.x = -MAX_VELOCITY_X * move_vec.x;
+		}
+	}
 }
 
 void Movement::UpdateAxisY(float elapsedTime)
@@ -137,6 +220,15 @@ void Movement::UpdateAxisY(float elapsedTime)
 		{
 			velocity.y = velocity.y - friction.y;
 			if (velocity.y < 0.0f)velocity.y = 0.0f;
+		}
+	}
+	//velocityの最大値
+	{
+		if(on_ground)
+		//velocityの最大値を超えないようにする
+		{
+			if (velocity.y >  MAX_VELOCITY_Y*move_vec.y)velocity.y =  MAX_VELOCITY_Y*move_vec.y;
+			if (velocity.y < -MAX_VELOCITY_Y*move_vec.y)velocity.y = -MAX_VELOCITY_Y*move_vec.y;
 		}
 	}
 	//重力処理
@@ -167,6 +259,14 @@ void Movement::UpdateAxisZ(float elapsedTime)
 		{
 			velocity.z = velocity.z - friction.z;
 			if (velocity.z < 0.0f)velocity.z = 0.0f;
+		}
+	}
+	//velocityの最大値
+	{
+		//velocityの最大値を超えないようにする
+		{
+			if (velocity.z >  MAX_VELOCITY_Z*move_vec.z)velocity.z =  MAX_VELOCITY_Z*move_vec.z;
+			if (velocity.z < -MAX_VELOCITY_Z*move_vec.z)velocity.z = -MAX_VELOCITY_Z*move_vec.z;
 		}
 	}
 }
