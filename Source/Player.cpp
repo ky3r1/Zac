@@ -48,29 +48,29 @@ void Player::Update(float elapsedTime)
 
 	Actor* enemy = nullptr;
 	//プレイヤーとエネミーの当たり判定
-	if (vs_collision->CylinderVsCylinderPushing(ActorType::Enemy, nullptr))
+	if (vs_collision->CylinderVsCylinderPushing(ActorType::Enemy, &enemy))
 	{
-		//if (unbeatable_delay.checker)
-		//{
-		//	//TakeDamage(1.0f);
-		//	{
-		//		DirectX::XMFLOAT3 impulse;
-		//		//吹き飛ばす力
-		//		const float power = 10.0f;
-		//		DirectX::XMVECTOR Enemy_Position = DirectX::XMLoadFloat3(&enemy->GetPosition());
-		//		DirectX::XMVECTOR Player_Position = DirectX::XMLoadFloat3(&GetActor()->GetPosition());
-		//		DirectX::XMVECTOR Vec = DirectX::XMVectorSubtract(Player_Position, Enemy_Position);
-		//		Vec = DirectX::XMVector3Normalize(Vec);
-		//		DirectX::XMFLOAT3 vec;
-		//		DirectX::XMStoreFloat3(&vec, Vec);
-		//		impulse.x = vec.x * power;
-		//		impulse.y = vec.y * power;
-		//		impulse.z = vec.z * power;
-		//		//movement->AddImpulse(vec);
-		//	}
+		if (unbeatable_delay.checker)
+		{
+			//TakeDamage(1.0f);
+			{
+				DirectX::XMFLOAT3 impulse;
+				//吹き飛ばす力
+				const float power = 10.0f;
+				DirectX::XMVECTOR Enemy_Position = DirectX::XMLoadFloat3(&enemy->GetPosition());
+				DirectX::XMVECTOR Player_Position = DirectX::XMLoadFloat3(&GetActor()->GetPosition());
+				DirectX::XMVECTOR Vec = DirectX::XMVectorSubtract(Player_Position, Enemy_Position);
+				Vec = DirectX::XMVector3Normalize(Vec);
+				DirectX::XMFLOAT3 vec;
+				DirectX::XMStoreFloat3(&vec, Vec);
+				impulse.x = vec.x * power;
+				impulse.y = vec.y * power;
+				impulse.z = vec.z * power;
+				//movement->AddImpulse(vec);
+			}
 
-		//	unbeatable_delay.checker = false;
-		//}
+			unbeatable_delay.checker = false;
+		}
 	}
 	Character::Update(elapsedTime);
 }
