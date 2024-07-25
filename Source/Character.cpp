@@ -4,7 +4,6 @@
 
 Character::Character()
 {
-    current_health = max_health;
 }
 
 void Character::Start()
@@ -24,7 +23,6 @@ void Character::Update(float elapsedTime)
 
 void Character::DrawImGui()
 {
-    ImGui::SliderFloat("health", &current_health, 0.0f, max_health);
 }
 
 void Character::DrawDebug()
@@ -33,5 +31,7 @@ void Character::DrawDebug()
 
 void Character::TakeDamage(float damage)
 {
-    current_health -= damage;
+    float Ch = GetActor()->GetHealth();
+    Ch -= damage;
+    GetActor()->SetHealth(Ch);
 }

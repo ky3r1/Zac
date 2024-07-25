@@ -24,6 +24,12 @@ DirectX::XMFLOAT3 Mathf::Normalize(DirectX::XMFLOAT3 A)
     return A_n;
 }
 
+float Mathf::Length(DirectX::XMFLOAT3 A)
+{
+    DirectX::XMVECTOR a = DirectX::XMLoadFloat3(&A);
+    return DirectX::XMVectorGetX(DirectX::XMVector3Length(a));
+}
+
 //äOêœ
 float Mathf::Cross(DirectX::XMFLOAT3 A, DirectX::XMFLOAT3 B)
 {

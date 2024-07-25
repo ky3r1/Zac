@@ -281,6 +281,9 @@
     <ClInclude Include="Source\AnimationComp.h">
       <Filter>Component\Behaviour</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ApproachingTimeObject.h">
+      <Filter>Component\Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="External\imgui\imgui.cpp">
@@ -462,6 +465,9 @@
     </ClCompile>
     <ClCompile Include="Source\AnimationComp.cpp">
       <Filter>Component\Behaviour</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ApproachingTimeObject.cpp">
+      <Filter>Component\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

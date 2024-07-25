@@ -4,13 +4,13 @@
 #define MAX_GRAVITY 1.0f
 
 //Velocityの最大値(移動ベクトルに掛けるため0になる場合があるので下の数値アリ)
-#define MAX_VELOCITY_X 1.00f
-#define MAX_VELOCITY_Y 1.00f
-#define MAX_VELOCITY_Z 1.00f
+#define MAX_VELOCITY_X 2.00f
+#define MAX_VELOCITY_Y 2.00f
+#define MAX_VELOCITY_Z 2.00f
 //Velocityの最低限の最大値
-#define MAX_MINI_VELOCITY_X 1.00f
-#define MAX_MINI_VELOCITY_Y 1.00f
-#define MAX_MINI_VELOCITY_Z 1.00f
+#define MAX_MINI_VELOCITY_X 0.00f
+#define MAX_MINI_VELOCITY_Y 0.00f
+#define MAX_MINI_VELOCITY_Z 0.00f
 
 //移動ベクトル入力時の最大値
 #define MAX_VELOCITY_MOVE_X 0.50f
@@ -43,6 +43,11 @@ void Movement::DrawImGui()
 	ImGui::InputFloat3("Friction", &friction.x);
 }
 
+void Movement::Start()
+{
+	move_vec={7.5f,7.5f,7.5f};
+}
+
 void Movement::Update(float elapsedTime)
 {
 	DirectX::XMFLOAT3 pos=GetActor()->GetPosition();
@@ -67,7 +72,9 @@ void Movement::Update(float elapsedTime)
 	}
 
 
+
 	//地面の向きに沿うようにXZ軸回転
+	if(GetActor()->GetAttitudeControlFlag())
 	{
 		//Y軸が法線ベクトル方向に向くオイラー角回転を算出
 		float X, Z;

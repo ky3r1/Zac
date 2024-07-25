@@ -25,7 +25,10 @@
 
 #include "CameraController.h"
 #include "Object.h"
+#include "ApproachingTimeObject.h"
 #include "AnimationComp.h"
+
+#include "Mathf.h"
 
 
 // 初期化
@@ -60,7 +63,7 @@ void SceneGame::Initialize()
 		std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
 		actor->LoadModel(filename);
 		actor->SetName("Player");
-		actor->SetPosition(DirectX::XMFLOAT3(350, 0, 0));
+		actor->SetPosition(DirectX::XMFLOAT3(0, 0, -10));
 		actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
 		actor->SetScale(DirectX::XMFLOAT3(10.0f, 10.0f, 10.0f));
 		actor->SetWeight(10.0f);
@@ -260,7 +263,26 @@ void SceneGame::Initialize()
 			actor->AddComponent<VsCollision>();
 			actor->AddComponent<Object>();
 		}
-		}
+	}
+	{
+		for (int i = 0; i < 10; i++)
+		{
+			std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
+			
+			const char* filename = "Data/Model/Cube/Cube.mdl";
+			actor->LoadModel(filename);
+			std::string name = std::string("DeadAfterObject:") + std::to_string(i);
+			actor->SetName(name);
+			actor->SetPosition({ Mathf::RandomRange(-100.0f,100.0f), 3.0f, Mathf::RandomRange(-100.0f, 100.0f) });
+			actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
+			actor->SetScale(DirectX::XMFLOAT3(5.0f, 5.0f, 5.0f));
+			actor->SetColor(DirectX::XMFLOAT4(0.0f, 0.5f, 1.0f, 0.5f));
+			actor->SetRadius(3.0f);
+			actor->SetActorType(ActorType::Object);
+			actor->AddComponent<VsCollision>();
+			actor->AddComponent<Movement>();
+			actor->AddComponent<ApproachingTimeObject>();
+		}}
 #endif // OBJECT
 }
 
@@ -282,12 +304,13 @@ void SceneGame::Update(float elapsedTime)
 	//MouseManager::GetInstance().MouseTransform(dc, Camera::Instance().GetView(), Camera::Instance().GetProjection());
 
 #ifdef  ALLPLAYER
-    //プレイヤー更新処理
+	ActorManager::Instance().DaedUpdate();
+    //Actor更新
 	ActorManager::Instance().Update(elapsedTime);
 	//if(Player::Instance().GetHealth() <= 0)SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult(false)));
 	//Player* player = ActorManager::Instance().GetActor<Player>("Player");
 	Actor* player=ActorManager::Instance().GetActor("Player");
-	if (player->GetComponent<Player>()->GetHealth() <= 0)SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult(true)));
+	//if (player->GetComponent<Player>()->GetHealth() <= 0)SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult(true)));
 	
 	CameraController camera_controller;
 	Camera* camera = ActorManager::Instance().GetActor("MainCamera")->GetComponent<Camera>().get();

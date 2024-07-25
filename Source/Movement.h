@@ -13,6 +13,9 @@ public:
     //ImGui描画
     void DrawImGui()override;
 
+
+    //初期化
+    virtual void Start()override;
     // 更新処理
     virtual void Update(float elapsedTime);
 
@@ -56,6 +59,9 @@ public:
     //速度
     DirectX::XMFLOAT3 GetVelocity()const { return velocity; }
     void SetVelocity(const DirectX::XMFLOAT3& value) { velocity = value; }
+    //摩擦
+    DirectX::XMFLOAT3 GetFriction()const { return friction; }
+    void SetFriction(const DirectX::XMFLOAT3& value) { friction = value; }
     //地面の上
     bool GetOnGround()const { return on_ground; }
     void SetOnGround(bool value) { on_ground = value; }

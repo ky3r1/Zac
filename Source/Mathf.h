@@ -10,6 +10,9 @@ public:
 	//ê≥ãKâª
     static DirectX::XMFLOAT3 Normalize(DirectX::XMFLOAT3 A);
 
+	//í∑Ç≥
+    static float Length(DirectX::XMFLOAT3 A);
+
 	//äOêœ
     static float Cross(DirectX::XMFLOAT3 A, DirectX::XMFLOAT3 B);
 

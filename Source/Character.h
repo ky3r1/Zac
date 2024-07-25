@@ -35,18 +35,9 @@ public:
     //ダメージを受ける
     virtual void TakeDamage(float damage);
 
-    //死亡通知
-    bool IsDead() { return current_health <= 0; }
-
-public:
-    // 体力セッター・ゲッター
-    void SetHealth(float health) { current_health = health; }
-    float GetHealth() { return current_health; }
 protected:
     std::shared_ptr<Movement>	movement;
     std::shared_ptr<VsCollision>	vs_collision;
-    float max_health = 10;
-    float current_health = max_health;
 
     DelayTime unbeatable_delay;
 };

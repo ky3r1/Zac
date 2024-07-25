@@ -82,6 +82,7 @@ public:
 
 	// 名前のセッター・ゲッター
 	void SetName(const char* name) { this->name = name; }
+	void SetName(std::string name) { this->name = name.c_str(); }
 	const std::string GetName() const { return name; }
 
 	// 位置のセッター・ゲッター
@@ -158,6 +159,27 @@ public:
     void SetAnimationState(AnimationState state) { animation_state = state; }
 	AnimationState GetAnimationState() const { return animation_state; }
 
+	// 体力セッター・ゲッター
+	void SetHealth(float health) { current_health = health; }
+	float GetHealth() { return current_health; }
+
+	// 体力最大値セッター・ゲッター
+    void SetMaxHealth(float maxhealth) { max_health = maxhealth; }
+    float GetMaxHealth() { return max_health; }
+
+	//死亡フラグ
+    void SetDeadFlag(bool dead) { on_death = dead; }
+    bool GetDeadFlag() { return on_death; }
+
+    //姿勢制御フラグ
+	void SetAttitudeControlFlag(bool flag) { attitude_control = flag; }
+    bool GetAttitudeControlFlag() { return attitude_control; }
+
+	//レイポジション
+    void SetRayPosition(const DirectX::XMFLOAT3& position) { ray_position = position; }
+    const DirectX::XMFLOAT3& GetRayPosition() const { return ray_position; }
+
+public:
     //////////////////////////////////////////////////////////////////////////
     //							コンポーネント							//
     //////////////////////////////////////////////////////////////////////////
@@ -189,12 +211,16 @@ private:
 	std::string			name;
 	Parameter			parameter;
 	Parameter			parameter_backup;
-	bool				raycast_flg = false;
+	
+	bool 				attitude_control = false;
 	DirectX::XMFLOAT4X4 old_transform = { 
 		1,0,0,0,
 		0,1,0,0,
 		0,0,1,0,
 		0,0,0,1 };
+	float max_health = 10;
+	float current_health = max_health;
+	bool on_death = false;
 
 	// フィルター用のタイプ
 	ActorType type = ActorType::None;
@@ -204,6 +230,9 @@ private:
 	//アニメーション
 	Animation  animation;
 	AnimationState animation_state = AnimationState::Idle;
+	//Ray情報
+	bool			  raycast_flg = false;
+    DirectX::XMFLOAT3 ray_position = { 0,0,0 };
 
 	std::unique_ptr<Model>	model;
 	std::vector<std::shared_ptr<Component>>	components;
@@ -243,6 +272,9 @@ public:
 
 	// 検索
 	Actor* GetActor(std::string name);
+
+	//死亡Flagが立ってるアクターを死亡させる
+	void DaedUpdate();
 
 	// 近くのアクターを取得
 	bool GetNearActor(Actor* origin,Actor& result, ActorType filter);

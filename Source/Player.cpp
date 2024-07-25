@@ -12,7 +12,7 @@
 // コンストラクタ
 Player::Player()
 {
-	current_health = max_health;
+	
 }
 
 Player::~Player()
@@ -22,10 +22,11 @@ Player::~Player()
 // 開始処理
 void Player::Start()
 {
+	GetActor()->SetHealth(GetActor()->GetMaxHealth());
 	movement = GetActor()->GetComponent<Movement>();
 	movement.get()->SetMoveSpeed(5.0f);
 	vs_collision=GetActor()->GetComponent<VsCollision>();
-
+	GetActor()->SetAttitudeControlFlag(true);
 	// 適当にモーション再生
 	GetActor()->SetAnimation(Anim_Spawn, false);
 	GetActor()->SetAnimationState(AnimationState::Spown);
@@ -83,6 +84,11 @@ void Player::Update(float elapsedTime)
 			unbeatable_delay.checker = false;
 		}
 	}
+	//GetActor()->SetRayPosition({
+	//	GetActor()->GetModel()->FindNode("Character1_Hips")->worldTransform._41,
+	//	GetActor()->GetModel()->FindNode("Character1_Hips")->worldTransform._42,
+	//	GetActor()->GetModel()->FindNode("Character1_Hips")->worldTransform._43 });
+	GetActor()->SetRayPosition(GetActor()->GetPosition());
 	Character::Update(elapsedTime);
 }
 

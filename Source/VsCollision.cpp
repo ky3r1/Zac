@@ -12,14 +12,14 @@ VsCollision::~VsCollision()
 bool VsCollision::SphereVsSpherePushing(ActorType filter,Actor** reactor)
 {
 	Actor* actor = ActorManager::Instance().GetNearActor(GetActor().get(), filter);
-	
+	if (actor == nullptr)return false;
+	if (reactor != nullptr)*reactor = actor;
 	Sphere pc = GetActor()->GetSphere();
 	Sphere ec = actor->GetSphere();
 	if (Collision::IntersectSphereVsSphere(pc, ec))
 	{
         GetActor()->SetSphere(pc);
         actor->SetSphere(ec);
-		if (reactor != nullptr)*reactor = actor;
 		return true;
 	}
 	return false;
@@ -28,12 +28,12 @@ bool VsCollision::SphereVsSpherePushing(ActorType filter,Actor** reactor)
 bool VsCollision::SphereVsSphere(ActorType filter, Actor** reactor)
 {
 	Actor* actor = ActorManager::Instance().GetNearActor(GetActor().get(), filter);
-	
+	if (actor == nullptr)return false;
+	if (reactor != nullptr)*reactor = actor;
 	Sphere pc = GetActor()->GetSphere();
 	Sphere ec = actor->GetSphere();
 	if (Collision::IntersectSphereVsSphere(pc, ec))
 	{
-		if (reactor != nullptr)*reactor = actor;
 		return true;
 	}
 	return false;
@@ -42,6 +42,8 @@ bool VsCollision::SphereVsSphere(ActorType filter, Actor** reactor)
 bool VsCollision::SphereVsCylinderPushing(ActorType filter, Actor** reactor,bool flg)
 {
 	Actor* actor = ActorManager::Instance().GetNearActor(GetActor().get(), filter);
+	if (actor == nullptr)return false;
+	if (reactor != nullptr)*reactor = actor;
 	//Ž‚¿Žå‚ªSphere‚È‚çtrueAŽ‚¿Žå‚ªCylinder‚È‚çfalse
 	if (flg)
 	{
@@ -51,7 +53,6 @@ bool VsCollision::SphereVsCylinderPushing(ActorType filter, Actor** reactor,bool
 		{
 			GetActor()->SetSphere(pc);
 			actor->SetCylinder(ec);
-			if (reactor != nullptr)*reactor = actor;
 			return true;
 		}
 	}
@@ -63,7 +64,6 @@ bool VsCollision::SphereVsCylinderPushing(ActorType filter, Actor** reactor,bool
         {
             GetActor()->SetCylinder(pc);
             actor->SetSphere(ec);
-			if (reactor != nullptr)*reactor = actor;
 			return true;
         }
 	}
@@ -73,6 +73,8 @@ bool VsCollision::SphereVsCylinderPushing(ActorType filter, Actor** reactor,bool
 bool VsCollision::SphereVsCylinder(ActorType filter, Actor** reactor, bool flg)
 {
 	Actor* actor = ActorManager::Instance().GetNearActor(GetActor().get(), filter);
+	if (actor == nullptr)return false;
+	if (reactor != nullptr)*reactor = actor;
 	//Ž‚¿Žå‚ªSphere‚È‚çtrueAŽ‚¿Žå‚ªCylinder‚È‚çfalse
 	if (flg)
 	{
@@ -80,7 +82,6 @@ bool VsCollision::SphereVsCylinder(ActorType filter, Actor** reactor, bool flg)
 		Cylinder ec = actor->GetCylinder();
 		if (Collision::IntersectSphereVsCylinder(pc, ec))
 		{
-			if (reactor != nullptr)*reactor = actor;
 			return true;
 		}
 	}
@@ -100,6 +101,8 @@ bool VsCollision::SphereVsCylinder(ActorType filter, Actor** reactor, bool flg)
 bool VsCollision::CylinderVsCylinderPushing(ActorType filter, Actor** reactor)
 {
 	Actor* actor = ActorManager::Instance().GetNearActor(GetActor().get(), filter);	
+	if(actor == nullptr)return false;
+	if (reactor != nullptr)*reactor = actor;
 	Cylinder pc = GetActor()->GetCylinder();
 	Cylinder ec = actor->GetCylinder();
 	if (Collision::IntersectCylinderVsCylinder(pc, ec))
@@ -107,7 +110,6 @@ bool VsCollision::CylinderVsCylinderPushing(ActorType filter, Actor** reactor)
 		
 		GetActor()->SetCylinder(pc);
 		actor->SetCylinder(ec);
-		if(reactor!=nullptr)*reactor = actor;
 		return true;
 	}
 	return false;
@@ -116,11 +118,12 @@ bool VsCollision::CylinderVsCylinderPushing(ActorType filter, Actor** reactor)
 bool VsCollision::CylinderVsCylinder(ActorType filter, Actor** reactor)
 {
 	Actor* actor = ActorManager::Instance().GetNearActor(GetActor().get(), filter);
+	if (actor == nullptr)return false;
+	if (reactor != nullptr)*reactor = actor;
 	Cylinder pc = GetActor()->GetCylinder();
 	Cylinder ec = actor->GetCylinder();
 	if (Collision::IntersectCylinderVsCylinder(pc, ec))
 	{
-		if (reactor != nullptr)*reactor = actor;
 		return true;
 	}
 	return false;
@@ -129,9 +132,9 @@ bool VsCollision::CylinderVsCylinder(ActorType filter, Actor** reactor)
 bool VsCollision::RayCastAxisY()
 {
 	DirectX::XMFLOAT3 position = {
-	GetActor()->GetPosition().x,
-	GetActor()->GetPosition().y,
-	GetActor()->GetPosition().z
+	GetActor()->GetRayPosition().x,
+	GetActor()->GetRayPosition().y,
+	GetActor()->GetRayPosition().z
 	};
 	DirectX::XMFLOAT3 vec = GetActor()->GetComponent<Movement>()->GetVelocity();
 
@@ -214,9 +217,9 @@ bool VsCollision::RayCastAxisXZ()
 	static float gravity = GetActor()->GetComponent<Movement>()->GetGravity();
 
 	DirectX::XMFLOAT3 position = {
-		GetActor()->GetPosition().x,
-		GetActor()->GetPosition().y,
-		GetActor()->GetPosition().z
+		GetActor()->GetRayPosition().x,
+		GetActor()->GetRayPosition().y,
+		GetActor()->GetRayPosition().z
     };
 	DirectX::XMFLOAT3 vec = GetActor()->GetComponent<Movement>()->GetVelocity();
 
