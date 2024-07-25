@@ -55,7 +55,7 @@ public:
     void SetNowGravity(float value) { now_gravity = value; }
     //ë¨ìx
     DirectX::XMFLOAT3 GetVelocity()const { return velocity; }
-    //void SetVelocity(const DirectX::XMFLOAT3& value) { velocity = value; }
+    void SetVelocity(const DirectX::XMFLOAT3& value) { velocity = value; }
     //ínñ ÇÃè„
     bool GetOnGround()const { return on_ground; }
     void SetOnGround(bool value) { on_ground = value; }
@@ -67,7 +67,7 @@ private:
     float		turnSpeed = 6.28f;
 
     DirectX::XMFLOAT3 velocity = {};
-    DirectX::XMFLOAT3 friction = { 0.40f,0.00f,0.40f};
+    DirectX::XMFLOAT3 friction = { 0.10f,0.00f,0.10f};
 
     float       gravity = 0.005f;
     float       now_gravity = 0;

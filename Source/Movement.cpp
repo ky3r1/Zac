@@ -2,13 +2,29 @@
 #include "Mathf.h"
 
 #define MAX_GRAVITY 1.0f
-#define MAX_VELOCITY_X 2.00f
-#define MAX_VELOCITY_Y 2.00f
-#define MAX_VELOCITY_Z 2.00f
+
+//Velocityの最大値(移動ベクトルに掛けるため0になる場合があるので下の数値アリ)
+#define MAX_VELOCITY_X 1.00f
+#define MAX_VELOCITY_Y 1.00f
+#define MAX_VELOCITY_Z 1.00f
+//Velocityの最低限の最大値
+#define MAX_MINI_VELOCITY_X 1.00f
+#define MAX_MINI_VELOCITY_Y 1.00f
+#define MAX_MINI_VELOCITY_Z 1.00f
+
+//移動ベクトル入力時の最大値
 #define MAX_VELOCITY_MOVE_X 0.50f
 #define MAX_VELOCITY_MOVE_Y 0.50f
 #define MAX_VELOCITY_MOVE_Z 0.50f
 
+//Velocity最大値の有効化
+#define VLOCITY_MAX_FLG_X
+//#define VLOCITY_MAX_FLG_Y
+#define VLOCITY_MAX_FLG_Z
+//Velocity最小値の有効化
+#define VLOCITY_MIN_FLG_X
+#define VLOCITY_MIN_FLG_Y
+#define VLOCITY_MIN_FLG_Z
 Movement::Movement()
 {
 }
@@ -24,6 +40,7 @@ void Movement::DrawImGui()
 	ImGui::InputFloat("Gravity", &gravity);
 	ImGui::InputFloat3("Velocity", &velocity.x);
 	ImGui::InputFloat3("Normal", &normal.x);
+	ImGui::InputFloat3("Friction", &friction.x);
 }
 
 void Movement::Update(float elapsedTime)
@@ -189,7 +206,8 @@ void Movement::ChangeVector(DirectX::XMFLOAT3& v, DirectX::XMFLOAT3& normal)
 }
 
 void Movement::UpdateAxisX(float elapsedTime)
-{	
+{
+#ifdef VLOCITY_MIN_FLG_X
 	//velocity増減処理
 	{
 		if (velocity.x < 0.0f)
@@ -203,19 +221,23 @@ void Movement::UpdateAxisX(float elapsedTime)
 			if (velocity.x < 0.0f)velocity.x = 0.0f;
 		}
 	}
+#endif // VLOCITY_MIN_FLG_X
+
+#ifdef VLOCITY_MAX_FLG_X
 	//velocityの最大値
 	{
 		//velocityの最大値を超えないようにする
 		{
-			if (velocity.x >  MAX_VELOCITY_X * move_vec.x)velocity.x =  MAX_VELOCITY_X * move_vec.x;
-			if (velocity.x < -MAX_VELOCITY_X * move_vec.x)velocity.x = -MAX_VELOCITY_X * move_vec.x;
+			if (velocity.x >   MAX_MINI_VELOCITY_X + MAX_VELOCITY_X * move_vec.x) velocity.x =   MAX_MINI_VELOCITY_X + MAX_VELOCITY_X * move_vec.x;
+			if (velocity.x < -(MAX_MINI_VELOCITY_X + MAX_VELOCITY_X * move_vec.x))velocity.x = -(MAX_MINI_VELOCITY_X + MAX_VELOCITY_X * move_vec.x);
 		}
 	}
-
+#endif // VLOCITY_MAX_FLG_X
 }
 
 void Movement::UpdateAxisY(float elapsedTime)
 {
+#ifdef VLOCITY_MIN_FLG_Y
 	//velocity増減処理
 	{
 		if (velocity.y < 0.0f)
@@ -229,15 +251,18 @@ void Movement::UpdateAxisY(float elapsedTime)
 			if (velocity.y < 0.0f)velocity.y = 0.0f;
 		}
 	}
+#endif // VLOCITY_MIN_FLG_Y
+#ifdef VLOCITY_MAX_FLG_Y
 	//velocityの最大値
 	{
-		//if(on_ground)
-		////velocityの最大値を超えないようにする
-		//{
-		//	if (velocity.y >  MAX_VELOCITY_Y*move_vec.y)velocity.y =  MAX_VELOCITY_Y*move_vec.y;
-		//	if (velocity.y < -MAX_VELOCITY_Y*move_vec.y)velocity.y = -MAX_VELOCITY_Y*move_vec.y;
-		//}
+		if(on_ground)
+		//velocityの最大値を超えないようにする
+		{
+			if (velocity.y >  MAX_VELOCITY_Y*move_vec.y)velocity.y =  MAX_VELOCITY_Y*move_vec.y;
+			if (velocity.y < -MAX_VELOCITY_Y*move_vec.y)velocity.y = -MAX_VELOCITY_Y*move_vec.y;
+		}
 	}
+#endif // VLOCITY_MAX_FLG_Y
 	//重力処理
 	{
 		{
@@ -246,7 +271,7 @@ void Movement::UpdateAxisY(float elapsedTime)
 		}
 		if (on_ground)
 		{
-			velocity.y = 0;
+			//velocity.y = 0;
 			now_gravity = 0;
 		}
 		velocity.y -= now_gravity;
@@ -255,6 +280,7 @@ void Movement::UpdateAxisY(float elapsedTime)
 
 void Movement::UpdateAxisZ(float elapsedTime)
 {
+#ifdef VLOCITY_MIN_FLG_Z
 	//velocity増減処理
 	{
 		if (velocity.z < 0.0f)
@@ -268,12 +294,15 @@ void Movement::UpdateAxisZ(float elapsedTime)
 			if (velocity.z < 0.0f)velocity.z = 0.0f;
 		}
 	}
+#endif // VLOCITY_MIN_FLG_Z
+#ifdef VLOCITY_MAX_FLG_Z
 	//velocityの最大値
 	{
-		////velocityの最大値を超えないようにする
-		//{
-		//	if (velocity.z >  MAX_VELOCITY_Z*move_vec.z)velocity.z =  MAX_VELOCITY_Z*move_vec.z;
-		//	if (velocity.z < -MAX_VELOCITY_Z*move_vec.z)velocity.z = -MAX_VELOCITY_Z*move_vec.z;
-		//}
+		//velocityの最大値を超えないようにする
+		{
+			if (velocity.z >   MAX_MINI_VELOCITY_Z + MAX_VELOCITY_Z * move_vec.z) velocity.z =   MAX_MINI_VELOCITY_Z + MAX_VELOCITY_Z * move_vec.z;
+			if (velocity.z < -(MAX_MINI_VELOCITY_Z + MAX_VELOCITY_Z * move_vec.z))velocity.z = -(MAX_MINI_VELOCITY_Z + MAX_VELOCITY_Z * move_vec.z);
+		}
 	}
+#endif // VLOCITY_MAX_FLG_Z
 }

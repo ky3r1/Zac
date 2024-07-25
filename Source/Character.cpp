@@ -16,9 +16,9 @@ void Character::Update(float elapsedTime)
     GetActor()->UpdateDelayTime(unbeatable_delay, MAX_UNBEATABLE);
     //RayCast
     {
-        vs_collision->RayCastAxisXZ();
         //vs_collision->RayCastAxisYUnder();
         vs_collision->RayCastAxisY();
+        vs_collision->RayCastAxisXZ();
     }
 }
 

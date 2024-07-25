@@ -95,26 +95,26 @@ bool VsCollision::RayCastAxisY()
 	if (ActorManager::Instance().GetNearActorRayCast(start, end, hit_result,&actor))
 	{
 		GetActor()->GetComponent<Movement>()->SetOnGround(true);
-		//switch (actor->GetFomY())
-		//{
-		//case FOM::Normal:
-		//	GetActor()->GetComponent<Movement>()->SetVelocity(DirectX::XMFLOAT3(vec.x, 0.0f, vec.z));
-		//	break;
-		//case FOM::Bounse:
-		//	GetActor()->GetComponent<Movement>()->SetVelocity(DirectX::XMFLOAT3(vec.x, -vec.y* repulsion_coefficient, vec.z));
-		//	break;
-		//case FOM::Friction:
-		//	GetActor()->GetComponent<Movement>()->SetVelocity(DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f));
-		//	break;
-		//case FOM::Friction_One:
-		//	GetActor()->GetComponent<Movement>()->SetVelocity(DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f));
-		//	break;
-		//case FOM::None:
-		//	break;
+		switch (actor->GetFomY())
+		{
+		case FOM::Normal:
+			GetActor()->GetComponent<Movement>()->SetVelocity(DirectX::XMFLOAT3(vec.x, 0.0f, vec.z));
+			break;
+		case FOM::Bounse:
+			GetActor()->GetComponent<Movement>()->SetVelocity(DirectX::XMFLOAT3(vec.x, -vec.y* repulsion_coefficient, vec.z));
+			break;
+		case FOM::Friction:
+			GetActor()->GetComponent<Movement>()->SetVelocity(DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f));
+			break;
+		case FOM::Friction_One:
+			GetActor()->GetComponent<Movement>()->SetVelocity(DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f));
+			break;
+		case FOM::None:
+			break;
 		//default:
 		//	GetActor()->GetComponent<Movement>()->SetVelocity(DirectX::XMFLOAT3(vec.x, 0.0f, vec.z));
 		//	break;
-		//}
+		}
 
 		GetActor()->SetPosition(hit_result.position);
 		GetActor()->GetComponent<Movement>()->SetNormal(hit_result.normal);
@@ -190,25 +190,25 @@ bool VsCollision::RayCastAxisXZ()
 			if (vec.z > 0)position.z = hit_result.position.z - 0.1f;
 			if (vec.z < 0)position.z = hit_result.position.z + 0.1f;
 		}
-		//switch (actor->GetFomXZ())
-		//{
-		//case FOM::Normal:
-		//	GetActor()->GetComponent<Movement>()->SetVelocity(DirectX::XMFLOAT3(0.0f, vec.y, 0.0f));
-		//	break;
-		//case FOM::Bounse:
-		//	GetActor()->GetComponent<Movement>()->SetVelocity(DirectX::XMFLOAT3(-vec.x* repulsion_coefficient, vec.y, -vec.z * repulsion_coefficient));
-		//	break;
-		//case FOM::Friction:
-		//	GetActor()->GetComponent<Movement>()->SetVelocity(DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f));
-		//	break;
-		//case FOM::Friction_One:
-		//	GetActor()->GetComponent<Movement>()->SetGravity(0.0f);
-		//	GetActor()->GetComponent<Movement>()->SetNowGravity(0.0f);
-		//	GetActor()->GetComponent<Movement>()->SetVelocity(DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f));
-		//	break;
-		//case FOM::None:
-		//	break;
-		//}
+		switch (actor->GetFomXZ())
+		{
+		case FOM::Normal:
+			GetActor()->GetComponent<Movement>()->SetVelocity(DirectX::XMFLOAT3(0.0f, vec.y, 0.0f));
+			break;
+		case FOM::Bounse:
+			GetActor()->GetComponent<Movement>()->SetVelocity(DirectX::XMFLOAT3(-vec.x* repulsion_coefficient, vec.y, -vec.z * repulsion_coefficient));
+			break;
+		case FOM::Friction:
+			GetActor()->GetComponent<Movement>()->SetVelocity(DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f));
+			break;
+		case FOM::Friction_One:
+			GetActor()->GetComponent<Movement>()->SetGravity(0.0f);
+			GetActor()->GetComponent<Movement>()->SetNowGravity(0.0f);
+			GetActor()->GetComponent<Movement>()->SetVelocity(DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f));
+			break;
+		case FOM::None:
+			break;
+		}
 		//vec.x *= -1;
 		//vec.z *= -1;
 		//GetActor()->GetComponent<Movement>()->SetVelocity(vec);
