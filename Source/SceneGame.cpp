@@ -25,7 +25,7 @@
 
 #include "CameraController.h"
 #include "Object.h"
-#include "AnimationState.h"
+#include "AnimationComp.h"
 
 
 // 初期化
@@ -69,7 +69,7 @@ void SceneGame::Initialize()
 		actor->SetActorType(ActorType::Player);
 		actor->AddComponent<Movement>();
 		actor->AddComponent<VsCollision>();
-		actor->AddComponent<AnimationState>();
+		actor->AddComponent<AnimationComp>();
 		actor->AddComponent<Player>();
 	}
 #endif // PLAYER

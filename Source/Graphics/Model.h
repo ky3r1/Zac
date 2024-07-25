@@ -11,8 +11,24 @@ struct Animation
 	int state = 0;		// 再生アニメーション番号
 	bool loop = false;	// ループフラグ
 	float blend = 0;	// ブレンド時間
-	bool stop = false;	// 停止フラグ(モーション中停止したら問題ある場合:true,モーション中停止しても問題ない場合:false)
 };
+
+//// アニメーションのタイプ分け
+//enum class AnimType
+//{
+//	Idle,
+//	Run,
+//	Jump,
+//	ShortATK,
+//	LongATK,
+//	Fall,
+//	Die,
+//};
+//struct AnimUnity
+//{
+//	int state = 0;
+//	AnimType type;
+//};
 
 // モデル
 class Model

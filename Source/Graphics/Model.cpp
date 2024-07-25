@@ -204,6 +204,7 @@ void Model::UpdateAnimation(float elapsedTime)
 		currentAnimationIndex = -1;
 		return;
 	}
+
 	// 時間経過
 	currentAnimationSeconds += elapsedTime;
 	// 再生時間が終端時間を超えたら
@@ -220,6 +221,23 @@ void Model::UpdateAnimation(float elapsedTime)
 			animationEndFlag = true;
 		}
 	}
+	
+	//// 時間経過
+	//currentAnimationSeconds -= elapsedTime;
+	//// 再生時間が終端時間を超えたら
+	//if (currentAnimationSeconds < 0)
+	//{
+	//	// 再生時間を巻き戻す
+	//	if (animationLoopFlag)
+	//	{
+	//		currentAnimationSeconds += animation.secondsLength;
+	//	}
+	//	else
+	//	{
+	//		currentAnimationSeconds = 0;
+	//		animationEndFlag = true;
+	//	}
+	//}
 }
 // アニメーション再生
 void Model::PlayAnimation(int playerNo, bool loop, float blendSeconds)

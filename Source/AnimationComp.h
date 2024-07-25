@@ -2,11 +2,11 @@
 #include "Component.h"
 #include "Model.h"
 
-class AnimationState :public Component
+class AnimationComp :public Component
 {
 public:
-    AnimationState();
-    virtual ~AnimationState();
+    AnimationComp();
+    virtual ~AnimationComp();
 
     //名前取得
     const char* GetName()const override { return "AnimationState"; }
@@ -23,5 +23,6 @@ public:
 public:
     //セッター・ゲッター
 private:
+    //std::vector<AnimUnity> Storage;
     Animation old_animation;
 };

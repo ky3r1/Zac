@@ -6,7 +6,7 @@
 #include "CameraController.h"
 #include "Enemy.h"
 #include "Mathf.h"
-#include "AnimationState.h"
+#include "AnimationComp.h"
 
 
 // コンストラクタ
@@ -27,8 +27,8 @@ void Player::Start()
 	vs_collision=GetActor()->GetComponent<VsCollision>();
 
 	// 適当にモーション再生
-	Model* model = GetActor()->GetModel();
-	GetActor()->SetAnimation(Anim_Spawn, false, true);
+	GetActor()->SetAnimation(Anim_Spawn, false);
+	GetActor()->SetAnimationState(AnimationState::Spown);
 }
 
 // 更新
@@ -36,16 +36,27 @@ void Player::Update(float elapsedTime)
 {
 	GamePad& gamePad = Input::Instance().GetGamePad();
 	//gamePad.Update();
-
-	CharacterControl(elapsedTime);
+	if (GetActor()->GetAnimationState() != AnimationState::Spown/*||
+		GetActor()->GetAnimationState() != AnimationState::Land||
+		!GetActor()->GetComponent<Movement>()->GetOnGround()*/)
+	{
+		CharacterControl(elapsedTime);
+	}
 	AnimationControl(elapsedTime);
 
 	//Jump
 	if (gamePad.GetButtonDown() & GamePad::BTN_X)
 	{
 		movement->Jump(5.0f);
+		//GetActor()->SetAnimation(Anim_JumpPeak, true);
 	}
-
+	{
+		float vy=GetActor()->GetComponent<Movement>()->GetVelocity().y;
+		if (vy < -0.2f)
+		{
+			GetActor()->SetAnimationState(AnimationState::GoesDown);
+		}
+	}
 	Actor* enemy = nullptr;
 	//プレイヤーとエネミーの当たり判定
 	if (vs_collision->CylinderVsCylinderPushing(ActorType::Enemy, &enemy))
@@ -207,35 +218,89 @@ DirectX::XMFLOAT3 Player::GetMoveVec()
 
 void Player::AnimationControl(float elapsedTime)
 {
-	DirectX::XMFLOAT3 move_vec = GetMoveVec();
-	if (GetActor()->GetComponent<AnimationState>()->IsAnimationStopFlg())
+	static AnimationState old_state = GetActor()->GetAnimationState();
+	switch (old_state)
 	{
-		if (!Mathf::Equal(move_vec, DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f)))
+	case AnimationState::Idle:
+		UpdateIdle();
+        break;
+	case AnimationState::Walk:
+        break;
+	case AnimationState::Run:
+		UpdateRun();
+        break;
+	case AnimationState::Jump:
+        break;
+	case AnimationState::Attack:
+        break;
+	case AnimationState::Spown:
+		UpdateSpown();
+		break;
+	case AnimationState::Land:
+		UpdateLand();
+		break;
+	case AnimationState::GoesDown:
+		UpdateGoesDown();
+		break;
+    default:
+        break;
+	}
+	if (old_state != GetActor()->GetAnimationState())
+	{
+			GetActor()->GetModel()->StopAnimation();
+            old_state = GetActor()->GetAnimationState();
+		
+	}
+}
+
+void Player::UpdateIdle()
+{
+	if (!GetActor()->GetModel()->IsPlayAnimation())
+	{
+		if (GetActor()->GetAnimation().state != Anim_Idle &&
+			GetActor()->GetAnimation().state != Anim_RandomIdle01 &&
+			GetActor()->GetAnimation().state != Anim_RandomIdle02 &&
+			GetActor()->GetAnimation().state != Anim_RandomIdle03)GetActor()->SetAnimation(Anim_Idle, false);
+		switch (rand() % 300)
 		{
-			GetActor()->SetAnimation(Anim_RunForwardInPlace, true, false);
-		}
-		else
-		{
-			int anim_state = GetActor()->GetAnimation().state;
-			if(GetActor() ->GetAnimation().state== Anim_RunForwardInPlace)GetActor()->SetAnimation(Anim_Idle, false, false);
-			if (!GetActor()->GetModel()->IsPlayAnimation())
-			{
-				switch (rand() % 100)
-				{
-				case 0:
-					GetActor()->SetAnimation(Anim_RandomIdle01, false, false);
-					break;
-				case 1:
-					GetActor()->SetAnimation(Anim_RandomIdle02, false, false);
-					break;
-				case 2:
-					GetActor()->SetAnimation(Anim_RandomIdle03, false, false);
-					break;
-				default:
-					GetActor()->SetAnimation(Anim_Idle, false, false);
-					break;
-				}
-			}
+		case 0:
+			GetActor()->SetAnimation(Anim_RandomIdle01, false);
+			break;
+		case 1:
+			GetActor()->SetAnimation(Anim_RandomIdle02, false);
+			break;
+		case 2:
+			GetActor()->SetAnimation(Anim_RandomIdle03, false);
+			break;
+		default:
+			GetActor()->SetAnimation(Anim_Idle, false);
+			break;
 		}
 	}
+	if (!Mathf::Equal(GetMoveVec(), DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f)))GetActor()->SetAnimationState(AnimationState::Run);
+}
+
+void Player::UpdateRun()
+{
+	GetActor()->SetAnimation(Anim_RunForwardInPlace, true);
+	if (Mathf::Equal(GetMoveVec(), DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f)))GetActor()->SetAnimationState(AnimationState::Idle);
+}
+
+void Player::UpdateSpown()
+{
+	GetActor()->SetAnimation(Anim_Spawn, false);
+	if(!GetActor()->GetModel()->IsPlayAnimation())GetActor()->SetAnimationState(AnimationState::Idle);
+}
+
+void Player::UpdateLand()
+{
+	GetActor()->SetAnimation(Anim_IdleLand, false);
+	if (!GetActor()->GetModel()->IsPlayAnimation())GetActor()->SetAnimationState(AnimationState::Idle);
+}
+
+void Player::UpdateGoesDown()
+{
+	GetActor()->SetAnimation(Anim_JumpGoesDown2, true);
+
+	if (!Mathf::Equal(GetMoveVec(), DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f)))GetActor()->SetAnimationState(AnimationState::Run);
 }

@@ -278,7 +278,7 @@
     <ClInclude Include="Source\Object.h">
       <Filter>Component\Object</Filter>
     </ClInclude>
-    <ClInclude Include="Source\AnimationState.h">
+    <ClInclude Include="Source\AnimationComp.h">
       <Filter>Component\Behaviour</Filter>
     </ClInclude>
   </ItemGroup>
@@ -460,7 +460,7 @@
     <ClCompile Include="Source\Object.cpp">
       <Filter>Component\Object</Filter>
     </ClCompile>
-    <ClCompile Include="Source\AnimationState.cpp">
+    <ClCompile Include="Source\AnimationComp.cpp">
       <Filter>Component\Behaviour</Filter>
     </ClCompile>
   </ItemGroup>

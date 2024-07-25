@@ -277,3 +277,8 @@ bool VsCollision::RayCastAxisXZ()
 	GetActor()->GetComponent<Movement>()->SetGravity(gravity);
 	return false;
 }
+
+//bool VsCollision::CheckRayAxisY()
+//{
+//	return false;
+//}

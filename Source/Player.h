@@ -40,6 +40,14 @@ private:
 	DirectX::XMFLOAT3 GetMoveVec();
 
 	void AnimationControl(float elapsedTime);
+
+private:
+	//Animation
+	void UpdateIdle();
+	void UpdateRun();
+	void UpdateSpown();
+	void UpdateLand();
+	void UpdateGoesDown();
 private:
 	enum
 	{
@@ -61,7 +69,7 @@ private:
 		Anim_IdleLandFast,
 		Anim_IdleShort,
 		Anim_JumpGoesDown,
-		Anim_JumpGouesDown2,
+		Anim_JumpGoesDown2,
 		Anim_JumpUp,
 		Anim_JumpUp2,
 		Anim_JumpPeak,

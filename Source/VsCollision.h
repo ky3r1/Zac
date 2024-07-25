@@ -30,6 +30,9 @@ public:
 
     //横方向のレイキャスト
     bool RayCastAxisXZ();
+
+    //bool CheckRayAxisY();
 private:
     float repulsion_coefficient = 0.7f;//反発係数
+    //bool checke = true;
 };

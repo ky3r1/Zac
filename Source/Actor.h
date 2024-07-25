@@ -22,6 +22,19 @@ enum class FOM//feeling of material(オブジェクトの質感)
 	None,
 };
 
+enum class AnimationState //アニメーション状態
+{
+    Idle,
+    Walk,
+    Run,
+    Jump,
+    Attack,
+	Spown,
+	Land,
+	GoesDown,
+	None,
+};
+
 //前方宣言
 class Component;
 
@@ -137,9 +150,13 @@ public:
 
 	//Animationセッター・ゲッター
     void SetAnimation(Animation animation) { this->animation = animation; }
-	void SetAnimation(int state, bool loop,bool stop) { this->animation.state = state; this->animation.loop = loop; this->animation.stop = stop; }
-	void SetAnimation(int state, bool loop, float blend,bool stop) { this->animation.state = state; this->animation.loop = loop; this->animation.blend = blend;	 this->animation.stop = stop;}
+	void SetAnimation(int state, bool loop) { this->animation.state = state; this->animation.loop = loop; }
+	void SetAnimation(int state, bool loop, float blend) { this->animation.state = state; this->animation.loop = loop; this->animation.blend = blend;}
 	Animation GetAnimation() const { return animation; }
+
+	//AnimationStateセッター・ゲッター
+    void SetAnimationState(AnimationState state) { animation_state = state; }
+	AnimationState GetAnimationState() const { return animation_state; }
 
     //////////////////////////////////////////////////////////////////////////
     //							コンポーネント							//
@@ -184,7 +201,9 @@ private:
 	//質感
     FOM fom_Y = FOM::Normal;
 	FOM fom_XZ = FOM::Normal;
+	//アニメーション
 	Animation  animation;
+	AnimationState animation_state = AnimationState::Idle;
 
 	std::unique_ptr<Model>	model;
 	std::vector<std::shared_ptr<Component>>	components;
