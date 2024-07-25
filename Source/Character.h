@@ -12,6 +12,9 @@
 class Character :public Component
 {
 public:
+    // 名前取得
+    const char* GetName() const override { return "Character"; }
+
     // コンストラクタ
     Character();
     // デストラクタ
@@ -39,11 +42,6 @@ public:
     // 体力セッター・ゲッター
     void SetHealth(float health) { current_health = health; }
     float GetHealth() { return current_health; }
-
-    //anime_stateセッター・ゲッター
-    void SetAnimationState(int state) { animation_state = state; }
-    int GetAnimationState() { return animation_state; }
-
 protected:
     std::shared_ptr<Movement>	movement;
     std::shared_ptr<VsCollision>	vs_collision;
@@ -51,6 +49,4 @@ protected:
     float current_health = max_health;
 
     DelayTime unbeatable_delay;
-
-    int animation_state = 0;
 };

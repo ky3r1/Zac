@@ -6,6 +6,7 @@
 #include "CameraController.h"
 #include "Enemy.h"
 #include "Mathf.h"
+#include "AnimationState.h"
 
 
 // コンストラクタ
@@ -27,12 +28,7 @@ void Player::Start()
 
 	// 適当にモーション再生
 	Model* model = GetActor()->GetModel();
-	animation_state = Anim_Player_Spawn;
-
-	//if (model != nullptr)
-	//{
-	//	model->PlayAnimation(Anim_Player_Spawn, false);
-	//}
+	GetActor()->SetAnimation(Anim_Spawn, false, true);
 }
 
 // 更新
@@ -40,37 +36,41 @@ void Player::Update(float elapsedTime)
 {
 	GamePad& gamePad = Input::Instance().GetGamePad();
 	//gamePad.Update();
-	CharacterControl(elapsedTime);
-	Actor* enemy = nullptr;
-	//プレイヤーとエネミーの当たり判定
-	if (vs_collision->CylinderVsCylinder(ActorType::Enemy, &enemy))
-	{
-		if (unbeatable_delay.checker)
-		{
-			//TakeDamage(1.0f);
-			{
-				DirectX::XMFLOAT3 impulse;
-				//吹き飛ばす力
-				const float power = 10.0f;
-				DirectX::XMVECTOR Enemy_Position = DirectX::XMLoadFloat3(&enemy->GetPosition());
-				DirectX::XMVECTOR Player_Position = DirectX::XMLoadFloat3(&GetActor()->GetPosition());
-				DirectX::XMVECTOR Vec = DirectX::XMVectorSubtract(Player_Position, Enemy_Position);
-				Vec = DirectX::XMVector3Normalize(Vec);
-				DirectX::XMFLOAT3 vec;
-				DirectX::XMStoreFloat3(&vec, Vec);
-				impulse.x = vec.x * power;
-				impulse.y = vec.y * power;
-				impulse.z = vec.z * power;
-				movement->AddImpulse(vec);
-			}
 
-			unbeatable_delay.checker = false;
-		}
-	}
+	CharacterControl(elapsedTime);
+	AnimationControl(elapsedTime);
+
 	//Jump
 	if (gamePad.GetButtonDown() & GamePad::BTN_X)
 	{
 		movement->Jump(5.0f);
+	}
+
+	Actor* enemy = nullptr;
+	//プレイヤーとエネミーの当たり判定
+	if (vs_collision->CylinderVsCylinderPushing(ActorType::Enemy, nullptr))
+	{
+		//if (unbeatable_delay.checker)
+		//{
+		//	//TakeDamage(1.0f);
+		//	{
+		//		DirectX::XMFLOAT3 impulse;
+		//		//吹き飛ばす力
+		//		const float power = 10.0f;
+		//		DirectX::XMVECTOR Enemy_Position = DirectX::XMLoadFloat3(&enemy->GetPosition());
+		//		DirectX::XMVECTOR Player_Position = DirectX::XMLoadFloat3(&GetActor()->GetPosition());
+		//		DirectX::XMVECTOR Vec = DirectX::XMVectorSubtract(Player_Position, Enemy_Position);
+		//		Vec = DirectX::XMVector3Normalize(Vec);
+		//		DirectX::XMFLOAT3 vec;
+		//		DirectX::XMStoreFloat3(&vec, Vec);
+		//		impulse.x = vec.x * power;
+		//		impulse.y = vec.y * power;
+		//		impulse.z = vec.z * power;
+		//		//movement->AddImpulse(vec);
+		//	}
+
+		//	unbeatable_delay.checker = false;
+		//}
 	}
 	Character::Update(elapsedTime);
 }
@@ -203,4 +203,39 @@ DirectX::XMFLOAT3 Player::GetMoveVec()
 	//GetActor()->SetPosition(old_position);
 
 	return vec;
+}
+
+void Player::AnimationControl(float elapsedTime)
+{
+	DirectX::XMFLOAT3 move_vec = GetMoveVec();
+	if (GetActor()->GetComponent<AnimationState>()->IsAnimationStopFlg())
+	{
+		if (!Mathf::Equal(move_vec, DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f)))
+		{
+			GetActor()->SetAnimation(Anim_RunForwardInPlace, true, false);
+		}
+		else
+		{
+			int anim_state = GetActor()->GetAnimation().state;
+			if(GetActor() ->GetAnimation().state== Anim_RunForwardInPlace)GetActor()->SetAnimation(Anim_Idle, false, false);
+			if (!GetActor()->GetModel()->IsPlayAnimation())
+			{
+				switch (rand() % 100)
+				{
+				case 0:
+					GetActor()->SetAnimation(Anim_RandomIdle01, false, false);
+					break;
+				case 1:
+					GetActor()->SetAnimation(Anim_RandomIdle02, false, false);
+					break;
+				case 2:
+					GetActor()->SetAnimation(Anim_RandomIdle03, false, false);
+					break;
+				default:
+					GetActor()->SetAnimation(Anim_Idle, false, false);
+					break;
+				}
+			}
+		}
+	}
 }

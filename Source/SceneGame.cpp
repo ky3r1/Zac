@@ -25,6 +25,7 @@
 
 #include "CameraController.h"
 #include "Object.h"
+#include "AnimationState.h"
 
 
 // 初期化
@@ -68,6 +69,7 @@ void SceneGame::Initialize()
 		actor->SetActorType(ActorType::Player);
 		actor->AddComponent<Movement>();
 		actor->AddComponent<VsCollision>();
+		actor->AddComponent<AnimationState>();
 		actor->AddComponent<Player>();
 	}
 #endif // PLAYER
@@ -252,7 +254,7 @@ void SceneGame::Initialize()
 			actor->SetPosition(DirectX::XMFLOAT3(380, 0.0f, 200));
 			actor->SetRotation(DirectX::XMFLOAT4(3.14f * 0.0f, 3.14f * 0.0f, 3.14f * 0.25f, 1));
 			actor->SetScale(DirectX::XMFLOAT3(100.0f, 100.0f, 100.0f));
-			actor->SetColor(DirectX::XMFLOAT4(0.0f, 0.5f, 1.0f, 1.0f));
+			actor->SetColor(DirectX::XMFLOAT4(0.5f, 0.5f, 1.0f, 1.0f));
 			actor->SetRaycastFlg(true);
 			actor->SetActorType(ActorType::Object);
 			actor->AddComponent<VsCollision>();

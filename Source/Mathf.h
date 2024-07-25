@@ -23,6 +23,9 @@ public:
     static float Distance(DirectX::XMFLOAT3 A, DirectX::XMFLOAT3 B);
 	static DirectX::XMFLOAT3 Distance3(DirectX::XMFLOAT3 A, DirectX::XMFLOAT3 B);
 
+	//ìôçÜ
+    static bool Equal(DirectX::XMFLOAT3 A, DirectX::XMFLOAT3 B);
+
 	//ê¸å`ï‚äÆ
 	static float Lerp(float a, float b, float t);
 

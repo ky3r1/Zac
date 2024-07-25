@@ -25,7 +25,7 @@ enum class FOM//feeling of material(オブジェクトの質感)
 //前方宣言
 class Component;
 
-static struct Parameter
+struct Parameter
 {
 	DirectX::XMFLOAT4	rotation = DirectX::XMFLOAT4(0, 0, 0, 1);
 	DirectX::XMFLOAT3	scale = DirectX::XMFLOAT3(1, 1, 1);
@@ -62,7 +62,7 @@ public:
 
 	//DelayTime更新
 	void UpdateDelayTime(DelayTime& delaytime, float maxtime);
-
+public:
 	//////////////////////////////////////////////////////////////////////////
 	//							セッター・ゲッター							//
 	//////////////////////////////////////////////////////////////////////////
@@ -135,6 +135,12 @@ public:
     void SetOldTransform(const DirectX::XMFLOAT4X4& transform) { old_transform = transform; }
     const DirectX::XMFLOAT4X4& GetOldTransform() const { return old_transform; }
 
+	//Animationセッター・ゲッター
+    void SetAnimation(Animation animation) { this->animation = animation; }
+	void SetAnimation(int state, bool loop,bool stop) { this->animation.state = state; this->animation.loop = loop; this->animation.stop = stop; }
+	void SetAnimation(int state, bool loop, float blend,bool stop) { this->animation.state = state; this->animation.loop = loop; this->animation.blend = blend;	 this->animation.stop = stop;}
+	Animation GetAnimation() const { return animation; }
+
     //////////////////////////////////////////////////////////////////////////
     //							コンポーネント							//
     //////////////////////////////////////////////////////////////////////////
@@ -178,6 +184,7 @@ private:
 	//質感
     FOM fom_Y = FOM::Normal;
 	FOM fom_XZ = FOM::Normal;
+	Animation  animation;
 
 	std::unique_ptr<Model>	model;
 	std::vector<std::shared_ptr<Component>>	components;

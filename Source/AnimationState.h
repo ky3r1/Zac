@@ -1,5 +1,6 @@
 #pragma once
 #include "Component.h"
+#include "Model.h"
 
 class AnimationState :public Component
 {
@@ -16,8 +17,11 @@ public:
     // 更新処理
     virtual void Update(float elapsedTime);
 
+    // アニメーションが停止していいアニメーションか判定
+    bool IsAnimationStopFlg();
+
 public:
     //セッター・ゲッター
 private:
-
+    Animation old_animation;
 };

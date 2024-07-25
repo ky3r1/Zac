@@ -9,25 +9,39 @@ VsCollision::~VsCollision()
 {
 }
 
-bool VsCollision::SphereVsSphere(ActorType filter,Actor** reactor)
+bool VsCollision::SphereVsSpherePushing(ActorType filter,Actor** reactor)
 {
 	Actor* actor = ActorManager::Instance().GetNearActor(GetActor().get(), filter);
-	*reactor = actor;
+	
 	Sphere pc = GetActor()->GetSphere();
 	Sphere ec = actor->GetSphere();
 	if (Collision::IntersectSphereVsSphere(pc, ec))
 	{
-		GetActor()->SetSphere(pc);
-		actor->SetSphere(ec);
+        GetActor()->SetSphere(pc);
+        actor->SetSphere(ec);
+		if (reactor != nullptr)*reactor = actor;
 		return true;
 	}
 	return false;
 }
 
-bool VsCollision::SphereVsCylinder(ActorType filter, Actor** reactor,bool flg)
+bool VsCollision::SphereVsSphere(ActorType filter, Actor** reactor)
 {
 	Actor* actor = ActorManager::Instance().GetNearActor(GetActor().get(), filter);
-	*reactor = actor;
+	
+	Sphere pc = GetActor()->GetSphere();
+	Sphere ec = actor->GetSphere();
+	if (Collision::IntersectSphereVsSphere(pc, ec))
+	{
+		if (reactor != nullptr)*reactor = actor;
+		return true;
+	}
+	return false;
+}
+
+bool VsCollision::SphereVsCylinderPushing(ActorType filter, Actor** reactor,bool flg)
+{
+	Actor* actor = ActorManager::Instance().GetNearActor(GetActor().get(), filter);
 	//Ž‚¿Žå‚ªSphere‚È‚çtrueAŽ‚¿Žå‚ªCylinder‚È‚çfalse
 	if (flg)
 	{
@@ -37,6 +51,7 @@ bool VsCollision::SphereVsCylinder(ActorType filter, Actor** reactor,bool flg)
 		{
 			GetActor()->SetSphere(pc);
 			actor->SetCylinder(ec);
+			if (reactor != nullptr)*reactor = actor;
 			return true;
 		}
 	}
@@ -48,22 +63,64 @@ bool VsCollision::SphereVsCylinder(ActorType filter, Actor** reactor,bool flg)
         {
             GetActor()->SetCylinder(pc);
             actor->SetSphere(ec);
+			if (reactor != nullptr)*reactor = actor;
 			return true;
         }
 	}
 	return false;
 }
 
-bool VsCollision::CylinderVsCylinder(ActorType filter, Actor** reactor)
+bool VsCollision::SphereVsCylinder(ActorType filter, Actor** reactor, bool flg)
+{
+	Actor* actor = ActorManager::Instance().GetNearActor(GetActor().get(), filter);
+	//Ž‚¿Žå‚ªSphere‚È‚çtrueAŽ‚¿Žå‚ªCylinder‚È‚çfalse
+	if (flg)
+	{
+		Sphere pc = GetActor()->GetSphere();
+		Cylinder ec = actor->GetCylinder();
+		if (Collision::IntersectSphereVsCylinder(pc, ec))
+		{
+			if (reactor != nullptr)*reactor = actor;
+			return true;
+		}
+	}
+	else
+	{
+		Cylinder pc = GetActor()->GetCylinder();
+		Sphere ec = actor->GetSphere();
+		if (Collision::IntersectSphereVsCylinder(ec, pc))
+		{
+			if (reactor != nullptr)*reactor = actor;
+			return true;
+		}
+	}
+	return false;
+}
+
+bool VsCollision::CylinderVsCylinderPushing(ActorType filter, Actor** reactor)
 {
 	Actor* actor = ActorManager::Instance().GetNearActor(GetActor().get(), filter);	
-	*reactor = actor;
 	Cylinder pc = GetActor()->GetCylinder();
 	Cylinder ec = actor->GetCylinder();
 	if (Collision::IntersectCylinderVsCylinder(pc, ec))
 	{	
+		
 		GetActor()->SetCylinder(pc);
 		actor->SetCylinder(ec);
+		if(reactor!=nullptr)*reactor = actor;
+		return true;
+	}
+	return false;
+}
+
+bool VsCollision::CylinderVsCylinder(ActorType filter, Actor** reactor)
+{
+	Actor* actor = ActorManager::Instance().GetNearActor(GetActor().get(), filter);
+	Cylinder pc = GetActor()->GetCylinder();
+	Cylinder ec = actor->GetCylinder();
+	if (Collision::IntersectCylinderVsCylinder(pc, ec))
+	{
+		if (reactor != nullptr)*reactor = actor;
 		return true;
 	}
 	return false;

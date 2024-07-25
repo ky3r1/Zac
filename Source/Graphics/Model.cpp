@@ -230,6 +230,22 @@ void Model::PlayAnimation(int playerNo, bool loop, float blendSeconds)
 	animationLoopFlag = loop;
 	animationEndFlag = false;
 }
+void Model::PlayAnimation(Animation anim)
+{
+	prevAnimationIndex = currentAnimationIndex;
+	currentAnimationIndex = anim.state;
+	currentAnimationSeconds = 0.0f;
+	animationLoopFlag = anim.loop;
+	animationEndFlag = false;
+}
+
+void Model::StopAnimation()
+{
+	currentAnimationIndex = resource->GetAnimations().size();
+	//currentAnimationIndex = 0;
+	animationLoopFlag = false;
+}
+
 // アニメーション再生中か
 bool Model::IsPlayAnimation() const
 {

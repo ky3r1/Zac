@@ -11,14 +11,17 @@ public:
     const char* GetName()const override { return "VsCollision"; }
 
     //球体と球体の衝突判定
-    bool SphereVsSphere(ActorType filter,Actor** reactor);
+    bool SphereVsSpherePushing(ActorType filter,Actor** reactor);
+    bool SphereVsSphere(ActorType filter, Actor** reactor);
 
     //球体と円柱の衝突判定
     //持ち主がSphereならtrue、持ち主がCylinderならfalse
-    bool SphereVsCylinder(ActorType filter, Actor** reactor,bool flg);
+    bool SphereVsCylinderPushing(ActorType filter, Actor** reactor,bool flg);
+    bool SphereVsCylinder(ActorType filter, Actor** reactor, bool flg);
 
     //円柱と球体の衝突判定
-    bool CylinderVsCylinder(ActorType filter,Actor** reactor);
+    bool CylinderVsCylinderPushing(ActorType filter,Actor** reactor);
+    bool CylinderVsCylinder(ActorType filter, Actor** reactor);
 
     //下方向のレイキャスト
     bool RayCastAxisY();

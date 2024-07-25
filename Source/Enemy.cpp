@@ -20,7 +20,7 @@ void Enemy::Update(float elapsedTime)
     Move(elapsedTime);
     Actor* dummy = nullptr;
     //エネミー同士の衝突判定
-    if (vs_collision->CylinderVsCylinder(ActorType::Enemy,&dummy))
+    if (vs_collision->CylinderVsCylinderPushing(ActorType::Enemy,&dummy))
     {
 
     }

@@ -12,46 +12,6 @@
 #include "Movement.h"
 #include "Character.h"
 
-enum
-{
-	Anim_Player_Combo01, //0
-	Anim_Player_Combo02,
-	Anim_Player_Combo03,
-	Anim_Player_Combo04,
-	Anim_Player_Death,
-	Anim_Player_GunIdle,
-	Anim_Player_GunPutAway,
-	Anim_Player_GunShoot,
-	Anim_Player_GunTakeOut,
-	Anim_Player_HitBack,
-	Anim_Player_HitFront,
-	Anim_Player_HitLeft,
-	Anim_Player_HitRight,
-	Anim_Player_Idle,
-	Anim_Player_IdleLand,
-	Anim_Player_IdleLandFast,
-	Anim_Player_IdleShort,
-	Anim_Player_JumpGoesDown,
-	Anim_Player_JumpGouesDown2,
-	Anim_Player_JumpUp,
-	Anim_Player_JumpUp2,
-	Anim_Player_JumpPeak,
-	Anim_Player_JumpTakeOff,
-	Anim_Player_QuiclTurnLeft,
-	Anim_Player_QuiclTurnRight,
-	Anim_Player_RandomIdle01,
-	Anim_Player_RandomIdle02,
-	Anim_Player_RandomIdle03,
-	Anim_Player_RunForward,
-	Anim_Player_RunForwardInPlace,
-	Anim_Player_RunForwardLanding,
-	Anim_Player_RunForwardLandingFast,
-	Anim_Player_Spawn,
-	Anim_Player_WalkForward,
-	Anim_Player_WalkForwardInPlace,
-	Anim_Player_walkForwardsLanding,
-};
-
 class Player : public Character
 {
 public:
@@ -78,5 +38,47 @@ private:
 	void CharacterControl(float elapsedTime);
 
 	DirectX::XMFLOAT3 GetMoveVec();
+
+	void AnimationControl(float elapsedTime);
 private:
+	enum
+	{
+		Anim_Combo01, //0
+		Anim_Combo02,
+		Anim_Combo03,
+		Anim_Combo04,
+		Anim_Death,
+		Anim_GunIdle,
+		Anim_GunPutAway,
+		Anim_GunShoot,
+		Anim_GunTakeOut,
+		Anim_HitBack,
+		Anim_HitFront,
+		Anim_HitLeft,
+		Anim_HitRight,
+		Anim_Idle,
+		Anim_IdleLand,
+		Anim_IdleLandFast,
+		Anim_IdleShort,
+		Anim_JumpGoesDown,
+		Anim_JumpGouesDown2,
+		Anim_JumpUp,
+		Anim_JumpUp2,
+		Anim_JumpPeak,
+		Anim_JumpTakeOff,
+		Anim_QuiclTurnLeft,
+		Anim_QuiclTurnRight,
+		Anim_RandomIdle01,
+		Anim_RandomIdle02,
+		Anim_RandomIdle03,
+		Anim_RunForward,
+		Anim_RunForwardInPlace,
+		Anim_RunForwardLanding,
+		Anim_RunForwardLandingFast,
+		Anim_Spawn,
+		Anim_WalkForward,
+		Anim_WalkForwardInPlace,
+		Anim_walkForwardsLanding,
+		None,
+	};
 };

@@ -69,6 +69,15 @@ DirectX::XMFLOAT3 Mathf::Distance3(DirectX::XMFLOAT3 A, DirectX::XMFLOAT3 B)
     return result;
 }
 
+bool Mathf::Equal(DirectX::XMFLOAT3 A, DirectX::XMFLOAT3 B)
+{
+    if (A.x == B.x && A.y == B.y && A.z == B.z)
+    {
+        return true;
+    }
+    return false;
+}
+
 //ê¸å`ï‚äÆ
 float Mathf::Lerp(float a, float b, float t)
 {

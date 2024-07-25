@@ -1,11 +1,20 @@
-#pragma once
+ï»¿#pragma once
 
 #include <memory>
 #include <vector>
 #include <DirectXMath.h>
 #include "Graphics/ModelResource.h"
 
-// ƒ‚ƒfƒ‹
+//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
+struct Animation
+{
+	int state = 0;		// å†ç”Ÿã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ç•ªå·
+	bool loop = false;	// ãƒ«ãƒ¼ãƒ—ãƒ•ãƒ©ã‚°
+	float blend = 0;	// ãƒ•ã‚™ãƒ¬ãƒ³ãƒˆã‚™æ™‚é–“
+	bool stop = false;	// åœæ­¢ãƒ•ãƒ©ã‚°(ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ä¸­åœæ­¢ã—ãŸã‚‰å•é¡Œã‚ã‚‹å ´åˆ:true,ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ä¸­åœæ­¢ã—ã¦ã‚‚å•é¡Œãªã„å ´åˆ:false)
+};
+
+// ãƒ¢ãƒ‡ãƒ«
 class Model
 {
 public:
@@ -26,31 +35,34 @@ public:
 		std::vector<Node*>	children;
 	};
 
-	// s—ñŒvZ
+	// è¡Œåˆ—è¨ˆç®—
 	void UpdateTransform(const DirectX::XMFLOAT4X4& transform);
 
 
-	// ƒm[ƒhƒŠƒXƒgæ“¾
+	// ãƒãƒ¼ãƒ‰ãƒªã‚¹ãƒˆå–å¾—
 	const std::vector<Node>& GetNodes() const { return nodes; }
 	std::vector<Node>& GetNodes() { return nodes; }
-	// ƒŠƒ\[ƒXæ“¾
+	// ãƒªã‚½ãƒ¼ã‚¹å–å¾—
 	const ModelResource* GetResource() const { return resource.get(); }
-	// ƒŠƒ\[ƒXæ“¾
+	// ãƒªã‚½ãƒ¼ã‚¹å–å¾—
 	std::shared_ptr<ModelResource> GetResourceShare() const { return resource; }
-	//ƒm[ƒhŒŸõ
+	//ãƒãƒ¼ãƒ‰æ¤œç´¢
 	Node* FindNode(const char* name);
 
 
-	// ƒAƒjƒ[ƒVƒ‡ƒ“XVˆ—
+	// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³æ›´æ–°å‡¦ç†
 	void UpdateAnimation(float elapsedTime);
-	// ƒAƒjƒ[ƒVƒ‡ƒ“Ä¶
+	// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å†ç”Ÿ
 	void PlayAnimation(int playerNo, bool loop, float blendSeconds = 0.2f);
-	// Ä¶ƒAƒjƒ[ƒVƒ‡ƒ“”Ô†æ“¾
+	void PlayAnimation(Animation anim);
+    // ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³åœæ­¢
+    void StopAnimation();
+	// å†ç”Ÿã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ç•ªå·å–å¾—
 	int GetPlayAnimationNo() { return currentAnimationIndex; }
 	int GetPrevPlayAnimationNo() { return prevAnimationIndex; }
-	//Œ»İ‚ÌƒAƒjƒ[ƒVƒ‡ƒ“Ä¶ŠÔæ“¾
+	//ç¾åœ¨ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å†ç”Ÿæ™‚é–“å–å¾—
 	float GetCurrentAnimationSeconds() const { return currentAnimationSeconds; }
-	// ƒAƒjƒ[ƒVƒ‡ƒ“Ä¶’†‚©
+	// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å†ç”Ÿä¸­ã‹
 	bool IsPlayAnimation()const;
 
 private:
