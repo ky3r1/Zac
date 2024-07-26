@@ -1,6 +1,6 @@
 #include "Enemy.h"
 #include "Mathf.h"
-#include "ApproachingTimeObject.h"
+#include "ApproachingObject.h"
 
 void Enemy::Start()
 {
@@ -34,25 +34,30 @@ void Enemy::Update(float elapsedTime)
     if (GetActor()->GetHealth() <= 0)
     {
         GetActor()->SetDeadFlag(true);
-        if(!test_flg)
+        if (!test_flg)
         {
-            const char* filename = "Data/Model/Cube/Cube.mdl";
-            std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
-            std::string name =std::string("DeadAfterObject:") + std::string(GetActor()->GetName());
-            actor->LoadModel(filename);
-            actor->SetName(name);
-            DirectX::XMFLOAT3 position = GetActor()->GetPosition();
-            actor->SetPosition({ position.x, position.y+3, position.z });
-            actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
-            actor->SetScale(DirectX::XMFLOAT3(5.0f, 5.0f, 5.0f));
-            actor->SetColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f));
-            actor->SetRadius(3.0f);
-            actor->SetActorType(ActorType::Object);
-            actor->AddComponent<VsCollision>();
-            actor->AddComponent<Movement>();
-            actor->AddComponent<ApproachingTimeObject>();
-            actor->GetComponent<ApproachingTimeObject>()->SetMaxRuntimer(1.0*60.0f);
-            test_flg = true;
+            for (int i = 0; i < 20; i++)
+            {
+                const char* filename = "Data/Model/Cube/Cube.mdl";
+                std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
+                std::string name = std::string("ApproachingTimeObject:") + std::string(GetActor()->GetName());
+                actor->LoadModel(filename);
+                actor->SetName(name);
+                DirectX::XMFLOAT3 position = GetActor()->GetPosition();
+                actor->SetPosition({ position.x, position.y + 3, position.z });
+                actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
+                actor->SetScale(DirectX::XMFLOAT3(5.0f, 5.0f, 5.0f));
+                actor->SetColor(DirectX::XMFLOAT4(0.0f, 1.0f, 1.0f, 0.5f));
+                actor->SetRadius(3.0f);
+                actor->SetActorType(ActorType::Object);
+                actor->AddComponent<VsCollision>();
+                actor->AddComponent<Movement>();
+                actor->AddComponent<ApproachingObject>();
+                actor->GetComponent<ApproachingObject>()->SetMaxRuntimer(2.0 * 60.0f);
+                actor->AddComponent<ApproachingObject>()->SetTargetActorType(ActorType::Player);
+                actor->GetComponent<ApproachingObject>()->SetDesiredPosition({ position.x + (rand() % 30 - 10), position.y + 3+ (rand() % 20), position.z + (rand() % 30 - 10) });
+                test_flg = true;
+            }
         }
     }
     GetActor()->SetRayPosition(GetActor()->GetPosition());
@@ -62,6 +67,10 @@ void Enemy::Update(float elapsedTime)
 void Enemy::DrawImGui()
 {
     Character::DrawImGui();
+    if (ImGui::Button("Delete"))
+    {
+        GetActor()->SetHealth(0);
+    }
 }
 
 void Enemy::DrawDebug()

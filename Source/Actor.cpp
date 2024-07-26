@@ -84,6 +84,9 @@ void Actor::OnGUI()
 		case ActorType::Camera:
 			type_str = "Camera";
 			break;
+		case ActorType::Bullet:
+			type_str = "Bullet";
+			break;
 		case ActorType::None:
 			type_str = "None";
 			break;

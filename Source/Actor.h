@@ -8,6 +8,7 @@ enum class ActorType
 	Enemy,
 	Stage,
 	Object,
+	Bullet,
 	Camera,
 	None,
 	All,

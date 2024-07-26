@@ -1,16 +1,16 @@
 ﻿#pragma once
-#include "Object.h"
+#include"CollisionObject.h"
 
-class ApproachingTimeObject : public Object
+class ApproachingObject : public CollisionObject
 {
 public:
     //名前取得
-    const char* GetName()const override { return "DeadAfterObject"; }
+    const char* GetName()const override { return "ApproachingObject"; }
 
     // コンストラクタ
-    ApproachingTimeObject();
+    ApproachingObject();
     // デストラクタ
-    ~ApproachingTimeObject();
+    ~ApproachingObject();
     // 初期化
     void Start() override;
     // 更新
@@ -21,10 +21,14 @@ public:
     void DrawDebug() override;
 public:
     void SetMaxRuntimer(int max_runtimer) { this->max_runtimer = max_runtimer; }
+    void SetDesiredPosition(DirectX::XMFLOAT3 desired_position) { this->desired_position = desired_position; }
+    void SetSphereRadius(float r) { this->c_sphere.radius = r; }
 private:
     int timer=0;
     int max_runtimer = INT_MAX;
-    bool test_flg = false;
     bool run_obj = false;
+    DirectX::XMFLOAT3 desired_position = {FLT_MAX,FLT_MAX,FLT_MAX};
+    bool desired_flg = false;
     DirectX::XMFLOAT3 default_position = {};
+    Sphere c_sphere = { {0,0,0},0.0f };
 };

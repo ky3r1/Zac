@@ -119,6 +119,7 @@
     <ClInclude Include="Source\Actor.h" />
     <ClInclude Include="Source\All.h" />
     <ClInclude Include="Source\AnimationComp.h" />
+    <ClInclude Include="Source\ApproachingCollisionObject.h" />
     <ClInclude Include="Source\Audio\Audio.h" />
     <ClInclude Include="Source\Audio\AudioResource.h" />
     <ClInclude Include="Source\Audio\AudioSource.h" />
@@ -126,8 +127,9 @@
     <ClInclude Include="Source\CameraController.h" />
     <ClInclude Include="Source\Character.h" />
     <ClInclude Include="Source\Collision.h" />
+    <ClInclude Include="Source\CollisionObject.h" />
     <ClInclude Include="Source\Component.h" />
-    <ClInclude Include="Source\ApproachingTimeObject.h" />
+    <ClInclude Include="Source\ApproachingObject.h" />
     <ClInclude Include="Source\Easing.h" />
     <ClInclude Include="Source\Effect.h" />
     <ClInclude Include="Source\EffectManager.h" />
@@ -187,6 +189,7 @@
     <ClCompile Include="External\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Source\Actor.cpp" />
     <ClCompile Include="Source\AnimationComp.cpp" />
+    <ClCompile Include="Source\ApproachingCollisionObject.cpp" />
     <ClCompile Include="Source\Audio\Audio.cpp" />
     <ClCompile Include="Source\Audio\AudioResource.cpp" />
     <ClCompile Include="Source\Audio\AudioSource.cpp" />
@@ -194,7 +197,8 @@
     <ClCompile Include="Source\CameraController.cpp" />
     <ClCompile Include="Source\Character.cpp" />
     <ClCompile Include="Source\Collision.cpp" />
-    <ClCompile Include="Source\ApproachingTimeObject.cpp" />
+    <ClCompile Include="Source\ApproachingObject.cpp" />
+    <ClCompile Include="Source\CollisionObject.cpp" />
     <ClCompile Include="Source\Effect.cpp" />
     <ClCompile Include="Source\EffectManager.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />

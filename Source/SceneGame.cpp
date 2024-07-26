@@ -25,7 +25,8 @@
 
 #include "CameraController.h"
 #include "Object.h"
-#include "ApproachingTimeObject.h"
+#include "ApproachingObject.h"
+#include "ApproachingCollisionObject.h"
 #include "AnimationComp.h"
 
 #include "Mathf.h"
@@ -63,7 +64,7 @@ void SceneGame::Initialize()
 		std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
 		actor->LoadModel(filename);
 		actor->SetName("Player");
-		actor->SetPosition(DirectX::XMFLOAT3(0, 0, -10));
+		actor->SetPosition(DirectX::XMFLOAT3(0, 0, -200));
 		actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
 		actor->SetScale(DirectX::XMFLOAT3(10.0f, 10.0f, 10.0f));
 		actor->SetWeight(10.0f);
@@ -85,13 +86,15 @@ void SceneGame::Initialize()
 	}
 #ifdef ALLENEMY
 	{
+		for(int i = 0; i < 10; i++)
 		// Enemy
 		{
 			const char* filename = "Data/Model/Slime/Slime.mdl";
 			std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
 			actor->LoadModel(filename);
-			actor->SetName("Enemy00");
-			actor->SetPosition(DirectX::XMFLOAT3(10, 0, 00));
+			std::string name = std::string("Enemy:") + std::to_string(i);
+			actor->SetName(name);
+			actor->SetPosition(DirectX::XMFLOAT3(Mathf::RandomRange(-100,100), 3, Mathf::RandomRange(50, 150)));
 			actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
 			actor->SetScale(DirectX::XMFLOAT3(0.05f, 0.05f, 0.05f));
 			actor->SetWeight(9.0f);
@@ -102,24 +105,24 @@ void SceneGame::Initialize()
 			actor->AddComponent<VsCollision>();
 			actor->AddComponent<Enemy>();
 		}
-		// Enemy
-		{
-			const char* filename = "Data/Model/Slime/Slime.mdl";
-			std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
-			actor->LoadModel(filename);
-			actor->SetName("Enemy01");
-			actor->SetPosition(DirectX::XMFLOAT3(20, 00, 00));
-			actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
-			actor->SetScale(DirectX::XMFLOAT3(0.05f, 0.05f, 0.05f));
-			actor->SetColor(DirectX::XMFLOAT4(0.0f, 0.05f, 1.05f, 1.0f));
-			actor->SetWeight(5.0f);
-			actor->SetRadius(3.0f);
-			actor->SetHeight(5.0f);
-			actor->SetActorType(ActorType::Enemy);
-			actor->AddComponent<Movement>();
-			actor->AddComponent<VsCollision>();
-			actor->AddComponent<Enemy>();
-		}
+		//// Enemy
+		//{
+		//	const char* filename = "Data/Model/Slime/Slime.mdl";
+		//	std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
+		//	actor->LoadModel(filename);
+		//	actor->SetName("Enemy01");
+		//	actor->SetPosition(DirectX::XMFLOAT3(20, 00, 00));
+		//	actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
+		//	actor->SetScale(DirectX::XMFLOAT3(0.05f, 0.05f, 0.05f));
+		//	actor->SetColor(DirectX::XMFLOAT4(0.0f, 0.05f, 1.05f, 1.0f));
+		//	actor->SetWeight(5.0f);
+		//	actor->SetRadius(3.0f);
+		//	actor->SetHeight(5.0f);
+		//	actor->SetActorType(ActorType::Enemy);
+		//	actor->AddComponent<Movement>();
+		//	actor->AddComponent<VsCollision>();
+		//	actor->AddComponent<Enemy>();
+		//}
 	}
 #ifdef ENEMY01
 	
@@ -268,10 +271,10 @@ void SceneGame::Initialize()
 		for (int i = 0; i < 10; i++)
 		{
 			std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
-			
+
 			const char* filename = "Data/Model/Cube/Cube.mdl";
 			actor->LoadModel(filename);
-			std::string name = std::string("DeadAfterObject:") + std::to_string(i);
+			std::string name = std::string("ApproachingObject_Time:") + std::to_string(i);
 			actor->SetName(name);
 			actor->SetPosition({ Mathf::RandomRange(-100.0f,100.0f), 3.0f, Mathf::RandomRange(-100.0f, 100.0f) });
 			actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
@@ -281,8 +284,32 @@ void SceneGame::Initialize()
 			actor->SetActorType(ActorType::Object);
 			actor->AddComponent<VsCollision>();
 			actor->AddComponent<Movement>();
-			actor->AddComponent<ApproachingTimeObject>();
-		}}
+			actor->AddComponent<ApproachingObject>();
+			actor->AddComponent<ApproachingObject>()->SetTargetActorType(ActorType::Player);
+		}
+	}
+	{
+		for (int i = 0; i < 10; i++)
+		{
+			std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
+
+			const char* filename = "Data/Model/Cube/Cube.mdl";
+			actor->LoadModel(filename);
+			std::string name = std::string("ApproachingObject_Radius:") + std::to_string(i);
+			actor->SetName(name);
+			actor->SetPosition({ Mathf::RandomRange(-200.0f,200.0f), 3.0f, Mathf::RandomRange(200.0f, 300.0f) });
+			actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
+			actor->SetScale(DirectX::XMFLOAT3(5.0f, 5.0f, 5.0f));
+			actor->SetColor(DirectX::XMFLOAT4(0.25f, 0.0f, 1.0f, 0.5f));
+			actor->SetRadius(3.0f);
+			actor->SetActorType(ActorType::Object);
+			actor->AddComponent<VsCollision>();
+			actor->AddComponent<Movement>();
+			actor->AddComponent<ApproachingObject>();
+			actor->GetComponent<ApproachingObject>()->SetSphereRadius(50.0f);
+			actor->AddComponent<ApproachingObject>()->SetTargetActorType(ActorType::Player);
+		}
+	}
 #endif // OBJECT
 }
 

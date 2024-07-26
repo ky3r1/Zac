@@ -75,6 +75,12 @@
     <Filter Include="Component\Object">
       <UniqueIdentifier>{27818bda-25d6-442c-b3e1-5ee1de9d3dcb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Component\Object\CollisionObject">
+      <UniqueIdentifier>{ed8315b7-5601-4897-b21f-67283840c283}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Object\CollisionObject\ApproachingObject">
+      <UniqueIdentifier>{f6a6c3bf-c0b0-4391-958e-ab0b143a116c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\imgui\imconfig.h">
@@ -281,8 +287,14 @@
     <ClInclude Include="Source\AnimationComp.h">
       <Filter>Component\Behaviour</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ApproachingTimeObject.h">
-      <Filter>Component\Object</Filter>
+    <ClInclude Include="Source\ApproachingObject.h">
+      <Filter>Component\Object\CollisionObject\ApproachingObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ApproachingCollisionObject.h">
+      <Filter>Component\Object\CollisionObject\ApproachingObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CollisionObject.h">
+      <Filter>Component\Object\CollisionObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -466,8 +478,14 @@
     <ClCompile Include="Source\AnimationComp.cpp">
       <Filter>Component\Behaviour</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ApproachingTimeObject.cpp">
-      <Filter>Component\Object</Filter>
+    <ClCompile Include="Source\ApproachingCollisionObject.cpp">
+      <Filter>Component\Object\CollisionObject\ApproachingObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ApproachingObject.cpp">
+      <Filter>Component\Object\CollisionObject\ApproachingObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CollisionObject.cpp">
+      <Filter>Component\Object\CollisionObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
