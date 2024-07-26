@@ -89,6 +89,10 @@ void Player::Update(float elapsedTime)
 	//	GetActor()->GetModel()->FindNode("Character1_Hips")->worldTransform._42,
 	//	GetActor()->GetModel()->FindNode("Character1_Hips")->worldTransform._43 });
 	GetActor()->SetRayPosition(GetActor()->GetPosition());
+	if (GetActor()->GetHealth()<=0)
+	{
+		GetActor()->SetAnimationState(AnimationState::Death);
+	}
 	Character::Update(elapsedTime);
 }
 
@@ -248,6 +252,9 @@ void Player::AnimationControl(float elapsedTime)
 	case AnimationState::GoesDown:
 		UpdateGoesDown();
 		break;
+	case AnimationState::Death:
+		UpdateDeath();
+		break;
     default:
         break;
 	}
@@ -307,6 +314,14 @@ void Player::UpdateLand()
 void Player::UpdateGoesDown()
 {
 	GetActor()->SetAnimation(Anim_JumpGoesDown2, true);
+	if (GetActor()->GetComponent<Movement>()->GetVelocity().y == 0)GetActor()->SetAnimationState(AnimationState::Land);
+}
 
-	if (!Mathf::Equal(GetMoveVec(), DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f)))GetActor()->SetAnimationState(AnimationState::Run);
+void Player::UpdateDeath()
+{
+	GetActor()->SetAnimation(Anim_Death, false);
+	if (GetActor()->GetModel()->IsPlayAnimation())
+	{
+		GetActor()->SetDeadFlag(true);
+	}
 }

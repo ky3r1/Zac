@@ -299,6 +299,9 @@
     <ClInclude Include="Source\SphereTrackingObject.h">
       <Filter>Component\Object\CollisionObject\TrackingObject\SphereTrackingObject</Filter>
     </ClInclude>
+    <ClInclude Include="Source\AiComponent.h">
+      <Filter>Component\Behaviour</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="External\imgui\imgui.cpp">
@@ -489,6 +492,9 @@
     </ClCompile>
     <ClCompile Include="Source\SphereTrackingObject.cpp">
       <Filter>Component\Object\CollisionObject\TrackingObject\SphereTrackingObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AiComponent.cpp">
+      <Filter>Component\Behaviour</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

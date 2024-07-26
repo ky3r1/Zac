@@ -48,6 +48,7 @@ private:
 	void UpdateSpown();
 	void UpdateLand();
 	void UpdateGoesDown();
+	void UpdateDeath();
 private:
 	enum
 	{

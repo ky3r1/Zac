@@ -28,6 +28,7 @@
 #include "TrackingObject.h"
 #include "SphereTrackingObject.h"
 #include "AnimationComp.h"
+#include "AiComponent.h"
 
 #include "Mathf.h"
 
@@ -53,6 +54,7 @@ void SceneGame::Initialize()
 		actor->SetRaycastFlg(true);
 		actor->SetActorType(ActorType::Stage);
 		actor->AddComponent<StageMain>();
+		actor->AddComponent<AiComponent>();
 	}
 #endif // ALLSTAGE
 

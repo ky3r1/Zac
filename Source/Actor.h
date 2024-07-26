@@ -33,6 +33,7 @@ enum class AnimationState //アニメーション状態
 	Spown,
 	Land,
 	GoesDown,
+	Death,
 	None,
 };
 
