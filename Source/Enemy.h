@@ -43,5 +43,4 @@ private:
 	// キャラクター操作
 	void Move(float elapsedTime);
 private:
-	bool test_flg = false;
 };

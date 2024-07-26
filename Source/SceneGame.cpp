@@ -26,7 +26,6 @@
 #include "CameraController.h"
 #include "Object.h"
 #include "ApproachingObject.h"
-#include "ApproachingCollisionObject.h"
 #include "AnimationComp.h"
 
 #include "Mathf.h"
@@ -285,7 +284,7 @@ void SceneGame::Initialize()
 			actor->AddComponent<VsCollision>();
 			actor->AddComponent<Movement>();
 			actor->AddComponent<ApproachingObject>();
-			actor->AddComponent<ApproachingObject>()->SetTargetActorType(ActorType::Player);
+			actor->GetComponent<ApproachingObject>()->SetTargetActorType(ActorType::Player);
 		}
 	}
 	{
@@ -307,7 +306,7 @@ void SceneGame::Initialize()
 			actor->AddComponent<Movement>();
 			actor->AddComponent<ApproachingObject>();
 			actor->GetComponent<ApproachingObject>()->SetSphereRadius(50.0f);
-			actor->AddComponent<ApproachingObject>()->SetTargetActorType(ActorType::Player);
+			actor->GetComponent<ApproachingObject>()->SetTargetActorType(ActorType::Player);
 		}
 	}
 #endif // OBJECT
@@ -331,7 +330,6 @@ void SceneGame::Update(float elapsedTime)
 	//MouseManager::GetInstance().MouseTransform(dc, Camera::Instance().GetView(), Camera::Instance().GetProjection());
 
 #ifdef  ALLPLAYER
-	ActorManager::Instance().DaedUpdate();
     //Actor更新
 	ActorManager::Instance().Update(elapsedTime);
 	//if(Player::Instance().GetHealth() <= 0)SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult(false)));

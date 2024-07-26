@@ -119,7 +119,6 @@
     <ClInclude Include="Source\Actor.h" />
     <ClInclude Include="Source\All.h" />
     <ClInclude Include="Source\AnimationComp.h" />
-    <ClInclude Include="Source\ApproachingCollisionObject.h" />
     <ClInclude Include="Source\Audio\Audio.h" />
     <ClInclude Include="Source\Audio\AudioResource.h" />
     <ClInclude Include="Source\Audio\AudioSource.h" />
@@ -189,7 +188,6 @@
     <ClCompile Include="External\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Source\Actor.cpp" />
     <ClCompile Include="Source\AnimationComp.cpp" />
-    <ClCompile Include="Source\ApproachingCollisionObject.cpp" />
     <ClCompile Include="Source\Audio\Audio.cpp" />
     <ClCompile Include="Source\Audio\AudioResource.cpp" />
     <ClCompile Include="Source\Audio\AudioSource.cpp" />

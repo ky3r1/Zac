@@ -20,9 +20,9 @@ public:
     void SetTargetActorType(ActorType type){ target_actortype = type; }
     ActorType GetTargetActorType(){ return target_actortype; }
 protected:
-    bool test_flg = false;
     bool test_flg2 = false;
-    ActorType target_actortype = ActorType::Player;
+    ActorType target_actortype = ActorType::None;
     //Actor* target_actor = nullptr;
-    std::unique_ptr<Actor> target_actor = nullptr;
+    //std::unique_ptr<Actor> target_actor = nullptr;
+    std::shared_ptr<Actor> target_actor = nullptr;
 };

@@ -34,13 +34,12 @@ void Enemy::Update(float elapsedTime)
     if (GetActor()->GetHealth() <= 0)
     {
         GetActor()->SetDeadFlag(true);
-        if (!test_flg)
         {
             for (int i = 0; i < 20; i++)
             {
                 const char* filename = "Data/Model/Cube/Cube.mdl";
                 std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
-                std::string name = std::string("ApproachingTimeObject:") + std::string(GetActor()->GetName());
+                std::string name = std::string("ApproachingTimeObject:") + std::string(GetActor()->GetName()) + std::string(":") + std::to_string(i);
                 actor->LoadModel(filename);
                 actor->SetName(name);
                 DirectX::XMFLOAT3 position = GetActor()->GetPosition();
@@ -54,10 +53,10 @@ void Enemy::Update(float elapsedTime)
                 actor->AddComponent<Movement>();
                 actor->AddComponent<ApproachingObject>();
                 actor->GetComponent<ApproachingObject>()->SetMaxRuntimer(2.0 * 60.0f);
-                actor->AddComponent<ApproachingObject>()->SetTargetActorType(ActorType::Player);
+                actor->GetComponent<ApproachingObject>()->SetTargetActorType(ActorType::Player);
                 actor->GetComponent<ApproachingObject>()->SetDesiredPosition({ position.x + (rand() % 30 - 10), position.y + 3+ (rand() % 20), position.z + (rand() % 30 - 10) });
-                test_flg = true;
             }
+            ActorManager::Instance().Remove(GetActor());
         }
     }
     GetActor()->SetRayPosition(GetActor()->GetPosition());

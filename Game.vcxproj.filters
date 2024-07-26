@@ -290,9 +290,6 @@
     <ClInclude Include="Source\ApproachingObject.h">
       <Filter>Component\Object\CollisionObject\ApproachingObject</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ApproachingCollisionObject.h">
-      <Filter>Component\Object\CollisionObject\ApproachingObject</Filter>
-    </ClInclude>
     <ClInclude Include="Source\CollisionObject.h">
       <Filter>Component\Object\CollisionObject</Filter>
     </ClInclude>
@@ -477,9 +474,6 @@
     </ClCompile>
     <ClCompile Include="Source\AnimationComp.cpp">
       <Filter>Component\Behaviour</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ApproachingCollisionObject.cpp">
-      <Filter>Component\Object\CollisionObject\ApproachingObject</Filter>
     </ClCompile>
     <ClCompile Include="Source\ApproachingObject.cpp">
       <Filter>Component\Object\CollisionObject\ApproachingObject</Filter>

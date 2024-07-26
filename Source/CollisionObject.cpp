@@ -7,6 +7,11 @@ CollisionObject::CollisionObject()
 
 CollisionObject::~CollisionObject()
 {
+	if (target_actor.get() != nullptr)
+    {
+        target_actor.reset();
+    }
+
 }
 
 void CollisionObject::Start()
@@ -15,21 +20,20 @@ void CollisionObject::Start()
 
 void CollisionObject::Update(float elapsedTime)
 {
+	Object::Update(elapsedTime);
 	Actor* actor = nullptr;
 	if (GetActor()->GetComponent<VsCollision>()->SphereVsSphere(target_actortype, &actor))
 	{
-		// ‘Ì—Í‚ð1‰ñ•œ
-		if (!test_flg)
-		{
-			actor->SetHealth(actor->GetHealth() + 1.0f);
-			test_flg = true;
-		}
+		//‚È‚º‚©2‰ñ‰ñ‚Á‚Ä‚¢‚é‚½‚ß”’l‚Í1/2‚É‚·‚é
+		actor->SetHealth(actor->GetHealth() + (1.0f));
 		GetActor()->SetDeadFlag(true);
+
+		ActorManager::Instance().Remove(GetActor());
 	}
-	if (!test_flg2)
+	//target_actor.release();
+	if (target_actor.get() != actor)
 	{
 		target_actor.reset(actor);
-		test_flg2 = true;
 	}
 }
 
@@ -66,7 +70,7 @@ void CollisionObject::DrawImGui()
 			type_str = "Unknown";
 			break;
 		}
-		ImGui::Text(u8"ActorType:%s", type_str.c_str());
+		ImGui::Text(u8"TargetActorType:%s", type_str.c_str());
 	}
 }
 
