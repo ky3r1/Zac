@@ -128,7 +128,7 @@
     <ClInclude Include="Source\Collision.h" />
     <ClInclude Include="Source\CollisionObject.h" />
     <ClInclude Include="Source\Component.h" />
-    <ClInclude Include="Source\ApproachingObject.h" />
+    <ClInclude Include="Source\PerfectTrackingObject.h" />
     <ClInclude Include="Source\Easing.h" />
     <ClInclude Include="Source\Effect.h" />
     <ClInclude Include="Source\EffectManager.h" />
@@ -195,7 +195,7 @@
     <ClCompile Include="Source\CameraController.cpp" />
     <ClCompile Include="Source\Character.cpp" />
     <ClCompile Include="Source\Collision.cpp" />
-    <ClCompile Include="Source\ApproachingObject.cpp" />
+    <ClCompile Include="Source\PerfectTrackingObject.cpp" />
     <ClCompile Include="Source\CollisionObject.cpp" />
     <ClCompile Include="Source\Effect.cpp" />
     <ClCompile Include="Source\EffectManager.cpp" />

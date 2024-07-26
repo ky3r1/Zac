@@ -1,17 +1,17 @@
-#include "ApproachingObject.h"
+#include "PerfectTrackingObject.h"
 #include "Movement.h"
 #include "VsCollision.h"
 #include "Mathf.h"
 
-ApproachingObject::ApproachingObject()
+PerfectTrackingObject::PerfectTrackingObject()
 {
 }
 
-ApproachingObject::~ApproachingObject()
+PerfectTrackingObject::~PerfectTrackingObject()
 {
 }
 
-void ApproachingObject::Start()
+void PerfectTrackingObject::Start()
 {
     if (Mathf::Equal(desired_position, DirectX::XMFLOAT3(FLT_MAX, FLT_MAX, FLT_MAX)))
     {
@@ -23,7 +23,7 @@ void ApproachingObject::Start()
     movement->SetFriction({ 0.0f,0.0f,0.0f });
 }
 
-void ApproachingObject::Update(float elapsedTime)
+void PerfectTrackingObject::Update(float elapsedTime)
 {
     CollisionObject::Update(elapsedTime);
     //Actor* actor = nullptr;
@@ -120,7 +120,7 @@ void ApproachingObject::Update(float elapsedTime)
     timer++;
 }
 
-void ApproachingObject::DrawImGui()
+void PerfectTrackingObject::DrawImGui()
 {
     CollisionObject::DrawImGui();
     ImGui::SliderFloat("Radius", &c_sphere.radius, 0.1f, 10.0f);
@@ -130,7 +130,7 @@ void ApproachingObject::DrawImGui()
     }
 }
 
-void ApproachingObject::DrawDebug()
+void PerfectTrackingObject::DrawDebug()
 {
     // デバッグ球描画
     {

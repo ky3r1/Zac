@@ -25,7 +25,7 @@
 
 #include "CameraController.h"
 #include "Object.h"
-#include "ApproachingObject.h"
+#include "PerfectTrackingObject.h"
 #include "AnimationComp.h"
 
 #include "Mathf.h"
@@ -283,10 +283,10 @@ void SceneGame::Initialize()
 			actor->SetActorType(ActorType::Object);
 			actor->AddComponent<VsCollision>();
 			actor->AddComponent<Movement>();
-			actor->AddComponent<ApproachingObject>();
-			actor->GetComponent<ApproachingObject>()->SetHitCollisionType(HitCollisionType::Heel);
-			actor->GetComponent<ApproachingObject>()->SetHitNum(1.0f);
-			actor->GetComponent<ApproachingObject>()->SetTargetActorType(ActorType::Player);
+			actor->AddComponent<PerfectTrackingObject>();
+			actor->GetComponent<PerfectTrackingObject>()->SetHitCollisionType(HitCollisionType::Heel);
+			actor->GetComponent<PerfectTrackingObject>()->SetHitNum(1.0f);
+			actor->GetComponent<PerfectTrackingObject>()->SetTargetActorType(ActorType::Player);
 		}
 	}
 	{
@@ -306,11 +306,11 @@ void SceneGame::Initialize()
 			actor->SetActorType(ActorType::Object);
 			actor->AddComponent<VsCollision>();
 			actor->AddComponent<Movement>();
-			actor->AddComponent<ApproachingObject>();
-			actor->GetComponent<ApproachingObject>()->SetHitCollisionType(HitCollisionType::Heel);
-			actor->GetComponent<ApproachingObject>()->SetHitNum(1.0f);
-			actor->GetComponent<ApproachingObject>()->SetSphereRadius(50.0f);
-			actor->GetComponent<ApproachingObject>()->SetTargetActorType(ActorType::Player);
+			actor->AddComponent<PerfectTrackingObject>();
+			actor->GetComponent<PerfectTrackingObject>()->SetHitCollisionType(HitCollisionType::Heel);
+			actor->GetComponent<PerfectTrackingObject>()->SetHitNum(1.0f);
+			actor->GetComponent<PerfectTrackingObject>()->SetSphereRadius(50.0f);
+			actor->GetComponent<PerfectTrackingObject>()->SetTargetActorType(ActorType::Player);
 		}
 	}
 #endif // OBJECT

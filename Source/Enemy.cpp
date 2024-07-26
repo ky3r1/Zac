@@ -1,6 +1,6 @@
 #include "Enemy.h"
 #include "Mathf.h"
-#include "ApproachingObject.h"
+#include "PerfectTrackingObject.h"
 
 void Enemy::Start()
 {
@@ -51,12 +51,12 @@ void Enemy::Update(float elapsedTime)
                 actor->SetActorType(ActorType::Object);
                 actor->AddComponent<VsCollision>();
                 actor->AddComponent<Movement>();
-                actor->AddComponent<ApproachingObject>();
-                actor->GetComponent<ApproachingObject>()->SetMaxRuntimer(2.0 * 60.0f);
-                actor->GetComponent<ApproachingObject>()->SetHitCollisionType(HitCollisionType::Heel);
-                actor->GetComponent<ApproachingObject>()->SetHitNum(1.0f);
-                actor->GetComponent<ApproachingObject>()->SetTargetActorType(ActorType::Player);
-                actor->GetComponent<ApproachingObject>()->SetDesiredPosition({ position.x + (rand() % 30 - 10), position.y + 3+ (rand() % 20), position.z + (rand() % 30 - 10) });
+                actor->AddComponent<PerfectTrackingObject>();
+                actor->GetComponent<PerfectTrackingObject>()->SetMaxRuntimer(2.0 * 60.0f);
+                actor->GetComponent<PerfectTrackingObject>()->SetHitCollisionType(HitCollisionType::Heel);
+                actor->GetComponent<PerfectTrackingObject>()->SetHitNum(1.0f);
+                actor->GetComponent<PerfectTrackingObject>()->SetTargetActorType(ActorType::Player);
+                actor->GetComponent<PerfectTrackingObject>()->SetDesiredPosition({ position.x + (rand() % 30 - 10), position.y + 3+ (rand() % 20), position.z + (rand() % 30 - 10) });
             }
             ActorManager::Instance().Remove(GetActor());
         }

@@ -1,16 +1,17 @@
 ﻿#pragma once
 #include"CollisionObject.h"
 
-class ApproachingObject : public CollisionObject
+//完全追従オブジェクト
+class PerfectTrackingObject : public CollisionObject
 {
 public:
     //名前取得
     const char* GetName()const override { return "ApproachingObject"; }
 
     // コンストラクタ
-    ApproachingObject();
+    PerfectTrackingObject();
     // デストラクタ
-    ~ApproachingObject();
+    ~PerfectTrackingObject();
     // 初期化
     void Start() override;
     // 更新

@@ -4,9 +4,9 @@
 #define MAX_GRAVITY 1.0f
 
 //Velocityの最大値(移動ベクトルに掛けるため0になる場合があるので下の数値アリ)
-#define MAX_VELOCITY_X 2.00f
-#define MAX_VELOCITY_Y 2.00f
-#define MAX_VELOCITY_Z 2.00f
+#define MAX_VELOCITY_X 1.00f
+#define MAX_VELOCITY_Y 1.00f
+#define MAX_VELOCITY_Z 1.00f
 //Velocityの最低限の最大値
 #define MAX_MINI_VELOCITY_X 0.00f
 #define MAX_MINI_VELOCITY_Y 0.00f
