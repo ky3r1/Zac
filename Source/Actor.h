@@ -68,6 +68,8 @@ public:
 	// 行列の更新
 	virtual void UpdateTransform();
 
+	virtual void Render(ID3D11DeviceContext* dc, Shader* shader);
+
 	// GUI表示
 	virtual void OnGUI();
 

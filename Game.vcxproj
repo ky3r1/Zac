@@ -128,7 +128,6 @@
     <ClInclude Include="Source\Collision.h" />
     <ClInclude Include="Source\CollisionObject.h" />
     <ClInclude Include="Source\Component.h" />
-    <ClInclude Include="Source\PerfectTrackingObject.h" />
     <ClInclude Include="Source\Easing.h" />
     <ClInclude Include="Source\Effect.h" />
     <ClInclude Include="Source\EffectManager.h" />
@@ -171,12 +170,14 @@
     <ClInclude Include="Source\SceneResult.h" />
     <ClInclude Include="Source\SceneTitle.h" />
     <ClInclude Include="Source\SceneTutorial.h" />
+    <ClInclude Include="Source\SphereTrackingObject.h" />
     <ClInclude Include="Source\Spown.h" />
     <ClInclude Include="Source\Stage.h" />
     <ClInclude Include="Source\StageMain.h" />
     <ClInclude Include="Source\StateBase.h" />
     <ClInclude Include="Source\StateDerived.h" />
     <ClInclude Include="Source\StateMachine.h" />
+    <ClInclude Include="Source\TrackingObject.h" />
     <ClInclude Include="Source\Ui.h" />
     <ClInclude Include="Source\VsCollision.h" />
   </ItemGroup>
@@ -195,7 +196,6 @@
     <ClCompile Include="Source\CameraController.cpp" />
     <ClCompile Include="Source\Character.cpp" />
     <ClCompile Include="Source\Collision.cpp" />
-    <ClCompile Include="Source\PerfectTrackingObject.cpp" />
     <ClCompile Include="Source\CollisionObject.cpp" />
     <ClCompile Include="Source\Effect.cpp" />
     <ClCompile Include="Source\EffectManager.cpp" />
@@ -234,6 +234,7 @@
     <ClCompile Include="Source\SceneResult.cpp" />
     <ClCompile Include="Source\SceneTitle.cpp" />
     <ClCompile Include="Source\SceneTutorial.cpp" />
+    <ClCompile Include="Source\SphereTrackingObject.cpp" />
     <ClCompile Include="Source\Spown.cpp" />
     <ClCompile Include="Source\Stage.cpp" />
     <ClCompile Include="Source\StageMain.cpp" />
@@ -241,6 +242,7 @@
     <ClCompile Include="Source\StateBase.cpp" />
     <ClCompile Include="Source\StateDerived.cpp" />
     <ClCompile Include="Source\StateMachine.cpp" />
+    <ClCompile Include="Source\TrackingObject.cpp" />
     <ClCompile Include="Source\Ui.cpp" />
     <ClCompile Include="Source\VsCollision.cpp" />
   </ItemGroup>

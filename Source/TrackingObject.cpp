@@ -1,17 +1,17 @@
-#include "PerfectTrackingObject.h"
+#include "TrackingObject.h"
 #include "Movement.h"
 #include "VsCollision.h"
 #include "Mathf.h"
 
-PerfectTrackingObject::PerfectTrackingObject()
+TrackingObject::TrackingObject()
 {
 }
 
-PerfectTrackingObject::~PerfectTrackingObject()
+TrackingObject::~TrackingObject()
 {
 }
 
-void PerfectTrackingObject::Start()
+void TrackingObject::Start()
 {
     if (Mathf::Equal(desired_position, DirectX::XMFLOAT3(FLT_MAX, FLT_MAX, FLT_MAX)))
     {
@@ -23,22 +23,34 @@ void PerfectTrackingObject::Start()
     movement->SetFriction({ 0.0f,0.0f,0.0f });
 }
 
-void PerfectTrackingObject::Update(float elapsedTime)
+void TrackingObject::Update(float elapsedTime)
 {
     CollisionObject::Update(elapsedTime);
-    //Actor* actor = nullptr;
-    //if (GetActor()->GetComponent<VsCollision>()->SphereVsSphere(target_actortype, &actor))
-    //{
-    //    // 体力を1回復
-    //    {
-    //        if (!test_flg)
-    //        {
-    //        	actor->SetHealth(actor->GetHealth() + 1.0f);
-    //        	test_flg = true;
-    //        }
-    //        GetActor()->SetDeadFlag(true);
-    //    }
-    //}
+    //死亡
+    {
+        if (target_actor != nullptr)
+        {
+            float r_h = target_actor->GetRadius()*0.9f;
+            Sphere p_scphere = { ppos, r_h };
+            r_h = GetActor()->GetRadius() * 0.9f;
+            Sphere c2_sphere = { c_sphere.position, r_h };
+            //{
+            //    DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(0.1, 0.8, 0.25, 1);
+            //    Graphics::Instance().GetDebugRenderer()->DrawSphere(p_scphere.position, p_scphere.radius, color);
+            //    color = DirectX::XMFLOAT4(0.77, 0.2, 0.5, 1);
+            //    Graphics::Instance().GetDebugRenderer()->DrawSphere(c2_sphere.position, c2_sphere.radius, color);
+            //}
+            if (timer > delete_timer
+                //誤差はGetActor()->GetRadius()のより小さくしないと当たり判定ができない
+                || Collision::IntersectSphereVsSphere(c2_sphere, p_scphere)
+                )
+            {
+                GetActor()->SetDeadFlag(true);
+                ActorManager::Instance().Remove(GetActor());
+            }
+        }
+    }
+    //回転
     {
         DirectX::XMFLOAT4 rotation = GetActor()->GetRotation();
         float rot = 0.1f / 3.14f;
@@ -46,19 +58,24 @@ void PerfectTrackingObject::Update(float elapsedTime)
         if (rotation.x > 3.14f)GetActor()->SetRotation({ -3.14f, rotation.y, rotation.z, rotation.w });
         if (rotation.y > 3.14f)GetActor()->SetRotation({ rotation.x, -3.14f, rotation.z, rotation.w });
         if (rotation.z > 3.14f)GetActor()->SetRotation({ rotation.x, rotation.y, -3.14f, rotation.w });
-    } 
+    }
     c_sphere.position = GetActor()->GetPosition();
-
     if (target_actor != nullptr)
     {
-        if (timer > max_runtimer || Collision::IntersectSphereVsSphere(c_sphere, target_actor->GetSphere()) || run_obj)
+
+        if (timer > max_runtimer || run_obj)
         {
+            //円形範囲内にいるときだけターゲットの位置情報を更新する(c_sphere.radiusで効果範囲を変更:0で非完全追従, FLT_MAXで完全追従)
+            if (Collision::IntersectSphereVsSphere(c_sphere, target_actor->GetSphere()))
+            {
+                ppos = target_actor->GetPosition();
+            }
 
             DirectX::XMFLOAT3 nvec = GetActor()->GetComponent<Movement>()->GetVelocity();
             DirectX::XMFLOAT3 impulse;
-            //吹き飛ばす力
+            //速力
             const float power = /*player->GetComponent<Movement>()->GetMoveSpeed() * 1.2f*/0.1f + Mathf::Length(nvec);
-            DirectX::XMFLOAT3 ppos = target_actor->GetPosition();
+            //DirectX::XMFLOAT3 ppos = target_actor->GetPosition();
             float ph = target_actor->GetHeight();
             DirectX::XMVECTOR Object_Position = DirectX::XMLoadFloat3(&GetActor()->GetPosition());
             DirectX::XMVECTOR Player_Position = DirectX::XMLoadFloat3(&DirectX::XMFLOAT3(ppos.x, ppos.y + ph * 0.25f, ppos.z));
@@ -78,6 +95,7 @@ void PerfectTrackingObject::Update(float elapsedTime)
         }
         else
         {
+            ppos = target_actor->GetPosition();
             if (!desired_flg)
             {
                 {
@@ -120,7 +138,7 @@ void PerfectTrackingObject::Update(float elapsedTime)
     timer++;
 }
 
-void PerfectTrackingObject::DrawImGui()
+void TrackingObject::DrawImGui()
 {
     CollisionObject::DrawImGui();
     ImGui::SliderFloat("Radius", &c_sphere.radius, 0.1f, 10.0f);
@@ -130,7 +148,7 @@ void PerfectTrackingObject::DrawImGui()
     }
 }
 
-void PerfectTrackingObject::DrawDebug()
+void TrackingObject::DrawDebug()
 {
     // デバッグ球描画
     {

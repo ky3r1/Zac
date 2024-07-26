@@ -36,6 +36,11 @@ void CollisionObject::Update(float elapsedTime)
 	target_actor = actor;
 }
 
+void CollisionObject::Render(ID3D11DeviceContext* dc, Shader* shader)
+{
+
+}
+
 void CollisionObject::DrawImGui()
 {
 	{

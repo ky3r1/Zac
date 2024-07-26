@@ -1,6 +1,6 @@
 #include "Enemy.h"
 #include "Mathf.h"
-#include "PerfectTrackingObject.h"
+#include "TrackingObject.h"
 
 void Enemy::Start()
 {
@@ -35,7 +35,7 @@ void Enemy::Update(float elapsedTime)
     {
         GetActor()->SetDeadFlag(true);
         {
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < 20; i++)
             {
                 const char* filename = "Data/Model/Cube/Cube.mdl";
                 std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
@@ -51,12 +51,13 @@ void Enemy::Update(float elapsedTime)
                 actor->SetActorType(ActorType::Object);
                 actor->AddComponent<VsCollision>();
                 actor->AddComponent<Movement>();
-                actor->AddComponent<PerfectTrackingObject>();
-                actor->GetComponent<PerfectTrackingObject>()->SetMaxRuntimer(2.0 * 60.0f);
-                actor->GetComponent<PerfectTrackingObject>()->SetHitCollisionType(HitCollisionType::Heel);
-                actor->GetComponent<PerfectTrackingObject>()->SetHitNum(1.0f);
-                actor->GetComponent<PerfectTrackingObject>()->SetTargetActorType(ActorType::Player);
-                actor->GetComponent<PerfectTrackingObject>()->SetDesiredPosition({ position.x + (rand() % 30 - 10), position.y + 3+ (rand() % 20), position.z + (rand() % 30 - 10) });
+                actor->AddComponent<TrackingObject>();
+                actor->GetComponent<TrackingObject>()->SetMaxRuntimer((rand() % 4 + rand() % 10/10) * 60.0f);
+                actor->GetComponent<TrackingObject>()->SetHitCollisionType(HitCollisionType::Damage);
+                actor->GetComponent<TrackingObject>()->SetSphereRadius(0.0f);
+                actor->GetComponent<TrackingObject>()->SetHitNum(1.0f);
+                actor->GetComponent<TrackingObject>()->SetTargetActorType(ActorType::Player);
+                actor->GetComponent<TrackingObject>()->SetDesiredPosition({ position.x + (rand() % 30 - 10), position.y + 3+ (rand() % 20), position.z + (rand() % 30 - 10) });
             }
             ActorManager::Instance().Remove(GetActor());
         }

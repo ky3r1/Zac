@@ -28,6 +28,8 @@ public:
 
 	//“™†
     static bool Equal(DirectX::XMFLOAT3 A, DirectX::XMFLOAT3 B);
+	//‚Ù‚Ú“™†
+	static bool NearlyEqual(DirectX::XMFLOAT3 A, DirectX::XMFLOAT3 B,DirectX::XMFLOAT3 E);
 
 	//üŒ`•âŠ®
 	static float Lerp(float a, float b, float t);

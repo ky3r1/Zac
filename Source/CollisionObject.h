@@ -19,6 +19,9 @@ public:
     virtual void Start() override;
     //更新
     virtual void Update(float elapsedTime) override;
+
+    virtual void Render(ID3D11DeviceContext* dc, Shader* shader) override;
+
     //Imgui描画
     virtual void DrawImGui() override;
     //デバッグプリミティブ描画
@@ -32,7 +35,7 @@ public:
 private:
 
 protected:
-        HitCollisionType hc_type = HitCollisionType::None;
+    HitCollisionType hc_type = HitCollisionType::None;
     ActorType target_actortype = ActorType::None;
     float hit_num = 0.0f;
     Actor* target_actor = nullptr;

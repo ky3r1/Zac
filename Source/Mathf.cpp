@@ -84,6 +84,17 @@ bool Mathf::Equal(DirectX::XMFLOAT3 A, DirectX::XMFLOAT3 B)
     return false;
 }
 
+bool Mathf::NearlyEqual(DirectX::XMFLOAT3 A, DirectX::XMFLOAT3 B, DirectX::XMFLOAT3 E)
+{
+    if (A.x <= B.x + E.x && A.x >= B.x - E.x &&
+        A.y <= B.y + E.y && A.y >= B.y - E.y &&
+        A.z <= B.z + E.z && A.z >= B.z - E.z)
+    {
+        return true;
+    }
+    return false;
+}
+
 //ê¸å`ï‚äÆ
 float Mathf::Lerp(float a, float b, float t)
 {

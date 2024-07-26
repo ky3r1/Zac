@@ -78,8 +78,11 @@
     <Filter Include="Component\Object\CollisionObject">
       <UniqueIdentifier>{ed8315b7-5601-4897-b21f-67283840c283}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Component\Object\CollisionObject\PerfectTrackingObject">
-      <UniqueIdentifier>{f6a6c3bf-c0b0-4391-958e-ab0b143a116c}</UniqueIdentifier>
+    <Filter Include="Component\Object\CollisionObject\TrackingObject">
+      <UniqueIdentifier>{f7b7d0d2-8c33-4cf6-bf7c-286b8c9a64ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Object\CollisionObject\TrackingObject\SphereTrackingObject">
+      <UniqueIdentifier>{4946ebec-c92d-4b55-9ed7-11edf05673c8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -287,11 +290,14 @@
     <ClInclude Include="Source\AnimationComp.h">
       <Filter>Component\Behaviour</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PerfectTrackingObject.h">
-      <Filter>Component\Object\CollisionObject\PerfectTrackingObject</Filter>
-    </ClInclude>
     <ClInclude Include="Source\CollisionObject.h">
       <Filter>Component\Object\CollisionObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TrackingObject.h">
+      <Filter>Component\Object\CollisionObject\TrackingObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SphereTrackingObject.h">
+      <Filter>Component\Object\CollisionObject\TrackingObject\SphereTrackingObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -475,11 +481,14 @@
     <ClCompile Include="Source\AnimationComp.cpp">
       <Filter>Component\Behaviour</Filter>
     </ClCompile>
-    <ClCompile Include="Source\PerfectTrackingObject.cpp">
-      <Filter>Component\Object\CollisionObject\PerfectTrackingObject</Filter>
-    </ClCompile>
     <ClCompile Include="Source\CollisionObject.cpp">
       <Filter>Component\Object\CollisionObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TrackingObject.cpp">
+      <Filter>Component\Object\CollisionObject\TrackingObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SphereTrackingObject.cpp">
+      <Filter>Component\Object\CollisionObject\TrackingObject\SphereTrackingObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

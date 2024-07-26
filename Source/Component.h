@@ -16,6 +16,8 @@ public:
 	// XVˆ—
 	virtual void Update(float elapsedTime) {}
 
+	virtual void Render(ID3D11DeviceContext* dc, Shader* shader) {}
+
 	// GUI•`‰æ
 	virtual void DrawImGui() {}
 

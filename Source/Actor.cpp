@@ -51,6 +51,14 @@ void Actor::UpdateTransform()
 	}
 }
 
+void Actor::Render(ID3D11DeviceContext* dc, Shader* shader)
+{
+	for (std::shared_ptr<Component>& component : components)
+	{
+		component->Render(dc,shader);
+	}
+}
+
 void Actor::OnGUI()
 {
 	// –¼‘O
@@ -320,6 +328,8 @@ void ActorManager::Render(ID3D11DeviceContext* dc, Shader* shader)
 		{
 			shader->Draw(dc, actor->GetModel(), actor->GetColor());
 		}
+		actor->Render(dc, shader);
+		
 	}
 
 	//shader->End(dc);

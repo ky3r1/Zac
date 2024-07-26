@@ -25,7 +25,8 @@
 
 #include "CameraController.h"
 #include "Object.h"
-#include "PerfectTrackingObject.h"
+#include "TrackingObject.h"
+#include "SphereTrackingObject.h"
 #include "AnimationComp.h"
 
 #include "Mathf.h"
@@ -273,7 +274,7 @@ void SceneGame::Initialize()
 
 			const char* filename = "Data/Model/Cube/Cube.mdl";
 			actor->LoadModel(filename);
-			std::string name = std::string("ApproachingObject_Time:") + std::to_string(i);
+			std::string name = std::string("TrackingObject:") + std::to_string(i);
 			actor->SetName(name);
 			actor->SetPosition({ Mathf::RandomRange(-100.0f,100.0f), 3.0f, Mathf::RandomRange(-100.0f, 100.0f) });
 			actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
@@ -283,10 +284,11 @@ void SceneGame::Initialize()
 			actor->SetActorType(ActorType::Object);
 			actor->AddComponent<VsCollision>();
 			actor->AddComponent<Movement>();
-			actor->AddComponent<PerfectTrackingObject>();
-			actor->GetComponent<PerfectTrackingObject>()->SetHitCollisionType(HitCollisionType::Heel);
-			actor->GetComponent<PerfectTrackingObject>()->SetHitNum(1.0f);
-			actor->GetComponent<PerfectTrackingObject>()->SetTargetActorType(ActorType::Player);
+			actor->AddComponent<TrackingObject>();
+			actor->GetComponent<TrackingObject>()->SetHitCollisionType(HitCollisionType::Heel);
+			actor->GetComponent<TrackingObject>()->SetSphereRadius(FLT_MAX);
+			actor->GetComponent<TrackingObject>()->SetHitNum(1.0f);
+			actor->GetComponent<TrackingObject>()->SetTargetActorType(ActorType::Player);
 		}
 	}
 	{
@@ -296,7 +298,7 @@ void SceneGame::Initialize()
 
 			const char* filename = "Data/Model/Cube/Cube.mdl";
 			actor->LoadModel(filename);
-			std::string name = std::string("ApproachingObject_Radius:") + std::to_string(i);
+			std::string name = std::string("SphereTrackingObject:") + std::to_string(i);
 			actor->SetName(name);
 			actor->SetPosition({ Mathf::RandomRange(-200.0f,200.0f), 3.0f, Mathf::RandomRange(200.0f, 300.0f) });
 			actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
@@ -306,11 +308,11 @@ void SceneGame::Initialize()
 			actor->SetActorType(ActorType::Object);
 			actor->AddComponent<VsCollision>();
 			actor->AddComponent<Movement>();
-			actor->AddComponent<PerfectTrackingObject>();
-			actor->GetComponent<PerfectTrackingObject>()->SetHitCollisionType(HitCollisionType::Heel);
-			actor->GetComponent<PerfectTrackingObject>()->SetHitNum(1.0f);
-			actor->GetComponent<PerfectTrackingObject>()->SetSphereRadius(50.0f);
-			actor->GetComponent<PerfectTrackingObject>()->SetTargetActorType(ActorType::Player);
+			actor->AddComponent<SphereTrackingObject>();
+			actor->GetComponent<SphereTrackingObject>()->SetHitCollisionType(HitCollisionType::Heel);
+			actor->GetComponent<SphereTrackingObject>()->SetHitNum(1.0f);
+			actor->GetComponent<SphereTrackingObject>()->SetRadiusSearch(100.0f);
+			actor->GetComponent<SphereTrackingObject>()->SetTargetActorType(ActorType::Player);
 		}
 	}
 #endif // OBJECT
