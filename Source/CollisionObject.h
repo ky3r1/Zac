@@ -1,6 +1,13 @@
 #pragma once
 #include "Object.h"
 
+enum class HitCollisionType
+{
+    Damage,
+    Heel,
+    None
+};
+
 class CollisionObject : public Object
 {
 public:
@@ -19,10 +26,15 @@ public:
 public:
     void SetTargetActorType(ActorType type){ target_actortype = type; }
     ActorType GetTargetActorType(){ return target_actortype; }
+    void SetHitCollisionType(HitCollisionType type){ hc_type = type; }
+    HitCollisionType GetHitCollisionType(){ return hc_type; }
+    void SetHitNum(float num){ hit_num = num; }
+private:
+
 protected:
-    bool test_flg2 = false;
+        HitCollisionType hc_type = HitCollisionType::None;
     ActorType target_actortype = ActorType::None;
-    //Actor* target_actor = nullptr;
-    //std::unique_ptr<Actor> target_actor = nullptr;
-    std::shared_ptr<Actor> target_actor = nullptr;
+    float hit_num = 0.0f;
+    Actor* target_actor = nullptr;
+    
 };

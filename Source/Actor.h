@@ -76,6 +76,11 @@ public:
 
 	//DelayTime更新
 	void UpdateDelayTime(DelayTime& delaytime, float maxtime);
+
+	//ダメージを受ける
+	virtual void TakeDamage(float damage);
+	//ダメージを受ける
+	virtual void TakeHeel(float heel);
 public:
 	//////////////////////////////////////////////////////////////////////////
 	//							セッター・ゲッター							//

@@ -31,9 +31,6 @@ public:
 
     //デバッグプリミティブ描画
     virtual void DrawDebug() override;
-    
-    //ダメージを受ける
-    virtual void TakeDamage(float damage);
 
 protected:
     std::shared_ptr<Movement>	movement;

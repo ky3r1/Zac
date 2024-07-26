@@ -35,7 +35,7 @@ void Enemy::Update(float elapsedTime)
     {
         GetActor()->SetDeadFlag(true);
         {
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 1; i++)
             {
                 const char* filename = "Data/Model/Cube/Cube.mdl";
                 std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
@@ -53,6 +53,8 @@ void Enemy::Update(float elapsedTime)
                 actor->AddComponent<Movement>();
                 actor->AddComponent<ApproachingObject>();
                 actor->GetComponent<ApproachingObject>()->SetMaxRuntimer(2.0 * 60.0f);
+                actor->GetComponent<ApproachingObject>()->SetHitCollisionType(HitCollisionType::Heel);
+                actor->GetComponent<ApproachingObject>()->SetHitNum(1.0f);
                 actor->GetComponent<ApproachingObject>()->SetTargetActorType(ActorType::Player);
                 actor->GetComponent<ApproachingObject>()->SetDesiredPosition({ position.x + (rand() % 30 - 10), position.y + 3+ (rand() % 20), position.z + (rand() % 30 - 10) });
             }

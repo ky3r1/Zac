@@ -94,7 +94,7 @@ void Movement::Update(float elapsedTime)
 }
 void Movement::Move(DirectX::XMFLOAT3 v)
 {
-	move_vec = { abs(v.x) ,abs(v.y) ,abs(v.z) };
+	move_vec = { abs(v.x) ,abs(v.y) ,abs(v.z)  };
 	DirectX::XMFLOAT3 mv = { v.x * moveSpeed ,v.y * moveSpeed ,v.z * moveSpeed };
 	//移動方向ベクトル
 	//velocity.x += v.x * moveSpeed*0.01f;
@@ -235,8 +235,12 @@ void Movement::UpdateAxisX(float elapsedTime)
 	{
 		//velocityの最大値を超えないようにする
 		{
-			if (velocity.x >   MAX_MINI_VELOCITY_X + MAX_VELOCITY_X * move_vec.x) velocity.x =   MAX_MINI_VELOCITY_X + MAX_VELOCITY_X * move_vec.x;
-			if (velocity.x < -(MAX_MINI_VELOCITY_X + MAX_VELOCITY_X * move_vec.x))velocity.x = -(MAX_MINI_VELOCITY_X + MAX_VELOCITY_X * move_vec.x);
+			if (velocity.x >   MAX_MINI_VELOCITY_X + MAX_VELOCITY_X * (move_vec.x+1)) velocity.x =   MAX_MINI_VELOCITY_X + MAX_VELOCITY_X * (move_vec.x+1);
+			if (velocity.x < -(MAX_MINI_VELOCITY_X + MAX_VELOCITY_X * (move_vec.x+1)))velocity.x = -(MAX_MINI_VELOCITY_X + MAX_VELOCITY_X * (move_vec.x+1));
+			//if(velocity.x > MAX_VELOCITY_X) velocity.x = MAX_VELOCITY_X;
+   //         if(velocity.x < -MAX_VELOCITY_X) velocity.x = -MAX_VELOCITY_X;
+			//if (velocity.x >   MAX_MINI_VELOCITY_X + MAX_VELOCITY_X) velocity.x =   MAX_MINI_VELOCITY_X + MAX_VELOCITY_X;
+			//if (velocity.x < -(MAX_MINI_VELOCITY_X + MAX_VELOCITY_X))velocity.x = -(MAX_MINI_VELOCITY_X + MAX_VELOCITY_X);
 		}
 	}
 #endif // VLOCITY_MAX_FLG_X
@@ -307,8 +311,10 @@ void Movement::UpdateAxisZ(float elapsedTime)
 	{
 		//velocityの最大値を超えないようにする
 		{
-			if (velocity.z >   MAX_MINI_VELOCITY_Z + MAX_VELOCITY_Z * move_vec.z) velocity.z =   MAX_MINI_VELOCITY_Z + MAX_VELOCITY_Z * move_vec.z;
-			if (velocity.z < -(MAX_MINI_VELOCITY_Z + MAX_VELOCITY_Z * move_vec.z))velocity.z = -(MAX_MINI_VELOCITY_Z + MAX_VELOCITY_Z * move_vec.z);
+			if (velocity.z >   MAX_MINI_VELOCITY_Z + MAX_VELOCITY_Z * (move_vec.z+1)) velocity.z =   MAX_MINI_VELOCITY_Z + MAX_VELOCITY_Z * (move_vec.z+1);
+			if (velocity.z < -(MAX_MINI_VELOCITY_Z + MAX_VELOCITY_Z * (move_vec.z+1)))velocity.z = -(MAX_MINI_VELOCITY_Z + MAX_VELOCITY_Z * (move_vec.z+1));
+			//if (velocity.z >   MAX_MINI_VELOCITY_Z + MAX_VELOCITY_Z) velocity.z =   MAX_MINI_VELOCITY_Z + MAX_VELOCITY_Z;
+			//if (velocity.z < -(MAX_MINI_VELOCITY_Z + MAX_VELOCITY_Z))velocity.z = -(MAX_MINI_VELOCITY_Z + MAX_VELOCITY_Z);
 		}
 	}
 #endif // VLOCITY_MAX_FLG_Z

@@ -209,6 +209,16 @@ void Actor::UpdateDelayTime(DelayTime& delaytime, float maxtime)
 	}
 }
 
+void Actor::TakeDamage(float damage)
+{
+	current_health -= damage;
+}
+
+void Actor::TakeHeel(float heel)
+{
+	current_health += heel;
+}
+
 // ƒ‚ƒfƒ‹‚Ì“Ç‚İ‚İ
 void Actor::LoadModel(const char* filename)
 {

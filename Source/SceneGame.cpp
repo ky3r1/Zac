@@ -284,6 +284,8 @@ void SceneGame::Initialize()
 			actor->AddComponent<VsCollision>();
 			actor->AddComponent<Movement>();
 			actor->AddComponent<ApproachingObject>();
+			actor->GetComponent<ApproachingObject>()->SetHitCollisionType(HitCollisionType::Heel);
+			actor->GetComponent<ApproachingObject>()->SetHitNum(1.0f);
 			actor->GetComponent<ApproachingObject>()->SetTargetActorType(ActorType::Player);
 		}
 	}
@@ -305,6 +307,8 @@ void SceneGame::Initialize()
 			actor->AddComponent<VsCollision>();
 			actor->AddComponent<Movement>();
 			actor->AddComponent<ApproachingObject>();
+			actor->GetComponent<ApproachingObject>()->SetHitCollisionType(HitCollisionType::Heel);
+			actor->GetComponent<ApproachingObject>()->SetHitNum(1.0f);
 			actor->GetComponent<ApproachingObject>()->SetSphereRadius(50.0f);
 			actor->GetComponent<ApproachingObject>()->SetTargetActorType(ActorType::Player);
 		}

@@ -28,10 +28,3 @@ void Character::DrawImGui()
 void Character::DrawDebug()
 {
 }
-
-void Character::TakeDamage(float damage)
-{
-    float Ch = GetActor()->GetHealth();
-    Ch -= damage;
-    GetActor()->SetHealth(Ch);
-}
