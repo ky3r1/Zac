@@ -1,6 +1,10 @@
 #include "BehaviorTree.h"
+#include "ActionBase.h"
 #include "NodeBase.h"
+#include "JudgmentBase.h"
+//#include "EnemyBlueSlime.h"
 #include "BehaviorData.h"
+
 
 // デストラクタ
 BehaviorTree::~BehaviorTree()
@@ -45,7 +49,7 @@ NodeBase* BehaviorTree::SequenceBack(NodeBase* sequenceNode, BehaviorData* data)
 }
 
 // ノード実行
-NodeBase* BehaviorTree::Run(NodeBase* actionNode, BehaviorData* data, float elapsedTime)
+NodeBase* BehaviorTree::Run(NodeBase* actionNode, BehaviorData* data,float elapsedTime)
 {
 	// ノード実行
 	ActionBase::State state = actionNode->Run(elapsedTime);
@@ -81,7 +85,7 @@ void BehaviorTree::NodeAllClear(NodeBase* delNode)
 	size_t count = delNode->children.size();
 	if (count > 0)
 	{
-		for (NodeBase* node : delNode->children)
+		for (NodeBase* node :delNode->children)
 		{
 			NodeAllClear(node);
 		}

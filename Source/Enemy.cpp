@@ -2,6 +2,12 @@
 #include "Mathf.h"
 #include "TrackingObject.h"
 
+//#include "BehaviorTree.h"
+//#include "BehaviorData.h"
+//#include "NodeBase.h"
+//#include "ActionBehavior.h"
+//#include "JudgmentBehavior.h"
+
 void Enemy::Start()
 {
     GetActor()->SetHealth(GetActor()->GetMaxHealth());
@@ -10,6 +16,30 @@ void Enemy::Start()
     vs_collision=GetActor()->GetComponent<VsCollision>();
     GetActor()->SetAttitudeControlFlag(true);
     //GetActor().get()->SetScale(DirectX::XMFLOAT3(5.0f, 5.0f, 5.0f));
+    //// ビヘイビアツリー設定
+    //behaviorData = new BehaviorData();
+    //aiTree = new BehaviorTree();
+    //// BehaviorTree図を基にBehaviorTreeを構築
+    //// ノードを追加
+    //GetActor()->AddComponent<EscapeJudgment>();
+    //aiTree->AddNode("", "Root", 0, BehaviorTree::SelectRule::Priority, nullptr, nullptr);
+    //aiTree->AddNode("Root", "Escape", 3, BehaviorTree::SelectRule::Sequence, new EscapeJudgment(), nullptr);
+    //aiTree->AddNode("Root", "Battle", 4, BehaviorTree::SelectRule::Priority, new BattleJudgment(), nullptr);
+    //aiTree->AddNode("Root", "Scout", 5, BehaviorTree::SelectRule::Priority, nullptr, nullptr);
+
+
+    //aiTree->AddNode("Scout", "Wander", 1, BehaviorTree::SelectRule::Non, new WanderJudgment(), new WanderAction());
+    //aiTree->AddNode("Scout", "Idle", 2, BehaviorTree::SelectRule::Non, nullptr, new IdleAction());
+
+    //aiTree->AddNode("Battle", "Attack", 1, BehaviorTree::SelectRule::Random, new AttackJudgment(), nullptr);
+    //aiTree->AddNode("Attack", "Normal", 1, BehaviorTree::SelectRule::Non, nullptr, new NormalAction());
+    //aiTree->AddNode("Attack", "Skill", 2, BehaviorTree::SelectRule::Non, nullptr, new SkillAction());
+
+    //aiTree->AddNode("Battle", "Pursuit", 2, BehaviorTree::SelectRule::Non, nullptr, new PursuitAction());
+
+    //aiTree->AddNode("Escape", "Leave", 1, BehaviorTree::SelectRule::Non, new EscapeJudgment(), new LeaveAction());
+    //aiTree->AddNode("Escape", "Recover", 2, BehaviorTree::SelectRule::Non, nullptr, new RecoverAction());
+
     // 適当にモーション再生
     Model* model = GetActor()->GetModel();
     if (model != nullptr)
@@ -63,6 +93,12 @@ void Enemy::Update(float elapsedTime)
     }
     GetActor()->SetRayPosition(GetActor()->GetPosition());
     Character::Update(elapsedTime);
+}
+
+bool Enemy::Search(DirectX::XMFLOAT3 target_position_s)
+{
+    if (Collision::SphereInPoint(GetActor()->GetPosition(), search_range, target_position_s))return true;
+    return false;
 }
 
 void Enemy::DrawImGui()

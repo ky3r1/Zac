@@ -1,20 +1,14 @@
 #pragma once
-#include "Component.h"
+#include "JudgmentBase.h"
+//#include "EnemyBlueSlime.h"
+#include "Enemy.h"
 
-// Às”»’è
-class JudgmentBase: public Component
-{
-public:
-	JudgmentBase() {}
-	virtual bool Judgment() = 0;
-protected:
-};
 
 // BattleNode‚É‘JˆÚ‚Å‚«‚é‚©”»’è
 class BattleJudgment : public JudgmentBase
 {
 public:
-	BattleJudgment(){};
+	BattleJudgment(Enemy* enemy) :JudgmentBase(enemy) {};
 	// ”»’è
 	bool Judgment();
 };
@@ -23,7 +17,7 @@ public:
 class AttackJudgment : public JudgmentBase
 {
 public:
-	AttackJudgment() {};
+	AttackJudgment(Enemy* enemy) :JudgmentBase(enemy) {};
 	// ”»’è
 	bool Judgment();
 };
@@ -32,7 +26,7 @@ public:
 class SkillShotJudgment : public JudgmentBase
 {
 public:
-	SkillShotJudgment(){};
+	SkillShotJudgment(Enemy* enemy) :JudgmentBase(enemy) {};
 	// ”»’è
 	bool Judgment();
 };
@@ -41,7 +35,7 @@ public:
 class WanderJudgment : public JudgmentBase
 {
 public:
-	WanderJudgment(){};
+	WanderJudgment(Enemy* enemy) :JudgmentBase(enemy) {};
 	// ”»’è
 	bool Judgment();
 };
@@ -51,7 +45,7 @@ public:
 class EscapeJudgment : public JudgmentBase
 {
 public:
-	EscapeJudgment() {};
+	EscapeJudgment(Enemy* enemy) :JudgmentBase(enemy) {};
 	// ”»’è
 	bool Judgment();
 };

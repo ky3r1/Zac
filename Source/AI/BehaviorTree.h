@@ -1,5 +1,5 @@
 #pragma once
-#include "All.h"
+#include <string>
 
 class ActionBase;
 class JudgmentBase;
@@ -11,7 +11,7 @@ class EnemyBlueSlime;
 class BehaviorTree
 {
 public:
-// 選択ルール
+	// 選択ルール
 	enum class SelectRule
 	{
 		Non,				// 無い末端ノード用
@@ -22,7 +22,8 @@ public:
 	};
 
 public:
-	BehaviorTree() :root(nullptr), owner(nullptr) {}
+	BehaviorTree() :root(nullptr) , owner(nullptr) {}
+	BehaviorTree(EnemyBlueSlime* enemy) :root(nullptr) , owner(enemy){}
 	~BehaviorTree();
 
 	// 実行ノードを推論する
@@ -35,7 +36,7 @@ public:
 	void AddNode(std::string parentName, std::string entryName, int priority, SelectRule selectRule, JudgmentBase* judgment, ActionBase* action);
 
 	// 実行
-	NodeBase* Run(NodeBase* actionNode, BehaviorData* data, float elapsedTime);
+	NodeBase* Run(NodeBase* actionNode, BehaviorData* data,float elapsedTime);
 private:
 	// ノード全削除
 	void NodeAllClear(NodeBase* delNode);

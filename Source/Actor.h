@@ -289,6 +289,12 @@ public:
 	// 検索
 	Actor* GetActor(std::string name);
 
+	//Player
+    Actor* GetPlayer()
+    {
+        return GetActor("Player");
+    }
+
 	//死亡Flagが立ってるアクターを死亡させる
 	void DaedUpdate();
 

@@ -302,19 +302,25 @@
     <ClInclude Include="Source\StateMachine.h">
       <Filter>Component\Action\State</Filter>
     </ClInclude>
-    <ClInclude Include="Source\NodeBase.h">
+    <ClInclude Include="Source\AI\ActionBase.h">
       <Filter>Component\Action\BehaviorTree</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ActionBehavior.h">
+    <ClInclude Include="Source\AI\ActionDerived.h">
       <Filter>Component\Action\BehaviorTree</Filter>
     </ClInclude>
-    <ClInclude Include="Source\JudgmentBehavior.h">
+    <ClInclude Include="Source\AI\BehaviorData.h">
       <Filter>Component\Action\BehaviorTree</Filter>
     </ClInclude>
-    <ClInclude Include="Source\BehaviorTree.h">
+    <ClInclude Include="Source\AI\BehaviorTree.h">
       <Filter>Component\Action\BehaviorTree</Filter>
     </ClInclude>
-    <ClInclude Include="Source\BehaviorData.h">
+    <ClInclude Include="Source\AI\JudgmentBase.h">
+      <Filter>Component\Action\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AI\JudgmentDerived.h">
+      <Filter>Component\Action\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AI\NodeBase.h">
       <Filter>Component\Action\BehaviorTree</Filter>
     </ClInclude>
   </ItemGroup>
@@ -505,19 +511,19 @@
     <ClCompile Include="Source\StateMachine.cpp">
       <Filter>Component\Action\State</Filter>
     </ClCompile>
-    <ClCompile Include="Source\NodeBase.cpp">
+    <ClCompile Include="Source\AI\ActionDerived.cpp">
       <Filter>Component\Action\BehaviorTree</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ActionBehavior.cpp">
+    <ClCompile Include="Source\AI\BehaviorData.cpp">
       <Filter>Component\Action\BehaviorTree</Filter>
     </ClCompile>
-    <ClCompile Include="Source\JudgmentBehavior.cpp">
+    <ClCompile Include="Source\AI\BehaviorTree.cpp">
       <Filter>Component\Action\BehaviorTree</Filter>
     </ClCompile>
-    <ClCompile Include="Source\BehaviorTree.cpp">
+    <ClCompile Include="Source\AI\JudgmentDerived.cpp">
       <Filter>Component\Action\BehaviorTree</Filter>
     </ClCompile>
-    <ClCompile Include="Source\BehaviorData.cpp">
+    <ClCompile Include="Source\AI\NodeBase.cpp">
       <Filter>Component\Action\BehaviorTree</Filter>
     </ClCompile>
   </ItemGroup>

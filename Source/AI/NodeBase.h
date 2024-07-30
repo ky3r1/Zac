@@ -1,26 +1,26 @@
 #pragma once
+
 #include <vector>
 #include <string>
 #include "BehaviorTree.h"
-#include "ActionBehavior.h"
+#include "ActionBase.h"
 
 class JudgmentBase;
 class BehaviorData;
 
+// メモリリーク調査用
+#define debug_new new(_NORMAL_BLOCK,__FILE__,__LINE__)
+
+
+// ノード
 class NodeBase
 {
 public:
 	// コンストラクタ
-	NodeBase(std::string name, 
-		NodeBase* parent, 
-		NodeBase* sibling, 
-		int priority,
-		BehaviorTree::SelectRule selectRule, 
-		JudgmentBase* judgment, 
-		ActionBase* action,
-		 int hierarchyNo) :
-		name(name), parent(parent), sibling(sibling), priority(priority),
-		selectRule(selectRule), judgment(judgment), action(action), hierarchyNo(hierarchyNo),
+	NodeBase(std::string name,NodeBase* parent,NodeBase* sibling,int priority,
+		BehaviorTree::SelectRule selectRule,JudgmentBase* judgment,ActionBase* action,int hierarchyNo) :
+		name(name),parent(parent),sibling(sibling),priority(priority),
+		selectRule(selectRule),judgment(judgment),action(action),hierarchyNo(hierarchyNo),
 		children(NULL)
 	{
 	}
@@ -47,7 +47,7 @@ public:
 	// 子ノード追加
 	void AddChild(NodeBase* child) { children.push_back(child); }
 	// 兄弟ノードセッター
-	void SetSibling(NodeBase* sibling) { this->sibling = sibling; }
+	void SetSibling(NodeBase* sibling) {this->sibling = sibling;}
 	// 行動データを持っているか
 	bool HasAction() { return action != nullptr ? true : false; }
 	// 実行可否判定
@@ -68,7 +68,7 @@ public:
 protected:
 	std::string					name;			// 名前
 	BehaviorTree::SelectRule	selectRule;		// 選択ルール
-	JudgmentBase*				judgment;		// 判定クラス
+	JudgmentBase*				judgment;	// 判定クラス
 	ActionBase*					action;			// 実行クラス
 	unsigned int				priority;		// 優先順位
 	NodeBase*					parent;			// 親ノード

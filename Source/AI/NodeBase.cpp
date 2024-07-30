@@ -1,7 +1,10 @@
+#include "JudgmentBase.h"
 #include "NodeBase.h"
+//#include "EnemyBlueSlime.h"
 #include "BehaviorData.h"
-#include "ActionBehavior.h"
-#include "JudgmentBehavior.h"
+#include "ActionBase.h"
+
+
 
 // デストラクタ
 NodeBase::~NodeBase()
@@ -26,6 +29,7 @@ NodeBase* NodeBase::GetLastChild()
 	{
 		return nullptr;
 	}
+
 	return children.at(children.size() - 1);
 }
 
@@ -36,6 +40,7 @@ NodeBase* NodeBase::GetTopChild()
 	{
 		return nullptr;
 	}
+
 	return children.at(0);
 }
 
@@ -60,6 +65,7 @@ NodeBase* NodeBase::SearchNode(std::string searchName)
 			}
 		}
 	}
+
 	return nullptr;
 }
 
@@ -75,13 +81,13 @@ NodeBase* NodeBase::Inference(BehaviorData* data)
 		// children.at(i)->judgmentがnullptrでなければ
 		if (children.at(i)->judgment != nullptr)
 		{
-			// children.at(i)->judgment->Judgment()関数を実行し、tureであれば
+			// TODO 04_03 children.at(i)->judgment->Judgment()関数を実行し、tureであれば
 			// listにchildren.at(i)を追加していく
-			if (children.at(i)->judgment->Judgment())list.emplace_back(children.at(i));
+			if(children.at(i)->judgment->Judgment())list.emplace_back(children.at(i));
 		}
 		else
 		{
-			// 判定クラスがなければ無条件に追加
+			// TODO 04_03 判定クラスがなければ無条件に追加
 			list.emplace_back(children.at(i));
 		}
 	}
@@ -126,12 +132,12 @@ NodeBase* NodeBase::SelectPriority(std::vector<NodeBase*>* list)
 	NodeBase* selectNode = nullptr;
 	int priority = INT_MAX;
 
-	// 一番優先順位が高いノードを探してselectNodeに格納
+	// TODO 04_04 一番優先順位が高いノードを探してselectNodeに格納
 	for (auto node : *list)
 	{
 		if (priority > node->GetPriority())
 		{
-			priority = node->GetPriority();
+			priority= node->GetPriority();
 			selectNode = node;
 		}
 	}
@@ -144,9 +150,9 @@ NodeBase* NodeBase::SelectPriority(std::vector<NodeBase*>* list)
 NodeBase* NodeBase::SelectRandom(std::vector<NodeBase*>* list)
 {
 	int selectNo = 0;
-	// listのサイズで乱数を取得してselectNoに格納
+	// TODO 04_05 listのサイズで乱数を取得してselectNoに格納
 	selectNo = rand() % list->size();
-
+	
 	// listのselectNo番目の実態をリターン
 	return (*list).at(selectNo);
 }
@@ -162,11 +168,11 @@ NodeBase* NodeBase::SelectSequence(std::vector<NodeBase*>* list, BehaviorData* d
 	// 中間ノードに登録されているノード数以上の場合、
 	if (step >= children.size())
 	{
-		// ルールによって処理を切り替える
+		// TODO 04_06 ルールによって処理を切り替える
 		// ルールがBehaviorTree::SelectRule::SequentialLoopingのときは最初から実行するため、stepに0を代入
 		// ルールがBehaviorTree::SelectRule::Sequenceのときは次に実行できるノードがないため、nullptrをリターン
-		if (this->selectRule == BehaviorTree::SelectRule::SequentialLooping)step = 0;
-		if (this->selectRule == BehaviorTree::SelectRule::Sequence)return nullptr;
+		if(this->selectRule == BehaviorTree::SelectRule::SequentialLooping)step = 0;
+		if(this->selectRule == BehaviorTree::SelectRule::Sequence)return nullptr;
 	}
 	// 実行可能リストに登録されているデータの数だけループを行う
 	for (auto itr = list->begin(); itr != list->end(); itr++)
@@ -174,7 +180,7 @@ NodeBase* NodeBase::SelectSequence(std::vector<NodeBase*>* list, BehaviorData* d
 		// 子ノードが実行可能リストに含まれているか
 		if (children.at(step)->GetName() == (*itr)->GetName())
 		{
-			// 現在の実行ノードの保存、次に実行するステップの保存を行った後、
+			// TODO 04_06 現在の実行ノードの保存、次に実行するステップの保存を行った後、
 			// 現在のステップ番号のノードをリターンしなさい
 			// ①スタックにはdata->PushSequenceNode関数を使用する。保存するデータは実行中の中間ノード。
 			// ②また、次に実行する中間ノードとステップ数を保存する
@@ -193,7 +199,7 @@ NodeBase* NodeBase::SelectSequence(std::vector<NodeBase*>* list, BehaviorData* d
 // 判定
 bool NodeBase::Judgment()
 {
-	// judgmentがあるか判断。あればメンバ関数Judgment()実行した結果をリターン。
+	// TODO 04_07 judgmentがあるか判断。あればメンバ関数Judgment()実行した結果をリターン。
 	if (judgment != nullptr)
 	{
 		return judgment->Judgment();
@@ -204,7 +210,7 @@ bool NodeBase::Judgment()
 // ノード実行
 ActionBase::State NodeBase::Run(float elapsedTime)
 {
-	// actionがあるか判断。あればメンバ関数Run()実行した結果をリターン。
+	// TODO 04_08 actionがあるか判断。あればメンバ関数Run()実行した結果をリターン。
 	if (action != nullptr)
 	{
 		return action->Run(elapsedTime);

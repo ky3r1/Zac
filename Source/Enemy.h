@@ -1,7 +1,11 @@
-#pragma once
+ï»¿#pragma once
 #include "Graphics/Shader.h"
 #include "Character.h"
 #include "Player.h"
+
+//#include "BehaviorTree.h"
+//#include "BehaviorData.h"
+//#include "NodeBase.h"
 
 enum class EnemySlimeAnimation
 {
@@ -19,33 +23,44 @@ enum
 	EnemyBoss_Num,
 };
 
-//ƒGƒlƒ~[
+//ã‚¨ãƒãƒŸãƒ¼
 class Enemy : public Character
 {
 public:
 	Enemy() {}
     ~Enemy() override {}
-	// –¼‘Oæ“¾
+	// åå‰å–å¾—
 	virtual const char* GetName() const override { return "Enemy"; }
 
-	// ŠJnˆ—
+	// é–‹å§‹å‡¦ç†
 	void Start() override;
 
-	// XVˆ—
+	// æ›´æ–°å‡¦ç†
 	void Update(float elapsedTime) override;
 
-	// GUI•`‰æ
-	virtual void DrawImGui() override;
+	//Search
+    bool Search(DirectX::XMFLOAT3 target_position_s);
 
+	// GUIæç”»
+	virtual void DrawImGui() override;
+	// ãƒ†ã‚™ãƒã‚™ãƒƒã‚¯ã‚™æç”»
 	void DrawDebug() override;
 public:
-    // ŒŸõ”ÍˆÍ
+    // æ¤œç´¢ç¯„å›²
     float GetSearchRange() const { return search_range; }
     void SetSearchRange(float range) { search_range = range; }
-	// UŒ‚”ÍˆÍ
+	// æ”»æ’ƒç¯„å›²
 	float GetAttackRange() const { return attack_range; }
 	void SetAttackRange(float range) { attack_range = range; }
+    // ã‚¿ã‚¤ãƒãƒ¼
+    float GetRunTimer() const { return run_timer; }
+    void SetRunTimer(float timer) { run_timer = timer; }
+    // ã‚¿ãƒ¼ã‚±ã‚™ãƒƒãƒˆä½ç½®
+    DirectX::XMFLOAT3 GetTargetPosition() const { return target_position; }
+    void SetTargetPosition(DirectX::XMFLOAT3 position) { target_position = position; }
 protected:
 	float search_range = 10.0f;
 	float attack_range = 4.0f;
+	float run_timer = 10.0f;
+	DirectX::XMFLOAT3 target_position;
 };
