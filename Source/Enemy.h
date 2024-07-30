@@ -42,6 +42,10 @@ public:
     // ŒŸõ”ÍˆÍ
     float GetSearchRange() const { return search_range; }
     void SetSearchRange(float range) { search_range = range; }
+	// UŒ‚”ÍˆÍ
+	float GetAttackRange() const { return attack_range; }
+	void SetAttackRange(float range) { attack_range = range; }
 protected:
 	float search_range = 10.0f;
+	float attack_range = 4.0f;
 };

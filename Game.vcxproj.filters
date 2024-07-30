@@ -87,7 +87,7 @@
     <Filter Include="Component\Action\State">
       <UniqueIdentifier>{217b9372-919d-481e-a0a8-19e24e54b709}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Component\Action\BehaviourTree">
+    <Filter Include="Component\Action\BehaviorTree">
       <UniqueIdentifier>{d30db9e1-27a6-4c33-9104-536b303fdb6a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -303,19 +303,19 @@
       <Filter>Component\Action\State</Filter>
     </ClInclude>
     <ClInclude Include="Source\NodeBase.h">
-      <Filter>Component\Action\BehaviourTree</Filter>
+      <Filter>Component\Action\BehaviorTree</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ActionBehaviour.h">
-      <Filter>Component\Action\BehaviourTree</Filter>
+    <ClInclude Include="Source\ActionBehavior.h">
+      <Filter>Component\Action\BehaviorTree</Filter>
     </ClInclude>
-    <ClInclude Include="Source\JudgmentBehaviour.h">
-      <Filter>Component\Action\BehaviourTree</Filter>
+    <ClInclude Include="Source\JudgmentBehavior.h">
+      <Filter>Component\Action\BehaviorTree</Filter>
     </ClInclude>
-    <ClInclude Include="Source\BehaviourTree.h">
-      <Filter>Component\Action\BehaviourTree</Filter>
+    <ClInclude Include="Source\BehaviorTree.h">
+      <Filter>Component\Action\BehaviorTree</Filter>
     </ClInclude>
-    <ClInclude Include="Source\BehaviourData.h">
-      <Filter>Component\Action\BehaviourTree</Filter>
+    <ClInclude Include="Source\BehaviorData.h">
+      <Filter>Component\Action\BehaviorTree</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -506,19 +506,19 @@
       <Filter>Component\Action\State</Filter>
     </ClCompile>
     <ClCompile Include="Source\NodeBase.cpp">
-      <Filter>Component\Action\BehaviourTree</Filter>
+      <Filter>Component\Action\BehaviorTree</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ActionBehaviour.cpp">
-      <Filter>Component\Action\BehaviourTree</Filter>
+    <ClCompile Include="Source\ActionBehavior.cpp">
+      <Filter>Component\Action\BehaviorTree</Filter>
     </ClCompile>
-    <ClCompile Include="Source\JudgmentBehaviour.cpp">
-      <Filter>Component\Action\BehaviourTree</Filter>
+    <ClCompile Include="Source\JudgmentBehavior.cpp">
+      <Filter>Component\Action\BehaviorTree</Filter>
     </ClCompile>
-    <ClCompile Include="Source\BehaviourTree.cpp">
-      <Filter>Component\Action\BehaviourTree</Filter>
+    <ClCompile Include="Source\BehaviorTree.cpp">
+      <Filter>Component\Action\BehaviorTree</Filter>
     </ClCompile>
-    <ClCompile Include="Source\BehaviourData.cpp">
-      <Filter>Component\Action\BehaviourTree</Filter>
+    <ClCompile Include="Source\BehaviorData.cpp">
+      <Filter>Component\Action\BehaviorTree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

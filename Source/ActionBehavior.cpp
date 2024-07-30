@@ -1,4 +1,4 @@
-#include "ActionBehaviour.h"
+#include "ActionBehavior.h"
 #include "Mathf.h"
 #include "VsCollision.h"
 #include "Movement.h"
