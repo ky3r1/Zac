@@ -1,13 +1,24 @@
 #pragma once
 #include <vector>
 #include <string>
+#include "BehaviorTree.h"
+#include "ActionBehavior.h"
+
+class JudgmentBase;
+class BehaviorData;
 
 class NodeBase
 {
 public:
 	// コンストラクタ
-	NodeBase(std::string name, NodeBase* parent, NodeBase* sibling, int priority,
-		BehaviorTree::SelectRule selectRule, JudgmentBase* judgment, ActionBase* action, int hierarchyNo) :
+	NodeBase(std::string name, 
+		NodeBase* parent, 
+		NodeBase* sibling, 
+		int priority,
+		BehaviorTree::SelectRule selectRule, 
+		JudgmentBase* judgment, 
+		ActionBase* action,
+		 int hierarchyNo) :
 		name(name), parent(parent), sibling(sibling), priority(priority),
 		selectRule(selectRule), judgment(judgment), action(action), hierarchyNo(hierarchyNo),
 		children(NULL)
@@ -57,10 +68,10 @@ public:
 protected:
 	std::string					name;			// 名前
 	BehaviorTree::SelectRule	selectRule;		// 選択ルール
-	JudgmentBase* judgment;	// 判定クラス
-	ActionBase* action;			// 実行クラス
+	JudgmentBase*				judgment;		// 判定クラス
+	ActionBase*					action;			// 実行クラス
 	unsigned int				priority;		// 優先順位
-	NodeBase* parent;			// 親ノード
-	NodeBase* sibling;		// 兄弟ノード
+	NodeBase*					parent;			// 親ノード
+	NodeBase*					sibling;		// 兄弟ノード
 	int							hierarchyNo;	// 階層番号
 };

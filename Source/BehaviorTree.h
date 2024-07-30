@@ -1,13 +1,17 @@
 #pragma once
-#include "ActionBehavior.h"
-#include "JudgmentBehavior.h"
-#include "NodeBase.h"
+#include "All.h"
+
+class ActionBase;
+class JudgmentBase;
+class NodeBase;
+class BehaviorData;
+class EnemyBlueSlime;
 
 // ビヘイビアツリー
 class BehaviorTree
 {
 public:
-	// 選択ルール
+// 選択ルール
 	enum class SelectRule
 	{
 		Non,				// 無い末端ノード用

@@ -1,5 +1,5 @@
 #pragma once
-#include "Actor.h"
+#include "Component.h"
 
 // é¿çsîªíË
 class JudgmentBase: public Component

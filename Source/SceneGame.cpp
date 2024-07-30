@@ -27,7 +27,6 @@
 #include "TrackingObject.h"
 #include "SphereTrackingObject.h"
 #include "AnimationComp.h"
-#include "AiComponent.h"
 #include "StateMachine.h"
 
 #include "Mathf.h"
@@ -107,7 +106,6 @@ void SceneGame::Initialize()
 			actor->SetActorType(ActorType::Enemy);
 			actor->AddComponent<Movement>();
 			actor->AddComponent<VsCollision>();
-			actor->AddComponent<AiComponent>();
 			actor->AddComponent<Enemy>();
 		}
 		//// Enemy

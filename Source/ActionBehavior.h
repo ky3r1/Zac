@@ -1,5 +1,5 @@
 #pragma once
-#include "Actor.h"
+#include "Component.h"
 // s“®ˆ—Šî’êƒNƒ‰ƒX
 class ActionBase :public Component
 {
