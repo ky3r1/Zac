@@ -39,18 +39,6 @@
     <Filter Include="System\Effect">
       <UniqueIdentifier>{38b2c568-e98d-44b7-b4bf-72749aa5f3ae}</UniqueIdentifier>
     </Filter>
-    <Filter Include="EnemyControl">
-      <UniqueIdentifier>{aa4836e2-7434-48e6-8942-ee08b696af25}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="EnemyControl\State">
-      <UniqueIdentifier>{80886cbe-aa3c-4c06-907d-c3a42c58a2fa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="EnemyControl\SearchSystem">
-      <UniqueIdentifier>{842ef880-36c4-4b2c-8309-da53038747e1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="EnemyControl\Spawn">
-      <UniqueIdentifier>{591a5449-80c9-465f-af4d-ee8bedf16631}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Component">
       <UniqueIdentifier>{5216ba32-ad0f-4ef2-ae93-937c64bd62be}</UniqueIdentifier>
     </Filter>
@@ -66,9 +54,6 @@
     <Filter Include="Component\Character\Projectile">
       <UniqueIdentifier>{3a4daa95-d8ff-4d37-8758-65b321fa7eb7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Component\Behaviour">
-      <UniqueIdentifier>{ecca378b-05cb-4fd2-b1d1-bef1516987d2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Component\Stage">
       <UniqueIdentifier>{ec65c4ca-6a60-4d92-8c92-c3796c1e0bc8}</UniqueIdentifier>
     </Filter>
@@ -83,6 +68,27 @@
     </Filter>
     <Filter Include="Component\Object\CollisionObject\TrackingObject\SphereTrackingObject">
       <UniqueIdentifier>{4946ebec-c92d-4b55-9ed7-11edf05673c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Control">
+      <UniqueIdentifier>{aa4836e2-7434-48e6-8942-ee08b696af25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Control\State">
+      <UniqueIdentifier>{80886cbe-aa3c-4c06-907d-c3a42c58a2fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Control\SearchSystem">
+      <UniqueIdentifier>{842ef880-36c4-4b2c-8309-da53038747e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Control\Spawn">
+      <UniqueIdentifier>{591a5449-80c9-465f-af4d-ee8bedf16631}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Action">
+      <UniqueIdentifier>{ecca378b-05cb-4fd2-b1d1-bef1516987d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Action\State">
+      <UniqueIdentifier>{217b9372-919d-481e-a0a8-19e24e54b709}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Action\BehaviourTree">
+      <UniqueIdentifier>{d30db9e1-27a6-4c33-9104-536b303fdb6a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -239,23 +245,14 @@
     <ClInclude Include="Source\Graphics\ResourceManager.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Source\StateBase.h">
-      <Filter>EnemyControl\State</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\StateDerived.h">
-      <Filter>EnemyControl\State</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\StateMachine.h">
-      <Filter>EnemyControl\State</Filter>
-    </ClInclude>
     <ClInclude Include="Source\EnemyMoveSystem.h">
-      <Filter>EnemyControl\SearchSystem</Filter>
+      <Filter>Control\SearchSystem</Filter>
     </ClInclude>
     <ClInclude Include="Source\StageMain.h">
       <Filter>Component\Stage</Filter>
     </ClInclude>
     <ClInclude Include="Source\Spown.h">
-      <Filter>EnemyControl\Spawn</Filter>
+      <Filter>Control\Spawn</Filter>
     </ClInclude>
     <ClInclude Include="Source\Ui.h">
       <Filter>System</Filter>
@@ -279,16 +276,16 @@
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Source\Movement.h">
-      <Filter>Component\Behaviour</Filter>
+      <Filter>Component\Action</Filter>
     </ClInclude>
     <ClInclude Include="Source\VsCollision.h">
-      <Filter>Component\Behaviour</Filter>
+      <Filter>Component\Action</Filter>
     </ClInclude>
     <ClInclude Include="Source\Object.h">
       <Filter>Component\Object</Filter>
     </ClInclude>
     <ClInclude Include="Source\AnimationComp.h">
-      <Filter>Component\Behaviour</Filter>
+      <Filter>Component\Action</Filter>
     </ClInclude>
     <ClInclude Include="Source\CollisionObject.h">
       <Filter>Component\Object\CollisionObject</Filter>
@@ -299,8 +296,26 @@
     <ClInclude Include="Source\SphereTrackingObject.h">
       <Filter>Component\Object\CollisionObject\TrackingObject\SphereTrackingObject</Filter>
     </ClInclude>
-    <ClInclude Include="Source\AiComponent.h">
-      <Filter>Component\Behaviour</Filter>
+    <ClInclude Include="Source\StateBase.h">
+      <Filter>Control\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\StateMachine.h">
+      <Filter>Component\Action\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\NodeBase.h">
+      <Filter>Component\Action\BehaviourTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ActionBehaviour.h">
+      <Filter>Component\Action\BehaviourTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\JudgmentBehaviour.h">
+      <Filter>Component\Action\BehaviourTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BehaviourTree.h">
+      <Filter>Component\Action\BehaviourTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BehaviourData.h">
+      <Filter>Component\Action\BehaviourTree</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -439,23 +454,14 @@
     <ClCompile Include="Source\Graphics\texture.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Source\StateBase.cpp">
-      <Filter>EnemyControl\State</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\StateDerived.cpp">
-      <Filter>EnemyControl\State</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\StateMachine.cpp">
-      <Filter>EnemyControl\State</Filter>
-    </ClCompile>
     <ClCompile Include="Source\EnemyMoveSystem.cpp">
-      <Filter>EnemyControl\SearchSystem</Filter>
+      <Filter>Control\SearchSystem</Filter>
     </ClCompile>
     <ClCompile Include="Source\StageMain.cpp">
       <Filter>Component\Stage</Filter>
     </ClCompile>
     <ClCompile Include="Source\Spown.cpp">
-      <Filter>EnemyControl\Spawn</Filter>
+      <Filter>Control\Spawn</Filter>
     </ClCompile>
     <ClCompile Include="Source\Ui.cpp">
       <Filter>System</Filter>
@@ -473,16 +479,16 @@
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="Source\Movement.cpp">
-      <Filter>Component\Behaviour</Filter>
+      <Filter>Component\Action</Filter>
     </ClCompile>
     <ClCompile Include="Source\VsCollision.cpp">
-      <Filter>Component\Behaviour</Filter>
+      <Filter>Component\Action</Filter>
     </ClCompile>
     <ClCompile Include="Source\Object.cpp">
       <Filter>Component\Object</Filter>
     </ClCompile>
     <ClCompile Include="Source\AnimationComp.cpp">
-      <Filter>Component\Behaviour</Filter>
+      <Filter>Component\Action</Filter>
     </ClCompile>
     <ClCompile Include="Source\CollisionObject.cpp">
       <Filter>Component\Object\CollisionObject</Filter>
@@ -493,8 +499,26 @@
     <ClCompile Include="Source\SphereTrackingObject.cpp">
       <Filter>Component\Object\CollisionObject\TrackingObject\SphereTrackingObject</Filter>
     </ClCompile>
-    <ClCompile Include="Source\AiComponent.cpp">
-      <Filter>Component\Behaviour</Filter>
+    <ClCompile Include="Source\StateBase.cpp">
+      <Filter>Control\State</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\StateMachine.cpp">
+      <Filter>Component\Action\State</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\NodeBase.cpp">
+      <Filter>Component\Action\BehaviourTree</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ActionBehaviour.cpp">
+      <Filter>Component\Action\BehaviourTree</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\JudgmentBehaviour.cpp">
+      <Filter>Component\Action\BehaviourTree</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BehaviourTree.cpp">
+      <Filter>Component\Action\BehaviourTree</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BehaviourData.cpp">
+      <Filter>Component\Action\BehaviourTree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

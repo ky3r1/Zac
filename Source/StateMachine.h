@@ -1,39 +1,27 @@
 #pragma once
-#include <vector>
+#include "Component.h"
 #include "StateBase.h"
 
-class StateMachine
+class StateMachine :public Component
 {
 public:
-	// コンストラクタ
-	StateMachine() {}
-	// デストラクタ
-	~StateMachine();
-	// 更新処理
-	void Update(float elapsedTime);
+    StateMachine();
+    ~StateMachine();
 
-	//MainState
-	// ステートセット
-	void SetState(int setstate);
-	// ステート変更
-	void ChangeState(int newState);
-	// ステート登録
-	void RegisterState(HierarchicalState* state);
+    //名前取得
+    const char* GetName()const override { return "StateMachine"; }
 
-	//SubState
-	//2層目のステート変更
-	void ChangeSubState(int newState);
-	//2層目ステート登録
-	void RegisterSubState(int index, State* substate);
-
-
-	// 現在のステート番号取得
-	int GetStateIndex();
-	//ステート取得
-	HierarchicalState* GetState() { return currentState; }
-protected:
-	// 現在のステート
-	HierarchicalState* currentState = nullptr;
-	// 各ステートを保持する配列
-	std::vector<HierarchicalState*> statePool;
+    void Update(float elapsedTime)override;
+public:
+    void ChangeState(StateBase* state) { next_state = state; }
+private:
+    StateBase* current_state = nullptr;
+    StateBase* next_state = nullptr;
+    enum
+    {
+        StartState,
+        UpdateState,
+        EndState,
+    };
+    int state = StartState;
 };

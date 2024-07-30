@@ -2,7 +2,7 @@
 
 #include "All.h"
 #include "Input/Input.h"
-#include "StageMain.h"
+//#include "StageMain.h"
 #include "Effect.h"
 #include "Component.h"
 #include "Movement.h"

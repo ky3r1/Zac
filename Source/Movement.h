@@ -22,9 +22,10 @@ public:
     // ˆÚ“®
     void Move(DirectX::XMFLOAT3 v);
     void MoveLocal(const DirectX::XMFLOAT3& direction, float elapsedTime);
+    void MoveTarget(DirectX::XMFLOAT3 tp,float elapsedTime);
 
     // ù‰ñ
-    void Turn(float elapsedTime, float vx, float vz);
+    void Turn(float elapsedTime, DirectX::XMFLOAT3 v);
 
     //ƒWƒƒƒ“ƒv
     void Jump(float jump_power);

@@ -20,7 +20,6 @@ void Enemy::Start()
 
 void Enemy::Update(float elapsedTime)
 {
-    Move(elapsedTime);
     //エネミー同士の衝突判定
     if (vs_collision->CylinderVsCylinderPushing(ActorType::Enemy,nullptr))
     {
@@ -52,7 +51,7 @@ void Enemy::Update(float elapsedTime)
                 actor->AddComponent<VsCollision>();
                 actor->AddComponent<Movement>();
                 actor->AddComponent<TrackingObject>();
-                actor->GetComponent<TrackingObject>()->SetMaxRuntimer((rand() % 4 + rand() % 10/10) * 60.0f);
+                actor->GetComponent<TrackingObject>()->SetMaxRuntimer((rand() % 4 + static_cast<float>(rand() % 1000)/1000) * 60.0f);
                 actor->GetComponent<TrackingObject>()->SetHitCollisionType(HitCollisionType::Damage);
                 actor->GetComponent<TrackingObject>()->SetSphereRadius(0.0f);
                 actor->GetComponent<TrackingObject>()->SetHitNum(1.0f);
@@ -85,16 +84,4 @@ void Enemy::DrawDebug()
     Graphics::Instance().GetDebugRenderer()->DrawSphere(position, radius, color);
     //衝突判定用のデバッグ円柱を描画
     Graphics::Instance().GetDebugRenderer()->DrawCylinder(position, radius, height, color);
-}
-
-void Enemy::Move(float elapsedTime)
-{
-    //Player* player = ActorManager::Instance().GetActor<Player>("Player");
-    //DirectX::XMFLOAT3 target = player->GetActor()->GetPosition();
-    Actor* player = ActorManager::Instance().GetActor("Player");
-    DirectX::XMFLOAT3 target = player->GetPosition();
-    //DirectX::XMFLOAT3 distance=Mathf::Distance3(GetActor().get()->GetPosition(), target);
-    //movement.get()->Turn(distance, elapsedTime);
-    //movement.get()->Move(distance, elapsedTime);
-    DirectX::XMFLOAT3 position=GetActor()->GetPosition();
 }

@@ -143,19 +143,26 @@ void Movement::MoveLocal(const DirectX::XMFLOAT3& direction, float elapsedTime)
 	actor->SetPosition(position);
 }
 
-void Movement::Turn(float elapsedTime, float vx, float vz)
+void Movement::MoveTarget(DirectX::XMFLOAT3 tp, float elapsedTime)
+{
+	DirectX::XMFLOAT3 vec = Mathf::Distance3(GetActor()->GetPosition(),tp);
+	Move(vec);
+	Turn(elapsedTime, vec);
+}
+
+void Movement::Turn(float elapsedTime, DirectX::XMFLOAT3 v)
 {
 	std::shared_ptr<Actor> actor = GetActor();
 	float speed = turnSpeed;
 	speed *= elapsedTime;
 
 	//進行ベクトルがゼロベクトルの場合は処理する必要なし
-	float length = sqrtf(vx * vx + vz * vz);
+	float length = sqrtf(v.x * v.x + v.z * v.z);
 	if (length < 0.0001f) return;
 
 	//進行ベクトルを単位ベクトル化
-	vx /= length;
-	vz /= length;
+	v.x /= length;
+	v.z /= length;
 
 
 	//自身の回転値から前方向を求める
@@ -163,7 +170,7 @@ void Movement::Turn(float elapsedTime, float vx, float vz)
 	float frontZ = cosf(actor->GetRotation().y);
 
 	//回転角を求めるため、2つの単位ベクトルの内積を計算する
-	float dot = (vx * frontX) + (vz * frontZ);
+	float dot = (v.x * frontX) + (v.z * frontZ);
 
 	//内積値は-1.0～1.0で表現されており、2つの単位ベクトルの角度が
 	// 小さいほど1.0に近づくという性質を利用して回転速度を調整する
@@ -171,7 +178,7 @@ void Movement::Turn(float elapsedTime, float vx, float vz)
 	if (rot > speed) { rot = speed; }
 	//speed *= rot;
 	//左右判定を行うために2つの単位ベクトルの外積を計算する
-	float cross = (vz * frontX) - (vx * frontZ);
+	float cross = (v.z * frontX) - (v.x * frontZ);
 
 	//2Dの外積値が正の場合か負の場合によって左右判定が行える
 	//左右判定を行うことによって左右回転を選択する

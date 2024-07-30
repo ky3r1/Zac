@@ -12,6 +12,8 @@
 #include "Movement.h"
 #include "Character.h"
 
+#include "StateBase.h"
+
 class Player : public Character
 {
 public:
@@ -90,4 +92,52 @@ private:
 		Anim_walkForwardsLanding,
 		None,
 	};
+private:
+	//class IdleState :public StateBase
+	//{
+	//public:
+	//	void Start(float elapsedTime,Actor** actor)override;
+	//	void Update(float elapsedTime) override;
+	//	void End(float elapsedTime) override;
+	//};
+
+	//class MoveState :public StateBase
+	//{
+	//public:
+	//	void Start(float elapsedTime)override;
+	//	void Update(float elapsedTime) override;
+	//	void End(float elapsedTime) override;
+	//};
+
+	//class SpownState :public StateBase
+	//{
+	//public:
+	//	void Start(float elapsedTime)override;
+	//	void Update(float elapsedTime) override;
+	//	void End(float elapsedTime) override;
+	//};
+
+	//class LandState :public StateBase
+	//{
+	//public:
+	//	void Start(float elapsedTime)override;
+	//	void Update(float elapsedTime) override;
+	//	void End(float elapsedTime) override;
+	//};
+
+	//class GoesDownState :public StateBase
+	//{
+	//public:
+	//	void Start(float elapsedTime)override;
+	//	void Update(float elapsedTime) override;
+	//	void End(float elapsedTime) override;
+	//};
+
+	//class DeathState :public StateBase
+	//{
+	//public:
+	//	void Start(float elapsedTime)override;
+	//	void Update(float elapsedTime) override;
+	//	void End(float elapsedTime) override;
+	//};
 };

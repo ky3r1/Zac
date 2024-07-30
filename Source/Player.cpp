@@ -7,6 +7,7 @@
 #include "Enemy.h"
 #include "Mathf.h"
 #include "AnimationComp.h"
+#include "StateMachine.h"
 
 
 // コンストラクタ
@@ -119,7 +120,7 @@ void Player::CharacterControl(float elapsedTime)
 	DirectX::XMFLOAT3 move_vec=GetMoveVec();
 	{
 #if 1
-		movement->Turn(elapsedTime,move_vec.x, move_vec.z);
+		movement->Turn(elapsedTime, move_vec);
 		movement->Move(move_vec);
 #else
 		// オイラーで制御する場合

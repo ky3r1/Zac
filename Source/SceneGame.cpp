@@ -1,20 +1,19 @@
 ﻿#include "SceneGame.h"
 
-//CameraInclude
+//Camera
 #include "Camera.h"
 
-//CharacterInclude
-#include "EffectManager.h"
-#include "MouseManager.h"
+//Character
 
-//SceneIncldue
+
+//Scene
 #include "SceneManager.h"
 #include "SceneLoading.h"
 #include "SceneResult.h"
 
-//StageIncldue
+//Stage
 //#include "StageManager.h"
-//#include "StageMain.h"
+#include "StageMain.h"
 //#include "StageMapChip.h"
 //#include "StageMapChip.h"
 
@@ -29,9 +28,12 @@
 #include "SphereTrackingObject.h"
 #include "AnimationComp.h"
 #include "AiComponent.h"
+#include "StateMachine.h"
 
 #include "Mathf.h"
 
+#include "EffectManager.h"
+#include "MouseManager.h"
 
 // 初期化
 void SceneGame::Initialize()
@@ -54,7 +56,6 @@ void SceneGame::Initialize()
 		actor->SetRaycastFlg(true);
 		actor->SetActorType(ActorType::Stage);
 		actor->AddComponent<StageMain>();
-		actor->AddComponent<AiComponent>();
 	}
 #endif // ALLSTAGE
 
@@ -76,6 +77,7 @@ void SceneGame::Initialize()
 		actor->AddComponent<Movement>();
 		actor->AddComponent<VsCollision>();
 		actor->AddComponent<AnimationComp>();
+		actor->AddComponent<StateMachine>();
 		actor->AddComponent<Player>();
 	}
 #endif // PLAYER
@@ -88,7 +90,7 @@ void SceneGame::Initialize()
 	}
 #ifdef ALLENEMY
 	{
-		for(int i = 0; i < 10; i++)
+		for(int i = 0; i < 5; i++)
 		// Enemy
 		{
 			const char* filename = "Data/Model/Slime/Slime.mdl";
@@ -105,6 +107,7 @@ void SceneGame::Initialize()
 			actor->SetActorType(ActorType::Enemy);
 			actor->AddComponent<Movement>();
 			actor->AddComponent<VsCollision>();
+			actor->AddComponent<AiComponent>();
 			actor->AddComponent<Enemy>();
 		}
 		//// Enemy

@@ -514,7 +514,7 @@ bool Collision::HPbarPoint(DirectX::XMFLOAT3 player_position, DirectX::XMFLOAT3 
     return HPpoint;
 }
 
-bool Collision::InPoint(DirectX::XMFLOAT3 bottom_left_front, DirectX::XMFLOAT3 top_right_back, DirectX::XMFLOAT3 move_pos)
+bool Collision::RectInPoint(DirectX::XMFLOAT3 bottom_left_front, DirectX::XMFLOAT3 top_right_back, DirectX::XMFLOAT3 move_pos)
 {
     //Xé≤ÅAYé≤ÅAZé≤ÇªÇÍÇºÇÍÇÃîÕàÕì‡Ç…ì¸Ç¡ÇƒÇ¢ÇÈÇ©ÇÃîªíË
     //bottom_left_front < top_right_backÇ∂Ç·Ç»Ç¢Ç∆í ÇÁÇ»Ç¢
@@ -531,7 +531,7 @@ bool Collision::InPoint(DirectX::XMFLOAT3 bottom_left_front, DirectX::XMFLOAT3 t
     return false;
 }
 
-bool Collision::InPoint2D(DirectX::XMFLOAT3 bottom_left_front, DirectX::XMFLOAT3 top_right_back, DirectX::XMFLOAT3 move_pos, Axis2D axis)
+bool Collision::RectInPoint2D(DirectX::XMFLOAT3 bottom_left_front, DirectX::XMFLOAT3 top_right_back, DirectX::XMFLOAT3 move_pos, Axis2D axis)
 {
     //2é≤ÇªÇÍÇºÇÍÇÃîÕàÕì‡Ç…ì¸Ç¡ÇƒÇ¢ÇÈÇ©ÇÃîªíË
     //bottom_left_front < top_right_backÇ∂Ç·Ç»Ç¢Ç∆í ÇÁÇ»Ç¢
@@ -578,6 +578,12 @@ bool Collision::InPoint2D(DirectX::XMFLOAT3 bottom_left_front, DirectX::XMFLOAT3
             return true;
         }
     }
+    return false;
+}
+
+bool Collision::SphereInPoint(DirectX::XMFLOAT3 center, float radius, DirectX::XMFLOAT3 move_pos)
+{
+    if (Mathf::Distance(center, move_pos) < radius)return true;
     return false;
 }
 

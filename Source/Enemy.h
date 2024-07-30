@@ -2,7 +2,6 @@
 #include "Graphics/Shader.h"
 #include "Character.h"
 #include "Player.h"
-#include "StateMachine.h"
 
 enum class EnemySlimeAnimation
 {
@@ -39,8 +38,10 @@ public:
 	virtual void DrawImGui() override;
 
 	void DrawDebug() override;
-private:
-	// キャラクター操作
-	void Move(float elapsedTime);
-private:
+public:
+    // 検索範囲
+    float GetSearchRange() const { return search_range; }
+    void SetSearchRange(float range) { search_range = range; }
+protected:
+	float search_range = 10.0f;
 };

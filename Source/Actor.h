@@ -188,6 +188,10 @@ public:
     void SetRayPosition(const DirectX::XMFLOAT3& position) { ray_position = position; }
     const DirectX::XMFLOAT3& GetRayPosition() const { return ray_position; }
 
+	//ターゲット
+    void SetTarget(std::shared_ptr<Actor> target) { this->target = target.get(); }
+    Actor* GetTarget() const { return target; }
+
 public:
     //////////////////////////////////////////////////////////////////////////
     //							コンポーネント							//
@@ -242,6 +246,9 @@ private:
 	//Ray情報
 	bool			  raycast_flg = false;
     DirectX::XMFLOAT3 ray_position = { 0,0,0 };
+	//追跡する対象
+	Actor* target;
+
 
 	std::unique_ptr<Model>	model;
 	std::vector<std::shared_ptr<Component>>	components;

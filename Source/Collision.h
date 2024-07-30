@@ -57,18 +57,24 @@ public:
     );
 
     //bottom_left_front`top_right_back“à‚Émove_pos‚ª“ü‚é‚Ætrue‚ğ•Ô‚·
-    static bool InPoint(
+    static bool RectInPoint(
         DirectX::XMFLOAT3 bottom_left_front,
         DirectX::XMFLOAT3 top_right_back,
         DirectX::XMFLOAT3 move_pos
     );
 
     //bottom_left_front`top_right_back“à‚ÌXZ•½–Ê‚É‚Émove_pos‚ª“ü‚é‚Ætrue‚ğ•Ô‚·
-    static bool InPoint2D(
+    static bool RectInPoint2D(
         DirectX::XMFLOAT3 bottom_left_front,
         DirectX::XMFLOAT3 top_right_back,
         DirectX::XMFLOAT3 move_pos,
         Axis2D axis
+    );
+    // ‹…‚Æ“_‚ÌŒğ·”»’è
+    static bool SphereInPoint(
+        DirectX::XMFLOAT3 center,
+        float radius,
+        DirectX::XMFLOAT3 move_pos
     );
 
     //“_‚ª‰~“à‚É“ü‚Á‚Ä‚¢‚é‚©
