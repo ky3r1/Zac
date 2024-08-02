@@ -12,6 +12,7 @@ public:
 
     //ImGui描画
     void DrawImGui()override;
+    void DrawDebug()override;
 
 
     //初期化
@@ -46,8 +47,8 @@ private:
 public:
     //セッター・ゲッター
     //移動速度
-    float GetMoveSpeed()const { return moveSpeed; }
-    void SetMoveSpeed(float value) { moveSpeed = value; }
+    float GetMoveSpeed()const { return move_speed; }
+    void SetMoveSpeed(float value) { move_speed = value; }
     //旋回速度
     float GetTurnSpeed()const { return turnSpeed; }
     void SetTurnSpeed(float value) { turnSpeed = value; }
@@ -61,8 +62,8 @@ public:
     DirectX::XMFLOAT3 GetVelocity()const { return velocity; }
     void SetVelocity(const DirectX::XMFLOAT3& value) { velocity = value; }
     //摩擦
-    DirectX::XMFLOAT3 GetFriction()const { return friction; }
-    void SetFriction(const DirectX::XMFLOAT3& value) { friction = value; }
+    float GetFriction()const { return friction; }
+    void SetFriction(const float& value) { friction = value; }
     //地面の上
     bool GetOnGround()const { return on_ground; }
     void SetOnGround(bool value) { on_ground = value; }
@@ -70,11 +71,11 @@ public:
     DirectX::XMFLOAT3 GetNormal()const { return normal; }
     void SetNormal(const DirectX::XMFLOAT3& value) { normal = value; }
 private:
-    float		moveSpeed = 5.0f;
+    float		move_speed = 5.0f;
     float		turnSpeed = 6.28f;
 
     DirectX::XMFLOAT3 velocity = {};
-    DirectX::XMFLOAT3 friction = { 0.10f,0.00f,0.10f};
+    float friction = { 0.30f };
 
     float       gravity = 0.005f;
     float       now_gravity = 0;

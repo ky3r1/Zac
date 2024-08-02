@@ -20,7 +20,8 @@ void TrackingObject::Start()
     default_position = desired_position;
     Movement* movement = GetActor()->GetComponent<Movement>().get();
     movement->SetGravity(0.0f);
-    movement->SetFriction({ 0.0f,0.0f,0.0f });
+    movement->SetFriction({ 0.0f});
+    movement->SetMoveSpeed(1.0f);
 }
 
 void TrackingObject::Update(float elapsedTime)

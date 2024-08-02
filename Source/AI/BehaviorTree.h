@@ -5,7 +5,7 @@ class ActionBase;
 class JudgmentBase;
 class NodeBase;
 class BehaviorData;
-class EnemyBlueSlime;
+class Enemy;
 
 // ビヘイビアツリー
 class BehaviorTree
@@ -23,7 +23,7 @@ public:
 
 public:
 	BehaviorTree() :root(nullptr) , owner(nullptr) {}
-	BehaviorTree(EnemyBlueSlime* enemy) :root(nullptr) , owner(enemy){}
+	BehaviorTree(Enemy* enemy) :root(nullptr) , owner(enemy){}
 	~BehaviorTree();
 
 	// 実行ノードを推論する
@@ -43,5 +43,5 @@ private:
 private:
 	// ルートノード
 	NodeBase* root;
-	EnemyBlueSlime* owner;
+	Enemy* owner;
 };

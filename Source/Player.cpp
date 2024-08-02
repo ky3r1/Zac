@@ -25,7 +25,7 @@ void Player::Start()
 {
 	GetActor()->SetHealth(GetActor()->GetMaxHealth());
 	movement = GetActor()->GetComponent<Movement>();
-	movement.get()->SetMoveSpeed(5.0f);
+	movement.get()->SetMoveSpeed(0.8f);
 	vs_collision=GetActor()->GetComponent<VsCollision>();
 	GetActor()->SetAttitudeControlFlag(true);
 	// 適当にモーション再生
@@ -100,6 +100,8 @@ void Player::Update(float elapsedTime)
 void Player::DrawImGui()
 {
 	Character::DrawImGui();
+	DirectX::XMFLOAT3 a=GetMoveVec();
+	ImGui::InputFloat3("Move Vec", &a.x);
 }
 
 void Player::DrawDebug()

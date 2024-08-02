@@ -4,7 +4,7 @@
 #include "Camera.h"
 
 //Character
-
+#include "Player.h"
 
 //Scene
 #include "SceneManager.h"

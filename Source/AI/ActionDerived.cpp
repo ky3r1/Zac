@@ -65,6 +65,8 @@ ActionBase::State WanderAction::Run(float elapsedTime)
 	case 0:
 		// 徘徊モーション設定
 		owner->GetActor()->GetModel()->PlayAnimation(0, false);
+        // 目標地点設定
+        owner->SetTargetPosition({ static_cast<float>(rand() % 20 - 10), static_cast<float>(rand() % 20 - 10), static_cast<float>(rand() % 20 - 10) });
 		step++;
 		break;
 	case 1:

@@ -2,43 +2,41 @@
 #include "Mathf.h"
 #include "TrackingObject.h"
 
-//#include "BehaviorTree.h"
-//#include "BehaviorData.h"
-//#include "NodeBase.h"
-//#include "ActionBehavior.h"
-//#include "JudgmentBehavior.h"
+#include "AI/BehaviorTree.h"
+#include "AI/BehaviorData.h"
+#include "AI/NodeBase.h"
+#include "AI/JudgmentDerived.h"
+#include "AI/ActionDerived.h"
 
 void Enemy::Start()
 {
     GetActor()->SetHealth(GetActor()->GetMaxHealth());
     movement = GetActor()->GetComponent<Movement>();
-    movement.get()->SetMoveSpeed(1.0f);
+    movement.get()->SetMoveSpeed(0.08f);
     vs_collision=GetActor()->GetComponent<VsCollision>();
     GetActor()->SetAttitudeControlFlag(true);
-    //GetActor().get()->SetScale(DirectX::XMFLOAT3(5.0f, 5.0f, 5.0f));
-    //// ビヘイビアツリー設定
-    //behaviorData = new BehaviorData();
-    //aiTree = new BehaviorTree();
-    //// BehaviorTree図を基にBehaviorTreeを構築
-    //// ノードを追加
-    //GetActor()->AddComponent<EscapeJudgment>();
-    //aiTree->AddNode("", "Root", 0, BehaviorTree::SelectRule::Priority, nullptr, nullptr);
-    //aiTree->AddNode("Root", "Escape", 3, BehaviorTree::SelectRule::Sequence, new EscapeJudgment(), nullptr);
-    //aiTree->AddNode("Root", "Battle", 4, BehaviorTree::SelectRule::Priority, new BattleJudgment(), nullptr);
-    //aiTree->AddNode("Root", "Scout", 5, BehaviorTree::SelectRule::Priority, nullptr, nullptr);
+    // ビヘイビアツリー設定
+    behaviorData = new BehaviorData();
+    aiTree = new BehaviorTree();
+    // BehaviorTree図を基にBehaviorTreeを構築
+    // ノードを追加
+    aiTree->AddNode("", "Root", 0, BehaviorTree::SelectRule::Priority, nullptr, nullptr);
+    aiTree->AddNode("Root", "Escape", 3, BehaviorTree::SelectRule::Sequence, new EscapeJudgment(this), nullptr);
+    aiTree->AddNode("Root", "Battle", 4, BehaviorTree::SelectRule::Priority, new BattleJudgment(this), nullptr);
+    aiTree->AddNode("Root", "Scout", 5, BehaviorTree::SelectRule::Priority, nullptr, nullptr);
 
 
-    //aiTree->AddNode("Scout", "Wander", 1, BehaviorTree::SelectRule::Non, new WanderJudgment(), new WanderAction());
-    //aiTree->AddNode("Scout", "Idle", 2, BehaviorTree::SelectRule::Non, nullptr, new IdleAction());
+    aiTree->AddNode("Scout", "Wander", 1, BehaviorTree::SelectRule::Non, new WanderJudgment(this), new WanderAction(this));
+    aiTree->AddNode("Scout", "Idle", 2, BehaviorTree::SelectRule::Non, nullptr, new IdleAction(this));
 
-    //aiTree->AddNode("Battle", "Attack", 1, BehaviorTree::SelectRule::Random, new AttackJudgment(), nullptr);
-    //aiTree->AddNode("Attack", "Normal", 1, BehaviorTree::SelectRule::Non, nullptr, new NormalAction());
-    //aiTree->AddNode("Attack", "Skill", 2, BehaviorTree::SelectRule::Non, nullptr, new SkillAction());
+    aiTree->AddNode("Battle", "Attack", 1, BehaviorTree::SelectRule::Random, new AttackJudgment(this), nullptr);
+    aiTree->AddNode("Attack", "Normal", 1, BehaviorTree::SelectRule::Non, nullptr, new NormalAction(this));
+    aiTree->AddNode("Attack", "Skill", 2, BehaviorTree::SelectRule::Non, nullptr, new SkillAction(this));
 
-    //aiTree->AddNode("Battle", "Pursuit", 2, BehaviorTree::SelectRule::Non, nullptr, new PursuitAction());
+    aiTree->AddNode("Battle", "Pursuit", 2, BehaviorTree::SelectRule::Non, nullptr, new PursuitAction(this));
 
-    //aiTree->AddNode("Escape", "Leave", 1, BehaviorTree::SelectRule::Non, new EscapeJudgment(), new LeaveAction());
-    //aiTree->AddNode("Escape", "Recover", 2, BehaviorTree::SelectRule::Non, nullptr, new RecoverAction());
+    aiTree->AddNode("Escape", "Leave", 1, BehaviorTree::SelectRule::Non, new EscapeJudgment(this), new LeaveAction(this));
+    aiTree->AddNode("Escape", "Recover", 2, BehaviorTree::SelectRule::Non, nullptr, new RecoverAction(this));
 
     // 適当にモーション再生
     Model* model = GetActor()->GetModel();
@@ -50,16 +48,26 @@ void Enemy::Start()
 
 void Enemy::Update(float elapsedTime)
 {
+    //// 現在実行されているノードが無ければ
+    //if (activeNode == nullptr)
+    //{
+    //    // 次に実行するノードを推論する。
+    //    activeNode = aiTree->ActiveNodeInference(behaviorData);
+    //}
+    //// 現在実行するノードがあれば
+    //if (activeNode != nullptr)
+    //{
+    //    // ビヘイビアツリーからノードを実行。
+    //    activeNode = aiTree->Run(activeNode, behaviorData, elapsedTime);
+    //}
+
+    GetActor()->GetComponent<Movement>()->MoveTarget(ActorManager::Instance().GetPlayer()->GetPosition(), elapsedTime);
+
     //エネミー同士の衝突判定
     if (vs_collision->CylinderVsCylinderPushing(ActorType::Enemy,nullptr))
     {
 
     }
-    ////RayCast
-    //{
-    //    vs_collision->RayCastAxisXZ(ActorType::Stage);
-    //    vs_collision->RayCastAxisY(ActorType::Stage);
-    //}
     if (GetActor()->GetHealth() <= 0)
     {
         GetActor()->SetDeadFlag(true);

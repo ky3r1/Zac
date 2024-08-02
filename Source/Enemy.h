@@ -1,11 +1,10 @@
 ﻿#pragma once
 #include "Graphics/Shader.h"
 #include "Character.h"
-#include "Player.h"
 
-//#include "BehaviorTree.h"
-//#include "BehaviorData.h"
-//#include "NodeBase.h"
+class BehaviorTree;
+class BehaviorData;
+class NodeBase;
 
 enum class EnemySlimeAnimation
 {
@@ -62,5 +61,9 @@ protected:
 	float search_range = 10.0f;
 	float attack_range = 4.0f;
 	float run_timer = 10.0f;
-	DirectX::XMFLOAT3 target_position;
+	DirectX::XMFLOAT3 target_position = { 0.0f, 0.0f, 0.0f };
+
+	BehaviorTree* aiTree = nullptr;
+	BehaviorData* behaviorData = nullptr;
+	NodeBase* activeNode = nullptr;
 };

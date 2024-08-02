@@ -67,11 +67,10 @@ DirectX::XMVECTOR a, b;
 }
 DirectX::XMFLOAT3 Mathf::Distance3(DirectX::XMFLOAT3 A, DirectX::XMFLOAT3 B)
 {
-    DirectX::XMVECTOR a, b;
     DirectX::XMFLOAT3 result;
-    a = DirectX::XMLoadFloat3(&A);
-    b = DirectX::XMLoadFloat3(&B);
-    DirectX::XMStoreFloat3(&result, DirectX::XMVector3Length(DirectX::XMVectorSubtract(a, b)));
+    result.x=sqrtf((A.x - B.x)*(A.x - B.x));
+    result.y=sqrtf((A.y - B.y)*(A.y - B.y));
+    result.z=sqrtf((A.z - B.z)*(A.z - B.z));
     return result;
 }
 
