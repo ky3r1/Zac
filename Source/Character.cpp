@@ -16,8 +16,9 @@ void Character::Update(float elapsedTime)
     //RayCast
     {
         //vs_collision->RayCastAxisYUnder();
-        vs_collision->RayCastAxisY();
         vs_collision->RayCastAxisXZ();
+        vs_collision->RayCastAxisY();
+        //vs_collision->RayCastAxisXZ();
     }
 }
 

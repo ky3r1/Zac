@@ -75,9 +75,9 @@ private:
     float		turnSpeed = 6.28f;
 
     DirectX::XMFLOAT3 velocity = {};
-    float friction = { 0.30f };
+    float friction = { 0.000f };
 
-    float       gravity = 0.005f;
+    float       gravity = 0.05f;
     float       now_gravity = 0;
     bool        on_ground = false;
 

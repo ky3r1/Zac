@@ -107,7 +107,7 @@ void Movement::Move(DirectX::XMFLOAT3 v)
 		//ˆÚ“®•ûŒüƒxƒNƒgƒ‹
 		{
 			velocity.x += v.x;
-			velocity.y += v.y;
+			//velocity.y += v.y;
 			velocity.z += v.z;
 		}
 	}
@@ -138,11 +138,20 @@ void Movement::MoveLocal(const DirectX::XMFLOAT3& direction, float elapsedTime)
 void Movement::MoveTarget(DirectX::XMFLOAT3 tp, float elapsedTime)
 {
 	//DirectX::XMFLOAT3 vec = Mathf::Distance3(GetActor()->GetPosition(),tp);
-	DirectX::XMFLOAT3 vec = Mathf::Distance3({0,0,0}, GetActor()->GetPosition());
-	//DirectX::XMFLOAT3 vec = Mathf::Distance3(GetActor()->GetPosition() ,{ 0,0,0 } );
+	DirectX::XMFLOAT3 vec = {};
+	DirectX::XMFLOAT3 zero = {};
+	DirectX::XMStoreFloat3(&vec,DirectX::XMVectorSubtract(DirectX::XMLoadFloat3(&tp), DirectX::XMLoadFloat3(&GetActor()->GetPosition())));
+	Turn(elapsedTime, vec);
+	//DirectX::XMFLOAT3 vec = Mathf::Distance3(GetActor()->GetPosition(), { 0,0,0 });
+	//DirectX::XMFLOAT3 pos = GetActor()->GetPosition();
+
 	float length = Mathf::Length(vec);
 	vec = { vec.x / length,vec.y / length,vec.z / length };
 	Move(vec);
+	//pos.x += vec.x*0.01f;
+	//pos.y += vec.y*0.01f;
+	//pos.z += vec.z*0.01f;
+	//GetActor()->SetPosition(pos);
 }
 
 void Movement::Turn(float elapsedTime, DirectX::XMFLOAT3 v)

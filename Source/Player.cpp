@@ -49,7 +49,7 @@ void Player::Update(float elapsedTime)
 	//Jump
 	if (gamePad.GetButtonDown() & GamePad::BTN_X)
 	{
-		movement->Jump(5.0f);
+		movement->Jump(10.0f);
 		//GetActor()->SetAnimation(Anim_JumpPeak, true);
 	}
 	{

@@ -15,7 +15,7 @@ ActionBase::State NormalAction::Run(float elapsedTime)
 		// 目標地点をプレイヤー位置に設定
 		owner->SetTargetPosition(ActorManager::Instance().GetPlayer()->GetPosition());
 		// アニメーション再生
-		owner->GetActor()->GetModel()->PlayAnimation(0, false);
+		owner->GetActor()->GetModel()->PlayAnimation(Enemy::Attack01, false);
 		step++;
 		break;
 	case 1:
@@ -41,12 +41,13 @@ ActionBase::State SkillAction::Run(float elapsedTime)
 			// 目標地点をプレイヤー位置に設定
 			owner->SetTargetPosition(ActorManager::Instance().GetPlayer()->GetPosition());
 			// アニメーション再生
-			owner->GetActor()->GetModel()->PlayAnimation(0, false);
+			owner->GetActor()->GetModel()->PlayAnimation(Enemy::Attack02, false);
 			step++;
 		case 1:
 			// アニメーションが終了しているとき
 			if (!owner->GetActor()->GetModel()->IsPlayAnimation())
 			{
+				owner->ShotObject();
 				step = 0;
 				// 攻撃成功を返す
 				return ActionBase::State::Complete;
@@ -64,9 +65,9 @@ ActionBase::State WanderAction::Run(float elapsedTime)
 	{
 	case 0:
 		// 徘徊モーション設定
-		owner->GetActor()->GetModel()->PlayAnimation(0, false);
+		owner->GetActor()->GetModel()->PlayAnimation(Enemy::WalkFront, true);
         // 目標地点設定
-        owner->SetTargetPosition({ static_cast<float>(rand() % 20 - 10), static_cast<float>(rand() % 20 - 10), static_cast<float>(rand() % 20 - 10) });
+        owner->SetTargetPosition({ static_cast<float>(rand() % 400 - 400 * 0.5f), owner->GetActor()->GetPosition().y, static_cast<float>(rand() % 400 - 400 * 0.5f) });
 		step++;
 		break;
 	case 1:
@@ -112,7 +113,7 @@ ActionBase::State PursuitAction::Run(float elapsedTime)
 		// 目標地点をプレイヤー位置に設定
 		owner->SetTargetPosition(ActorManager::Instance().GetPlayer()->GetPosition());
 		owner->SetRunTimer(Mathf::RandomRange(3.0f, 5.0f));
-		owner->GetActor()->GetModel()->PlayAnimation(0, true);
+		owner->GetActor()->GetModel()->PlayAnimation(Enemy::Run, true);
 		step++;
 		break;
 	case 1:
@@ -133,7 +134,7 @@ ActionBase::State PursuitAction::Run(float elapsedTime)
 		//float vz = targetPosition.z - position.z;
 		//float dist = sqrtf(vx * vx + vy * vy + vz * vz);
 		// 攻撃範囲にいるとき
-		if (Collision::SphereInPoint(owner->GetActor()->GetPosition(),owner->GetAttackRange(), ActorManager::Instance().GetPlayer()->GetPosition()))
+		if (Collision::SphereInPoint(owner->GetActor()->GetPosition(),owner->GetAdjacentAttackRange(), ActorManager::Instance().GetPlayer()->GetPosition()))
 		{
 			step = 0;
 			// 追跡成功を返す
@@ -159,7 +160,7 @@ ActionBase::State IdleAction::Run(float elapsedTime)
 	{
 	case 0:
 		owner->SetRunTimer(Mathf::RandomRange(3.0f, 5.0f));
-		owner->GetActor()->GetModel()->PlayAnimation(0, true);
+		owner->GetActor()->GetModel()->PlayAnimation(Enemy::IdleNormal, true);
 		step++;
 		break;
 	case 1:
@@ -170,7 +171,7 @@ ActionBase::State IdleAction::Run(float elapsedTime)
 		// 待機時間が過ぎた時
 		if (runTimer <= 0.0f)
 		{
-			owner->SetTargetPosition({ static_cast<float>(rand() % 20 - 10), static_cast<float>(rand() % 20 - 10), static_cast<float>(rand() % 20 - 10) });
+			owner->SetTargetPosition({ static_cast<float>(rand() % 400 - 400*0.5f), owner->GetActor()->GetPosition().y, static_cast<float>(rand() % 400 - 400 * 0.5f) });
 			step = 0;
 			return ActionBase::State::Complete;
 		}
@@ -201,7 +202,7 @@ ActionBase::State LeaveAction::Run(float elapsedTime)
 		targetPosition.z *= -5;
 		owner->SetTargetPosition(targetPosition);
 
-		owner->GetActor()->GetModel()->PlayAnimation(0, true);
+		owner->GetActor()->GetModel()->PlayAnimation(Enemy::Run, true);
 		step++;
 		break;
 	case 1:
@@ -226,7 +227,7 @@ ActionBase::State RecoverAction::Run(float elapsedTime)
 	switch (step)
 	{
 	case 0:
-		owner->GetActor()->GetModel()->PlayAnimation(0, true);
+		owner->GetActor()->GetModel()->PlayAnimation(Enemy::Taunt, true);
 		step++;
 		break;
 	case 1:

@@ -27,13 +27,34 @@ bool AttackJudgment::Judgment()
 	float vz = targetPosition.z - position.z;
 	float dist = sqrtf(vx * vx + vy * vy + vz * vz);
 
-	if (dist < owner->GetAttackRange())
+	if (dist < owner->GetAdjacentAttackRange())
 	{
 		// AttackNode‚Ö‘JˆÚ‚Å‚«‚é
 		return true;
 	}
 	return false;
 }
+
+//// AttackNode‚É‘JˆÚ‚Å‚«‚é‚©”»’è
+//bool AdjacentAttackJudgment::Judgment()
+//{
+//	// ‘ÎÛ‚Æ‚Ì‹——£‚ðŽZo
+//	DirectX::XMFLOAT3 position = owner->GetActor()->GetPosition();
+//	DirectX::XMFLOAT3 targetPosition = ActorManager::Instance().GetPlayer()->GetPosition();
+//
+//	float vx = targetPosition.x - position.x;
+//	float vy = targetPosition.y - position.y;
+//	float vz = targetPosition.z - position.z;
+//	float dist = sqrtf(vx * vx + vy * vy + vz * vz);
+//
+//	if (dist < owner->GetAdjacentAttackRange())
+//	{
+//		// AttackNode‚Ö‘JˆÚ‚Å‚«‚é
+//		return true;
+//	}
+//	return false;
+//}
+
 
 
 

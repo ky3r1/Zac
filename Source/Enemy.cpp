@@ -12,7 +12,7 @@ void Enemy::Start()
 {
     GetActor()->SetHealth(GetActor()->GetMaxHealth());
     movement = GetActor()->GetComponent<Movement>();
-    movement.get()->SetMoveSpeed(0.08f);
+    movement.get()->SetMoveSpeed(0.3f);
     vs_collision=GetActor()->GetComponent<VsCollision>();
     GetActor()->SetAttitudeControlFlag(true);
     // ビヘイビアツリー設定
@@ -48,21 +48,25 @@ void Enemy::Start()
 
 void Enemy::Update(float elapsedTime)
 {
-    //// 現在実行されているノードが無ければ
-    //if (activeNode == nullptr)
-    //{
-    //    // 次に実行するノードを推論する。
-    //    activeNode = aiTree->ActiveNodeInference(behaviorData);
-    //}
-    //// 現在実行するノードがあれば
-    //if (activeNode != nullptr)
-    //{
-    //    // ビヘイビアツリーからノードを実行。
-    //    activeNode = aiTree->Run(activeNode, behaviorData, elapsedTime);
-    //}
+    // 現在実行されているノードが無ければ
+    if (activeNode == nullptr)
+    {
+        // 次に実行するノードを推論する。
+        activeNode = aiTree->ActiveNodeInference(behaviorData);
+    }
+    // 現在実行するノードがあれば
+    if (activeNode != nullptr)
+    {
+        // ビヘイビアツリーからノードを実行。
+        activeNode = aiTree->Run(activeNode, behaviorData, elapsedTime);
+    }
 
-    GetActor()->GetComponent<Movement>()->MoveTarget(ActorManager::Instance().GetPlayer()->GetPosition(), elapsedTime);
-
+    //GetActor()->GetComponent<Movement>()->MoveTarget(ActorManager::Instance().GetPlayer()->GetPosition(), elapsedTime);
+    //{
+    //    DirectX::XMFLOAT3 vec_pe;
+    //    DirectX::XMStoreFloat3(&vec_pe, DirectX::XMVectorSubtract(DirectX::XMLoadFloat3(&ActorManager::Instance().GetPlayer()->GetPosition()), DirectX::XMLoadFloat3(&GetActor()->GetPosition())));
+    //    GetActor()->GetComponent<Movement>()->Turn(elapsedTime, vec_pe);
+    //}
     //エネミー同士の衝突判定
     if (vs_collision->CylinderVsCylinderPushing(ActorType::Enemy,nullptr))
     {
@@ -76,7 +80,7 @@ void Enemy::Update(float elapsedTime)
             {
                 const char* filename = "Data/Model/Cube/Cube.mdl";
                 std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
-                std::string name = std::string("ApproachingTimeObject:") + std::string(GetActor()->GetName()) + std::string(":") + std::to_string(i);
+                std::string name = std::string("TrackingObject:") + std::string(GetActor()->GetName()) + std::string(":") + std::to_string(i);
                 actor->LoadModel(filename);
                 actor->SetName(name);
                 DirectX::XMFLOAT3 position = GetActor()->GetPosition();
@@ -103,6 +107,30 @@ void Enemy::Update(float elapsedTime)
     Character::Update(elapsedTime);
 }
 
+void Enemy::ShotObject()
+{
+    const char* filename = "Data/Model/Cube/Cube.mdl";
+    std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
+    std::string name = std::string("TrackingObject:") + std::string(GetActor()->GetName()) + std::string(":") + std::string("Shot");
+    actor->LoadModel(filename);
+    actor->SetName(name);
+    DirectX::XMFLOAT3 position = GetActor()->GetPosition();
+    actor->SetPosition({ position.x, position.y + 3, position.z });
+    actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
+    actor->SetScale(DirectX::XMFLOAT3(5.0f, 5.0f, 5.0f));
+    actor->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 0.5f));
+    actor->SetRadius(3.0f);
+    actor->SetActorType(ActorType::Object);
+    actor->AddComponent<VsCollision>();
+    actor->AddComponent<Movement>();
+    actor->AddComponent<TrackingObject>();
+    actor->GetComponent<TrackingObject>()->SetMaxRuntimer((0.0f));
+    actor->GetComponent<TrackingObject>()->SetHitCollisionType(HitCollisionType::Damage);
+    actor->GetComponent<TrackingObject>()->SetHitNum(1.0f);
+    actor->GetComponent<TrackingObject>()->SetTargetActorType(ActorType::Player);
+    //actor->GetComponent<TrackingObject>()->SetDesiredPosition({ position.x + (rand() % 30 - 10), position.y + 3 + (rand() % 20), position.z + (rand() % 30 - 10) });
+}
+
 bool Enemy::Search(DirectX::XMFLOAT3 target_position_s)
 {
     if (Collision::SphereInPoint(GetActor()->GetPosition(), search_range, target_position_s))return true;
@@ -124,8 +152,34 @@ void Enemy::DrawDebug()
     DirectX::XMFLOAT3 position = GetActor()->GetPosition();
     float radius = GetActor()->GetRadius();
     float height = GetActor()->GetHeight();
-    DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(1, 0, 0, 1);
-    Graphics::Instance().GetDebugRenderer()->DrawSphere(position, radius, color);
-    //衝突判定用のデバッグ円柱を描画
-    Graphics::Instance().GetDebugRenderer()->DrawCylinder(position, radius, height, color);
+    {
+        DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(1, 0, 0, 1);
+        //当たり判定用のデバッグ球を描画
+        Graphics::Instance().GetDebugRenderer()->DrawSphere(position, radius, color);
+    }
+    {
+        DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(1, 0, 0, 1);
+        //衝突判定用のデバッグ円柱を描画
+        Graphics::Instance().GetDebugRenderer()->DrawCylinder(position, radius, height, color);
+    }
+    {
+        DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(1, 0, 1, 1);
+        //近接攻撃範囲
+        Graphics::Instance().GetDebugRenderer()->DrawCylinder(position, adjacent_attack_range, 1.0f, color);
+    }
+    {
+        DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(0.8f, 0.3f, 0.3f, 1);
+        //遠距離攻撃範囲
+        Graphics::Instance().GetDebugRenderer()->DrawCylinder(position, remote_attack_range, 1.0f, color);
+    }
+    {
+        DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(1, 1, 0, 1);
+        //索敵範囲
+        Graphics::Instance().GetDebugRenderer()->DrawCylinder(position, search_range, 1.0f, color);
+    }
+    {
+        DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(0.0f, 0.5f, 1.0f, 1);
+        //当たり判定用のデバッグ球を描画
+        Graphics::Instance().GetDebugRenderer()->DrawSphere(target_position, 3.0f, color);
+    }
 }

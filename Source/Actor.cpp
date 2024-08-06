@@ -177,6 +177,10 @@ void Actor::OnGUI()
         {
 			parameter = parameter_backup;
         }
+		if (ImGui::Button("Death"))
+		{
+			ActorManager::Instance().Remove(shared_from_this());
+		}
 	}
 
 	// コンポーネント

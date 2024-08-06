@@ -22,6 +22,15 @@ public:
 	bool Judgment();
 };
 
+//// AttackNode‚É‘JˆÚ‚Å‚«‚é‚©”»’è
+//class AdjacentAttackJudgment : public JudgmentBase
+//{
+//public:
+//	AdjacentAttackJudgment(Enemy* enemy) :JudgmentBase(enemy) {};
+//	// ”»’è
+//	bool Judgment();
+//};
+
 // SkillNode‚É‘JˆÚ‚Å‚«‚é‚©”»’è
 class SkillShotJudgment : public JudgmentBase
 {

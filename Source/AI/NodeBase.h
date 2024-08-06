@@ -74,4 +74,5 @@ protected:
 	NodeBase*					parent;			// 親ノード
 	NodeBase*					sibling;		// 兄弟ノード
 	int							hierarchyNo;	// 階層番号
+	int							animation_num;	//アニメーション用番号設定
 };
