@@ -22,23 +22,32 @@ public:
 	bool Judgment();
 };
 
-//// AttackNode‚É‘JˆÚ‚Å‚«‚é‚©”»’è
-//class AdjacentAttackJudgment : public JudgmentBase
-//{
-//public:
-//	AdjacentAttackJudgment(Enemy* enemy) :JudgmentBase(enemy) {};
-//	// ”»’è
-//	bool Judgment();
-//};
-
-// SkillNode‚É‘JˆÚ‚Å‚«‚é‚©”»’è
-class SkillShotJudgment : public JudgmentBase
+// ShortAttackNode‚É‘JˆÚ‚Å‚«‚é‚©”»’è
+class ShortAttackJudgment : public JudgmentBase
 {
 public:
-	SkillShotJudgment(Enemy* enemy) :JudgmentBase(enemy) {};
+	ShortAttackJudgment(Enemy* enemy) :JudgmentBase(enemy) {};
 	// ”»’è
 	bool Judgment();
 };
+
+// LongAttackNode‚É‘JˆÚ‚Å‚«‚é‚©”»’è
+class LongAttackJudgment : public JudgmentBase
+{
+public:
+	LongAttackJudgment(Enemy* enemy) :JudgmentBase(enemy) {};
+	// ”»’è
+	bool Judgment();
+};
+
+//// SkillNode‚É‘JˆÚ‚Å‚«‚é‚©”»’è
+//class SkillShotJudgment : public JudgmentBase
+//{
+//public:
+//	SkillShotJudgment(Enemy* enemy) :JudgmentBase(enemy) {};
+//	// ”»’è
+//	bool Judgment();
+//};
 
 // WanderNode‚É‘JˆÚ‚Å‚«‚é‚©”»’è
 class WanderJudgment : public JudgmentBase

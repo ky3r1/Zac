@@ -23,6 +23,8 @@ ActionBase::State NormalAction::Run(float elapsedTime)
 		// アニメーションが終了しているとき
 		if (!owner->GetActor()->GetModel()->IsPlayAnimation())
 		{
+			owner->SetAttackFlag(false);
+			ActorManager::Instance().GetPlayer()->TakeDamage(1.0f);
 			step = 0;
 			// 攻撃成功を返す
 			return ActionBase::State::Complete;
@@ -47,6 +49,7 @@ ActionBase::State SkillAction::Run(float elapsedTime)
 			// アニメーションが終了しているとき
 			if (!owner->GetActor()->GetModel()->IsPlayAnimation())
 			{
+				owner->SetAttackFlag(false);
 				owner->ShotObject();
 				step = 0;
 				// 攻撃成功を返す
@@ -125,16 +128,8 @@ ActionBase::State PursuitAction::Run(float elapsedTime)
 		// 目的地点へ移動
 		owner->GetActor()->GetComponent<Movement>()->MoveTarget(owner->GetTargetPosition(), elapsedTime);
 
-		//// プレイヤーとの距離を計算
-		//DirectX::XMFLOAT3 position = owner->GetPosition();
-		//DirectX::XMFLOAT3 targetPosition = owner->GetTargetPosition();
-
-		//float vx = targetPosition.x - position.x;
-		//float vy = targetPosition.y - position.y;
-		//float vz = targetPosition.z - position.z;
-		//float dist = sqrtf(vx * vx + vy * vy + vz * vz);
-		// 攻撃範囲にいるとき
-		if (Collision::SphereInPoint(owner->GetActor()->GetPosition(),owner->GetAdjacentAttackRange(), ActorManager::Instance().GetPlayer()->GetPosition()))
+		// 遠距離攻撃範囲にいるとき
+		if (owner->GetAttackFlag() && Collision::SphereInPoint(owner->GetActor()->GetPosition(), owner->GetLongAttackRange(), ActorManager::Instance().GetPlayer()->GetPosition()))
 		{
 			step = 0;
 			// 追跡成功を返す

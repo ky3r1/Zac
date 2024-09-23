@@ -1,0 +1,477 @@
+{
+	"asset":
+	{
+		"version": "2.0",
+		"generator": "Unreal Engine 5.4.3"
+	},
+	"scene": 0,
+	"accessors": [
+		{
+			"bufferView": 0,
+			"count": 46,
+			"type": "MAT4",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 1,
+			"count": 6045,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"bufferView": 2,
+			"count": 4651,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [ -0.992265821, 0.593082249, -0.824395895 ],
+			"max": [ 0.887813151, 2.21193671, 0.546164453 ]
+		},
+		{
+			"bufferView": 3,
+			"count": 4651,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 4,
+			"count": 4651,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 5,
+			"count": 4651,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 6,
+			"count": 4651,
+			"type": "VEC4",
+			"componentType": 5121
+		},
+		{
+			"bufferView": 7,
+			"count": 4651,
+			"type": "VEC4",
+			"componentType": 5121,
+			"normalized": true
+		}
+	],
+	"buffers": [
+		{
+			"uri": "Beholder_SK.bin",
+			"byteLength": 275492
+		}
+	],
+	"bufferViews": [
+		{
+			"buffer": 0,
+			"byteLength": 2944
+		},
+		{
+			"buffer": 0,
+			"byteLength": 12090,
+			"byteOffset": 2944,
+			"target": 34963
+		},
+		{
+			"buffer": 0,
+			"byteLength": 55812,
+			"byteOffset": 15036,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 55812,
+			"byteOffset": 70848,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 74416,
+			"byteOffset": 126660,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 37208,
+			"byteOffset": 201076,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 18604,
+			"byteOffset": 238284,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 18604,
+			"byteOffset": 256888,
+			"target": 34962
+		}
+	],
+	"images": [
+		{
+			"uri": "DefaultPBR_MAT_MetallicRoughness.png"
+		},
+		{
+			"uri": "DefaultPBR_MAT_Emissive.png"
+		},
+		{
+			"uri": "BasecolorDefault_TEX.png"
+		}
+	],
+	"materials": [
+		{
+			"name": "DefaultPBR_MAT",
+			"pbrMetallicRoughness":
+			{
+				"baseColorTexture":
+				{
+					"index": 0
+				},
+				"metallicRoughnessTexture":
+				{
+					"index": 1
+				}
+			},
+			"emissiveTexture":
+			{
+				"index": 2
+			},
+			"emissiveFactor": [ 1, 1, 1 ],
+			"extensions":
+			{
+				"KHR_materials_emissive_strength":
+				{
+					"emissiveStrength": 67.1875
+				}
+			}
+		}
+	],
+	"meshes": [
+		{
+			"name": "Beholder_SK",
+			"primitives": [
+				{
+					"attributes":
+					{
+						"POSITION": 2,
+						"NORMAL": 3,
+						"TANGENT": 4,
+						"TEXCOORD_0": 5,
+						"JOINTS_0": 6,
+						"WEIGHTS_0": 7
+					},
+					"indices": 1,
+					"material": 0
+				}
+			]
+		}
+	],
+	"nodes": [
+		{
+			"skin": 0,
+			"mesh": 0,
+			"children": [ 1 ]
+		},
+		{
+			"name": "Root",
+			"translation": [ -1.14015054e-33, 1.25189483, -0.188804522 ],
+			"rotation": [ 0.258791238, -0.258791268, 0.658047915, 0.658047974 ],
+			"children": [ 2 ]
+		},
+		{
+			"name": "Body",
+			"translation": [ 0.276937842, -9.76564468e-18, 2.84217088e-16 ],
+			"rotation": [ 0.360327631, -7.9182817e-17, 0.932825923, -3.50554081e-17 ],
+			"children": [ 3, 4, 5, 6, 7, 8, 12, 13, 18, 23, 28, 33, 34, 39, 40, 45, 46 ]
+		},
+		{
+			"name": "BottomBodyCTRL",
+			"translation": [ 0.330166698, -1.04971437e-16, 6.661338e-18 ],
+			"rotation": [ 0.00429434841, 0.00429434841, -0.707093775, -0.707093775 ]
+		},
+		{
+			"name": "TopBodyCTRL",
+			"translation": [ -0.322940201, 1.03283505e-16, -0.00813619699 ],
+			"rotation": [ 0.00429434841, 0.00429434841, -0.707093775, -0.707093775 ]
+		},
+		{
+			"name": "LeftBodyCTRL",
+			"translation": [ -0.00598617084, 0.336504787, 8.50216093e-05 ],
+			"rotation": [ 0.00429434841, 0.00429434841, -0.707093775, -0.707093775 ]
+		},
+		{
+			"name": "RightBodyCTRL",
+			"translation": [ -0.00598807866, -0.336504996, 8.49984281e-05 ],
+			"rotation": [ -0.707093775, -0.707093775, -0.00429434841, -0.00429434841 ]
+		},
+		{
+			"name": "RearBodyCTRL",
+			"translation": [ 0.00236391998, 2.17122867e-17, -0.299807131 ],
+			"rotation": [ 0.00429434841, 0.00429434841, -0.707093775, -0.707093775 ]
+		},
+		{
+			"name": "EyeCTRL",
+			"translation": [ -0.00859348383, -2.05797937e-17, 0.18079181 ],
+			"rotation": [ 0.691189945, -8.65741589e-17, 0.722673237, -1.92779839e-18 ],
+			"children": [ 9, 10, 11 ]
+		},
+		{
+			"name": "EyeBallCTRL",
+			"translation": [ 0.122425079, -2.123726e-17, -0 ],
+			"rotation": [ 0.491839498, -0.491839498, 0.508029521, -0.508029521 ]
+		},
+		{
+			"name": "UpperEyelidCTRL",
+			"translation": [ 0.125973329, -2.17481499e-17, -0 ],
+			"rotation": [ 0.491839498, -0.491839498, 0.508029521, -0.508029521 ]
+		},
+		{
+			"name": "LowerEyelidCTRL",
+			"translation": [ 0.125973329, -2.17481499e-17, -0 ],
+			"rotation": [ 0.491839498, -0.491839498, 0.508029521, -0.508029521 ]
+		},
+		{
+			"name": "Process01",
+			"translation": [ -0.415320069, 0.086976476, 0.0636507794 ],
+			"rotation": [ -0.00707820151, -0.0138425715, 0.996973515, 0.0761711299 ]
+		},
+		{
+			"name": "TentacleA01",
+			"translation": [ -0.230635196, 0.360397011, 0.0662987828 ],
+			"rotation": [ 0.0691865981, -0.0418190546, 0.883302033, 0.461781263 ],
+			"children": [ 14 ]
+		},
+		{
+			"name": "TentacleA02",
+			"translation": [ 0.125950187, -0.00172180252, 0.00110826385 ],
+			"rotation": [ -0.00349222356, -0.0146043217, -0.022516096, -0.999633729 ],
+			"children": [ 15 ]
+		},
+		{
+			"name": "TentacleA03",
+			"translation": [ 0.141550094, -0.00248649111, -0.000940014492 ],
+			"rotation": [ 0.00467149075, 0.0209778901, 0.0289008003, -0.999351323 ],
+			"children": [ 16 ]
+		},
+		{
+			"name": "TentacleA04",
+			"translation": [ 0.109061524, 0.00323441112, 0.00093126524 ],
+			"rotation": [ -0.000681647798, -0.00616136752, -0.00385349407, -0.999973357 ],
+			"children": [ 17 ]
+		},
+		{
+			"name": "TentacleA05",
+			"translation": [ 0.163875788, 1.84741105e-15, -5.15143469e-16 ],
+			"rotation": [ 0.315319777, -0.66847235, -0.327043593, -0.58886385 ]
+		},
+		{
+			"name": "TentacleE01",
+			"translation": [ -0.308383316, -0.215707466, 0.175414324 ],
+			"rotation": [ 0.242932349, 0.0744221061, 0.928456724, -0.270949364 ],
+			"children": [ 19 ]
+		},
+		{
+			"name": "TentacleE02",
+			"translation": [ 0.108211651, -0.00046596615, -0.000734827656 ],
+			"rotation": [ 0.00513772201, -0.0146748014, 0.00920014456, -0.999836802 ],
+			"children": [ 20 ]
+		},
+		{
+			"name": "TentacleE03",
+			"translation": [ 0.117826566, -8.71436496e-05, -0.000561416964 ],
+			"rotation": [ 0.00216690893, -0.0281248558, 0.00430314895, -0.9995929 ],
+			"children": [ 21 ]
+		},
+		{
+			"name": "TentacleE04",
+			"translation": [ 0.0837161914, 0.00156602508, -0.00380462431 ],
+			"rotation": [ 0.0092389863, 0.0419700332, 0.0177310109, -0.998918772 ],
+			"children": [ 22 ]
+		},
+		{
+			"name": "TentacleE05",
+			"translation": [ 0.150945902, 7.1054272e-17, -0 ],
+			"rotation": [ 0.000167832681, -0.0267527737, -0.0214374922, -0.999412179 ]
+		},
+		{
+			"name": "TentacleD01",
+			"translation": [ 0.0817113444, -0.411200315, -0.0627573505 ],
+			"rotation": [ -0.0568826571, -0.0587020032, 0.639173746, -0.764706075 ],
+			"children": [ 24 ]
+		},
+		{
+			"name": "TentacleD02",
+			"translation": [ 0.120079927, 0.000322919717, 3.05881003e-05 ],
+			"rotation": [ 0.00246652961, 0.00144961628, -0.014911741, -0.999884725 ],
+			"children": [ 25 ]
+		},
+		{
+			"name": "TentacleD03",
+			"translation": [ 0.158544809, -1.13686835e-15, -2.6645352e-17 ],
+			"rotation": [ 8.63903479e-05, 0.001911717, -0.000533415354, -0.999998033 ],
+			"children": [ 26 ]
+		},
+		{
+			"name": "TentacleD04",
+			"translation": [ 0.121089876, -0.00170119153, 0.00212299754 ],
+			"rotation": [ 0.00431050221, -0.0282012057, -0.0227985159, -0.999332964 ],
+			"children": [ 27 ]
+		},
+		{
+			"name": "TentacleD05",
+			"translation": [ 0.122879304, -8.52651264e-16, 1.7763568e-17 ],
+			"rotation": [ -0.00295326649, -0.0114792334, 0.00637089508, -0.999909461 ]
+		},
+		{
+			"name": "TentacleB01",
+			"translation": [ 0.196508422, 0.323405594, 0.185615942 ],
+			"rotation": [ -0.107625075, 0.226120457, -0.43348974, -0.86566335 ],
+			"children": [ 29 ]
+		},
+		{
+			"name": "TentacleB02",
+			"translation": [ 0.106914863, -0.0039164084, -0.000632694922 ],
+			"rotation": [ -0.0113043282, 0.0030888326, -0.0205965657, -0.999719203 ],
+			"children": [ 30 ]
+		},
+		{
+			"name": "TentacleB03",
+			"translation": [ 0.148178279, 0.0031903456, 0.000406954961 ],
+			"rotation": [ 0.00768222986, -0.00188960263, 0.0139583703, -0.999871373 ],
+			"children": [ 31 ]
+		},
+		{
+			"name": "TentacleB04",
+			"translation": [ 0.127119169, -0.0054821223, -0.00345650362 ],
+			"rotation": [ -0.0137410983, 0.0148083651, -0.0242181793, -0.999502659 ],
+			"children": [ 32 ]
+		},
+		{
+			"name": "TentacleB05",
+			"translation": [ 0.185585514, -2.84217088e-16, 4.26325632e-16 ],
+			"rotation": [ -0.0203507748, -0.00387972035, -0.0134501327, -0.999694884 ]
+		},
+		{
+			"name": "Process04",
+			"translation": [ 0.31862393, -0.221345514, 0.188254789 ],
+			"rotation": [ 0.0412628911, 0.202091098, 0.278565645, -0.938007355 ]
+		},
+		{
+			"name": "TentacleC01",
+			"translation": [ 0.391237587, -0.0837641805, -0.0566539802 ],
+			"rotation": [ -0.00829064939, -0.0897200406, 0.0807710588, -0.99265182 ],
+			"children": [ 35 ]
+		},
+		{
+			"name": "TentacleC02",
+			"translation": [ 0.0914200172, 0.000484131975, -0.000424126687 ],
+			"rotation": [ -0.0033555862, 0.0166658554, 0.0188953951, -0.999676943 ],
+			"children": [ 36 ]
+		},
+		{
+			"name": "TentacleC03",
+			"translation": [ 0.115852155, 6.62305829e-05, 5.15058782e-05 ],
+			"rotation": [ 0.00238885428, 0.0126588577, -0.0161978081, -0.9997859 ],
+			"children": [ 37 ]
+		},
+		{
+			"name": "TentacleC04",
+			"translation": [ 0.088513121, 0.000272977282, 0.000316888152 ],
+			"rotation": [ -0.00278757955, -0.0206695925, 0.0179060791, -0.999622107 ],
+			"children": [ 38 ]
+		},
+		{
+			"name": "TentacleC05",
+			"translation": [ 0.0981949419, -3.5527136e-17, 7.1054272e-17 ],
+			"rotation": [ 0.053211391, -0.000584259862, -0.0180323049, -0.998420298 ]
+		},
+		{
+			"name": "Process03",
+			"translation": [ 0.379409939, 0.0691686645, -0.181599036 ],
+			"rotation": [ -0.0256684963, -0.219928414, -0.0345975943, -0.974564433 ]
+		},
+		{
+			"name": "TentacleF01",
+			"translation": [ -0.247731507, 0.17913273, -0.285140097 ],
+			"rotation": [ -0.371287495, 0.10091719, 0.888517797, 0.249994919 ],
+			"children": [ 41 ]
+		},
+		{
+			"name": "TentacleF02",
+			"translation": [ 0.149632365, 0.00070305838, -0.000206988363 ],
+			"rotation": [ -0.0119236438, 0.00373691926, 0.0121558988, -0.999848127 ],
+			"children": [ 42 ]
+		},
+		{
+			"name": "TentacleF03",
+			"translation": [ 0.187017158, -0.000459521427, 0.000940213329 ],
+			"rotation": [ 0.00824129861, -0.0164158419, -0.00819142163, -0.999797821 ],
+			"children": [ 43 ]
+		},
+		{
+			"name": "TentacleF04",
+			"translation": [ 0.148786411, 0.00947048888, -0.00588628277 ],
+			"rotation": [ -0.0472676568, 0.0335142016, 0.0486241318, -0.997135043 ],
+			"children": [ 44 ]
+		},
+		{
+			"name": "TentacleF05",
+			"translation": [ 0.17896162, 1.42108544e-16, -4.26325632e-16 ],
+			"rotation": [ 0.086906679, -0.0304604843, -0.0766226277, -0.992798269 ]
+		},
+		{
+			"name": "Process02",
+			"translation": [ 0.0756696463, 0.388044268, -0.187739506 ],
+			"rotation": [ 0.193307057, -0.138852239, -0.584853113, -0.775434852 ]
+		},
+		{
+			"name": "Process05",
+			"translation": [ -0.150177881, -0.24951461, -0.26232937 ],
+			"rotation": [ 0.488442004, -0.716172278, -0.41940555, -0.269482195 ]
+		}
+	],
+	"samplers": [
+		{
+			"minFilter": 9987,
+			"magFilter": 9729
+		}
+	],
+	"scenes": [
+		{
+			"nodes": [ 0 ]
+		}
+	],
+	"skins": [
+		{
+			"name": "Beholder_SK",
+			"inverseBindMatrices": 0,
+			"skeleton": 0,
+			"joints": [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46 ]
+		}
+	],
+	"textures": [
+		{
+			"name": "BasecolorDefault_TEX",
+			"sampler": 0,
+			"source": 2
+		},
+		{
+			"name": "DefaultPBR_MAT_MetallicRoughness",
+			"sampler": 0,
+			"source": 0
+		},
+		{
+			"name": "DefaultPBR_MAT_Emissive",
+			"sampler": 0,
+			"source": 1
+		}
+	],
+	"extensionsUsed": [
+		"KHR_materials_emissive_strength"
+	]
+}

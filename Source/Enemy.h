@@ -50,9 +50,16 @@ public:
     // 検索範囲
     float GetSearchRange() const { return search_range; }
     void SetSearchRange(float range) { search_range = range; }
-	// 攻撃範囲
-	float GetAdjacentAttackRange() const { return adjacent_attack_range; }
-	void SetAdjacentAttackRange(float range) { adjacent_attack_range = range; }
+	// 近距離攻撃範囲
+	float GetShortAttackRange() const { return short_attack_range; }
+	void SetShortAttackRange(float range) { short_attack_range = range; }
+    // 遠距離攻撃範囲
+    float GetLongAttackRange() const { return long_attack_range; }
+    void SetLongAttackRange(float range) { long_attack_range = range; }
+    // 攻撃フラグ
+    bool GetAttackFlag() const { return attack_flag.checker; }
+    void SetAttackFlag(bool flag) { attack_flag.checker = flag; }
+
     // タイマー
     float GetRunTimer() const { return run_timer; }
     void SetRunTimer(float timer) { run_timer = timer; }
@@ -80,9 +87,10 @@ public:
 		Die
     };
 protected:
-	float search_range = 50.0f;
-	float adjacent_attack_range = 10.0f;//近接
-	float remote_attack_range	= 40.0f;//遠距離
+	float search_range = 75.0f;
+	float short_attack_range = 10.0f;//近接
+	float long_attack_range	= 40.0f;//遠距離
+	DelayTime attack_flag = { 0.0f, false };//攻撃フラグ
 	float run_timer = 10.0f;
 	DirectX::XMFLOAT3 target_position = { 0.0f, 0.0f, 0.0f };
 

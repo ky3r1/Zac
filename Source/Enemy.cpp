@@ -8,6 +8,8 @@
 #include "AI/JudgmentDerived.h"
 #include "AI/ActionDerived.h"
 
+#define ATTACKTIMER 2.0f*60;
+
 void Enemy::Start()
 {
     GetActor()->SetHealth(GetActor()->GetMaxHealth());
@@ -29,9 +31,13 @@ void Enemy::Start()
     aiTree->AddNode("Scout", "Wander", 1, BehaviorTree::SelectRule::Non, new WanderJudgment(this), new WanderAction(this));
     aiTree->AddNode("Scout", "Idle", 2, BehaviorTree::SelectRule::Non, nullptr, new IdleAction(this));
 
-    aiTree->AddNode("Battle", "Attack", 1, BehaviorTree::SelectRule::Random, new AttackJudgment(this), nullptr);
-    aiTree->AddNode("Attack", "Normal", 1, BehaviorTree::SelectRule::Non, nullptr, new NormalAction(this));
-    aiTree->AddNode("Attack", "Skill", 2, BehaviorTree::SelectRule::Non, nullptr, new SkillAction(this));
+
+    aiTree->AddNode("Battle", "Attack", 1, BehaviorTree::SelectRule::Priority, new AttackJudgment(this), nullptr);
+    aiTree->AddNode("Attack", "ShortAttack", 1, BehaviorTree::SelectRule::Non, new ShortAttackJudgment(this), new NormalAction(this)/*nullptr*/);
+    //aiTree->AddNode("ShortAttack", "Normal", 1, BehaviorTree::SelectRule::Non, nullptr, new NormalAction(this));
+    
+    aiTree->AddNode("Attack", "LongAttack", 2, BehaviorTree::SelectRule::Non, new LongAttackJudgment(this), new SkillAction(this)/*nullptr*/);
+    //aiTree->AddNode("LongAttack", "Skill", 1, BehaviorTree::SelectRule::Non, nullptr, new SkillAction(this));
 
     aiTree->AddNode("Battle", "Pursuit", 2, BehaviorTree::SelectRule::Non, nullptr, new PursuitAction(this));
 
@@ -60,6 +66,8 @@ void Enemy::Update(float elapsedTime)
         // ビヘイビアツリーからノードを実行。
         activeNode = aiTree->Run(activeNode, behaviorData, elapsedTime);
     }
+    
+    GetActor()->UpdateDelayTime(attack_flag, 2.0f*60.0f);
 
     //GetActor()->GetComponent<Movement>()->MoveTarget(ActorManager::Instance().GetPlayer()->GetPosition(), elapsedTime);
     //{
@@ -165,12 +173,12 @@ void Enemy::DrawDebug()
     {
         DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(1, 0, 1, 1);
         //近接攻撃範囲
-        Graphics::Instance().GetDebugRenderer()->DrawCylinder(position, adjacent_attack_range, 1.0f, color);
+        Graphics::Instance().GetDebugRenderer()->DrawCylinder(position, short_attack_range, 1.0f, color);
     }
     {
         DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(0.8f, 0.3f, 0.3f, 1);
         //遠距離攻撃範囲
-        Graphics::Instance().GetDebugRenderer()->DrawCylinder(position, remote_attack_range, 1.0f, color);
+        Graphics::Instance().GetDebugRenderer()->DrawCylinder(position, long_attack_range, 1.0f, color);
     }
     {
         DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(1, 1, 0, 1);

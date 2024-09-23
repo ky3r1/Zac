@@ -1,0 +1,342 @@
+{
+	"asset":
+	{
+		"version": "2.0",
+		"generator": "Unreal Engine 5.4.3"
+	},
+	"scene": 0,
+	"accessors": [
+		{
+			"bufferView": 0,
+			"count": 22,
+			"type": "MAT4",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 1,
+			"count": 5349,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"bufferView": 2,
+			"count": 3713,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [ -0.564349115, 0.00597499358, -0.493568778 ],
+			"max": [ 0.564349115, 1.40357077, 0.513281643 ]
+		},
+		{
+			"bufferView": 3,
+			"count": 3713,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 4,
+			"count": 3713,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 5,
+			"count": 3713,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 6,
+			"count": 3713,
+			"type": "VEC4",
+			"componentType": 5121
+		},
+		{
+			"bufferView": 7,
+			"count": 3713,
+			"type": "VEC4",
+			"componentType": 5121,
+			"normalized": true
+		}
+	],
+	"buffers": [
+		{
+			"uri": "ChestMonster_SK.bin",
+			"byteLength": 220036
+		}
+	],
+	"bufferViews": [
+		{
+			"buffer": 0,
+			"byteLength": 1408
+		},
+		{
+			"buffer": 0,
+			"byteLength": 10698,
+			"byteOffset": 1408,
+			"target": 34963
+		},
+		{
+			"buffer": 0,
+			"byteLength": 44556,
+			"byteOffset": 12108,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 44556,
+			"byteOffset": 56664,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 59408,
+			"byteOffset": 101220,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 29704,
+			"byteOffset": 160628,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 14852,
+			"byteOffset": 190332,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 14852,
+			"byteOffset": 205184,
+			"target": 34962
+		}
+	],
+	"images": [
+		{
+			"uri": "DefaultPBR_MAT_MetallicRoughness.png"
+		},
+		{
+			"uri": "DefaultPBR_MAT_Emissive.png"
+		},
+		{
+			"uri": "BasecolorDefault_TEX.png"
+		}
+	],
+	"materials": [
+		{
+			"name": "DefaultPBR_MAT",
+			"pbrMetallicRoughness":
+			{
+				"baseColorTexture":
+				{
+					"index": 0
+				},
+				"metallicRoughnessTexture":
+				{
+					"index": 1
+				}
+			},
+			"emissiveTexture":
+			{
+				"index": 2
+			},
+			"emissiveFactor": [ 1, 1, 1 ],
+			"extensions":
+			{
+				"KHR_materials_emissive_strength":
+				{
+					"emissiveStrength": 67.1875
+				}
+			}
+		}
+	],
+	"meshes": [
+		{
+			"name": "ChestMonster_SK",
+			"primitives": [
+				{
+					"attributes":
+					{
+						"POSITION": 2,
+						"NORMAL": 3,
+						"TANGENT": 4,
+						"TEXCOORD_0": 5,
+						"JOINTS_0": 6,
+						"WEIGHTS_0": 7
+					},
+					"indices": 1,
+					"material": 0
+				}
+			]
+		}
+	],
+	"nodes": [
+		{
+			"skin": 0,
+			"mesh": 0,
+			"children": [ 1 ]
+		},
+		{
+			"name": "Root",
+			"translation": [ 0, 0.301127732, -0.21143131 ],
+			"rotation": [ 0.387686074, -0.387686074, 0.591354012, 0.591353953 ],
+			"children": [ 2 ]
+		},
+		{
+			"name": "Body",
+			"translation": [ 0.214743584, -2.64392831e-17, -7.1054272e-17 ],
+			"rotation": [ 1.05037565e-33, -0.544045508, -6.81065815e-34, -0.839055717 ],
+			"children": [ 3, 9, 12, 15, 18, 21, 22 ]
+		},
+		{
+			"name": "Head",
+			"translation": [ 0.703295529, 6.17335347e-16, -2.44249064e-17 ],
+			"rotation": [ 0.592685282, -1.18575454e-16, 0.805434167, -2.64452421e-16 ],
+			"children": [ 4, 5 ]
+		},
+		{
+			"name": "UpperTeethCTRL",
+			"translation": [ 0.348265022, 2.51806335e-17, -1.42108544e-16 ],
+			"rotation": [ -0.416213721, -0.416213721, -0.57163465, -0.57163465 ]
+		},
+		{
+			"name": "EyeCTRL",
+			"translation": [ 0.0872446448, -2.42050782e-16, 0.102079332 ],
+			"rotation": [ -0.971698642, 1.44645418e-17, -0.236223891, -5.94993794e-17 ],
+			"children": [ 6, 7, 8 ]
+		},
+		{
+			"name": "EyeBallCTRL",
+			"translation": [ 0.168465748, 3.31515957e-17, -2.84217088e-16 ],
+			"rotation": [ 0.457136989, -0.457136989, 0.53946805, -0.53946805 ]
+		},
+		{
+			"name": "UppderEyeLid",
+			"translation": [ 0.168465748, 3.31515957e-17, -2.84217088e-16 ],
+			"rotation": [ 0.457136989, -0.457136989, 0.53946805, -0.53946805 ]
+		},
+		{
+			"name": "LowerEyelid",
+			"translation": [ 0.168465748, 3.31515957e-17, -2.84217088e-16 ],
+			"rotation": [ 0.457136989, -0.457136989, 0.53946805, -0.53946805 ]
+		},
+		{
+			"name": "RearLeftLeg01",
+			"translation": [ -0.147366852, -0.405742675, -0.307747573 ],
+			"rotation": [ -0.32558322, -0.239114419, 0.528951526, -0.746344507 ],
+			"children": [ 10 ]
+		},
+		{
+			"name": "RearLeftLeg02",
+			"translation": [ 0.141468674, -1.06581408e-16, 8.88178367e-17 ],
+			"rotation": [ -0.232242495, 0.330458045, 0.743656814, -0.53276211 ],
+			"children": [ 11 ]
+		},
+		{
+			"name": "RearLeftLeg03",
+			"translation": [ 0.283698142, 1.42108544e-16, 2.84217088e-16 ],
+			"rotation": [ -0.000547425298, -0.000555886538, -0.701663196, -0.71250844 ]
+		},
+		{
+			"name": "FrontLeftLeg01",
+			"translation": [ -0.140852958, -0.405742675, 0.337926567 ],
+			"rotation": [ 0.342099994, 0.226700902, 0.527782917, -0.743652821 ],
+			"children": [ 13 ]
+		},
+		{
+			"name": "FrontLeftLeg02",
+			"translation": [ 0.142149225, -1.77635673e-16, -0 ],
+			"rotation": [ 0.228150323, -0.340960503, 0.738171697, -0.535533309 ],
+			"children": [ 14 ]
+		},
+		{
+			"name": "FrontLeftLeg03",
+			"translation": [ 0.283914596, -7.1054272e-17, -1.42108544e-16 ],
+			"rotation": [ -0.000371345843, -0.000377261778, -0.70149678, -0.712672412 ]
+		},
+		{
+			"name": "RearRightLeg01",
+			"translation": [ -0.14736715, 0.405742973, -0.3077479 ],
+			"rotation": [ 0.321509987, -0.241994217, -0.52764082, -0.748107791 ],
+			"children": [ 16 ]
+		},
+		{
+			"name": "RearRightLeg02",
+			"translation": [ 0.141468748, 3.5527136e-17, 1.77635673e-16 ],
+			"rotation": [ 0.235142767, 0.326399684, -0.74544692, -0.531488478 ],
+			"children": [ 17 ]
+		},
+		{
+			"name": "RearRightLeg03",
+			"translation": [ 0.283697724, 1.42108544e-16, 1.42108544e-16 ],
+			"rotation": [ -0.701663256, -0.712508321, 0.000547831354, 0.000556298706 ]
+		},
+		{
+			"name": "FrontRightLeg01",
+			"translation": [ -0.140853256, 0.405742973, 0.337926209 ],
+			"rotation": [ -0.335687131, 0.231234476, -0.525811613, -0.74657011 ],
+			"children": [ 19 ]
+		},
+		{
+			"name": "FrontRightLeg02",
+			"translation": [ 0.142149374, -3.5527136e-17, 1.24344979e-16 ],
+			"rotation": [ -0.232751116, -0.334594488, -0.741079271, -0.533549428 ],
+			"children": [ 20 ]
+		},
+		{
+			"name": "FrontRightLeg03",
+			"translation": [ 0.283914626, -1.42108544e-16, -1.42108544e-16 ],
+			"rotation": [ -0.70149684, -0.712672353, 0.000371855829, 0.000377779827 ]
+		},
+		{
+			"name": "LockCTRL",
+			"translation": [ 0.0829303414, 1.28471777e-16, 0.456493646 ],
+			"rotation": [ 0.00356669305, -0.00356669305, 0.707097828, -0.707097828 ]
+		},
+		{
+			"name": "LowerTeethCTRL",
+			"translation": [ 0.133512899, 1.77462111e-16, 0.274304897 ],
+			"rotation": [ 0.00356669305, -0.00356669305, 0.707097828, -0.707097828 ]
+		}
+	],
+	"samplers": [
+		{
+			"minFilter": 9987,
+			"magFilter": 9729
+		}
+	],
+	"scenes": [
+		{
+			"nodes": [ 0 ]
+		}
+	],
+	"skins": [
+		{
+			"name": "ChestMonster_SK",
+			"inverseBindMatrices": 0,
+			"skeleton": 0,
+			"joints": [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22 ]
+		}
+	],
+	"textures": [
+		{
+			"name": "BasecolorDefault_TEX",
+			"sampler": 0,
+			"source": 2
+		},
+		{
+			"name": "DefaultPBR_MAT_MetallicRoughness",
+			"sampler": 0,
+			"source": 0
+		},
+		{
+			"name": "DefaultPBR_MAT_Emissive",
+			"sampler": 0,
+			"source": 1
+		}
+	],
+	"extensionsUsed": [
+		"KHR_materials_emissive_strength"
+	]
+}

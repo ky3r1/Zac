@@ -62,7 +62,8 @@ void SceneGame::Initialize()
 #ifdef ALLPLAYER
 	// プレイヤー
 	{
-		const char* filename = "Data/Model/GP5_UnityChan/unitychan.mdl";
+		const char* filename = "Data/Model/Assets/Wizard/Wizard.mdl";
+		//const char* filename = "Data/Model/GP5_UnityChan/unitychan.mdl";
 		std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
 		actor->LoadModel(filename);
 		actor->SetName("Player");

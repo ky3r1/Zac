@@ -1,0 +1,320 @@
+{
+	"asset":
+	{
+		"version": "2.0",
+		"generator": "Unreal Engine 5.4.3"
+	},
+	"scene": 0,
+	"accessors": [
+		{
+			"bufferView": 0,
+			"count": 18,
+			"type": "MAT4",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 1,
+			"count": 8418,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"bufferView": 2,
+			"count": 5775,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [ -0.954074681, -9.09494681e-15, -0.326140404 ],
+			"max": [ 0.954074681, 1.1975435, 0.326140404 ]
+		},
+		{
+			"bufferView": 3,
+			"count": 5775,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 4,
+			"count": 5775,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 5,
+			"count": 5775,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 6,
+			"count": 5775,
+			"type": "VEC4",
+			"componentType": 5121
+		},
+		{
+			"bufferView": 7,
+			"count": 5775,
+			"type": "VEC4",
+			"componentType": 5121,
+			"normalized": true
+		}
+	],
+	"buffers": [
+		{
+			"uri": "Cactus_SK.bin",
+			"byteLength": 341388
+		}
+	],
+	"bufferViews": [
+		{
+			"buffer": 0,
+			"byteLength": 1152
+		},
+		{
+			"buffer": 0,
+			"byteLength": 16836,
+			"byteOffset": 1152,
+			"target": 34963
+		},
+		{
+			"buffer": 0,
+			"byteLength": 69300,
+			"byteOffset": 17988,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 69300,
+			"byteOffset": 87288,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 92400,
+			"byteOffset": 156588,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 46200,
+			"byteOffset": 248988,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 23100,
+			"byteOffset": 295188,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 23100,
+			"byteOffset": 318288,
+			"target": 34962
+		}
+	],
+	"images": [
+		{
+			"uri": "DefaultPBR_MAT_MetallicRoughness.png"
+		},
+		{
+			"uri": "DefaultPBR_MAT_Emissive.png"
+		},
+		{
+			"uri": "BasecolorDefault_TEX.png"
+		}
+	],
+	"materials": [
+		{
+			"name": "DefaultPBR_MAT",
+			"pbrMetallicRoughness":
+			{
+				"baseColorTexture":
+				{
+					"index": 0
+				},
+				"metallicRoughnessTexture":
+				{
+					"index": 1
+				}
+			},
+			"emissiveTexture":
+			{
+				"index": 2
+			},
+			"emissiveFactor": [ 1, 1, 1 ],
+			"extensions":
+			{
+				"KHR_materials_emissive_strength":
+				{
+					"emissiveStrength": 67.1875
+				}
+			}
+		}
+	],
+	"meshes": [
+		{
+			"name": "Cactus_SK",
+			"primitives": [
+				{
+					"attributes":
+					{
+						"POSITION": 2,
+						"NORMAL": 3,
+						"TANGENT": 4,
+						"TEXCOORD_0": 5,
+						"JOINTS_0": 6,
+						"WEIGHTS_0": 7
+					},
+					"indices": 1,
+					"material": 0
+				}
+			]
+		}
+	],
+	"nodes": [
+		{
+			"skin": 0,
+			"mesh": 0,
+			"children": [ 1 ]
+		},
+		{
+			"name": "cactus_root",
+			"translation": [ 0, 0.0181965269, 0.00188173424 ],
+			"rotation": [ 0.0604344904, -0.0604344904, 0.704519451, 0.70451951 ],
+			"children": [ 2 ]
+		},
+		{
+			"name": "cactus_spine01",
+			"translation": [ 0.168769166, -6.08609509e-18, 5.8286707e-18 ],
+			"rotation": [ 3.42323167e-33, -0.157815203, -5.47093851e-34, -0.98746866 ],
+			"children": [ 3 ]
+		},
+		{
+			"name": "cactus_spine02",
+			"translation": [ 0.178221256, 7.75793109e-17, -8.881784e-18 ],
+			"rotation": [ -3.51223055e-33, -0.0702542663, -5.24919941e-34, -0.997529209 ],
+			"children": [ 4 ]
+		},
+		{
+			"name": "cactus_spine03",
+			"translation": [ 0.191020072, 3.80244968e-17, -7.1054272e-17 ],
+			"rotation": [ 3.5627004e-33, 0.260952234, -6.32981346e-34, -0.96535182 ],
+			"children": [ 5, 11, 15 ]
+		},
+		{
+			"name": "cactus_neck",
+			"translation": [ 0.0846066549, -9.17838946e-17, 1.42108544e-16 ],
+			"rotation": [ 3.98973656e-33, -0.124414876, 1.05253929e-33, -0.992230296 ],
+			"children": [ 6 ]
+		},
+		{
+			"name": "cactus_head",
+			"translation": [ 0.143979803, 6.83205526e-17, -2.6645352e-17 ],
+			"rotation": [ -1.18453508e-32, 0.10616298, 2.84815761e-34, -0.994348764 ],
+			"children": [ 7, 8, 9, 10 ]
+		},
+		{
+			"name": "cactus_headDeco",
+			"translation": [ 0.151090637, -9.89218082e-17, -1.06581408e-16 ],
+			"rotation": [ 0.0722921565, -0.0722921565, 0.703401625, -0.703401625 ]
+		},
+		{
+			"name": "cactus_rightEye",
+			"translation": [ -0.0483233333, 0.199883997, 0.227094308 ],
+			"rotation": [ 0.0722921565, -0.0722921565, 0.703401625, -0.703401625 ]
+		},
+		{
+			"name": "cactus_leftEye",
+			"translation": [ -0.0483229496, -0.199884295, 0.227093786 ],
+			"rotation": [ 0.0722921565, -0.0722921565, 0.703401625, -0.703401625 ]
+		},
+		{
+			"name": "cactus_mouth",
+			"translation": [ -0.166702911, -9.14305032e-17, 0.300846905 ],
+			"rotation": [ 0.0722921565, -0.0722921565, 0.703401625, -0.703401625 ]
+		},
+		{
+			"name": "cactus_leftUpperArm",
+			"translation": [ -0.00497885561, -0.213423997, -0.00282881246 ],
+			"rotation": [ 0.0529807471, -0.117248625, 0.705119193, -0.697318256 ],
+			"children": [ 12 ]
+		},
+		{
+			"name": "cactus_leftLowerArm",
+			"translation": [ 0.311101675, -3.55271347e-16, -6.21724896e-17 ],
+			"rotation": [ -1.11680118e-33, 0.0906056762, 1.22752533e-32, -0.995886862 ],
+			"children": [ 13 ]
+		},
+		{
+			"name": "cactus_leftHand",
+			"translation": [ 0.291319191, 1.42108544e-16, 2.13162816e-16 ],
+			"rotation": [ 1.10739254e-33, -0.0449211784, 2.46270181e-32, -0.998990536 ],
+			"children": [ 14 ]
+		},
+		{
+			"name": "cactus_leftHandTip",
+			"translation": [ 0.106433071, 0.0016464527, 0.00680505391 ]
+		},
+		{
+			"name": "cactus_rightUpperArm",
+			"translation": [ -0.00497876806, 0.213423997, -0.00282885274 ],
+			"rotation": [ -0.0529808737, -0.117248617, -0.705119193, -0.697318316 ],
+			"children": [ 16 ]
+		},
+		{
+			"name": "cactus_rightLowerArm",
+			"translation": [ 0.311101884, 7.1054272e-17, -2.6645352e-17 ],
+			"rotation": [ -0, 0.0906056836, -0, -0.995886862 ],
+			"children": [ 17 ]
+		},
+		{
+			"name": "cactus_rightHand",
+			"translation": [ 0.291318715, 3.55271347e-16, -7.1054272e-17 ],
+			"rotation": [ 0.0449212827, 7.04176841e-08, 0.998990536, -4.45919461e-08 ],
+			"children": [ 18 ]
+		},
+		{
+			"name": "cactus_rightHandTip",
+			"translation": [ -0.106433354, 0.00164635829, 0.00680501387 ]
+		}
+	],
+	"samplers": [
+		{
+			"minFilter": 9987,
+			"magFilter": 9729
+		}
+	],
+	"scenes": [
+		{
+			"nodes": [ 0 ]
+		}
+	],
+	"skins": [
+		{
+			"name": "Cactus_SK",
+			"inverseBindMatrices": 0,
+			"skeleton": 0,
+			"joints": [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18 ]
+		}
+	],
+	"textures": [
+		{
+			"name": "BasecolorDefault_TEX",
+			"sampler": 0,
+			"source": 2
+		},
+		{
+			"name": "DefaultPBR_MAT_MetallicRoughness",
+			"sampler": 0,
+			"source": 0
+		},
+		{
+			"name": "DefaultPBR_MAT_Emissive",
+			"sampler": 0,
+			"source": 1
+		}
+	],
+	"extensionsUsed": [
+		"KHR_materials_emissive_strength"
+	]
+}

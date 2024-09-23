@@ -18,6 +18,17 @@ bool BattleJudgment::Judgment()
 // AttackNode‚É‘JˆÚ‚Å‚«‚é‚©”»’è
 bool AttackJudgment::Judgment()
 {
+	if (owner->GetAttackFlag())
+	{
+		// AttackNode‚Ö‘JˆÚ‚Å‚«‚é
+		return true;
+	}
+	return false;
+}
+
+// AttackNode‚É‘JˆÚ‚Å‚«‚é‚©”»’è
+bool ShortAttackJudgment::Judgment()
+{
 	// ‘ÎÛ‚Æ‚Ì‹——£‚ðŽZo
 	DirectX::XMFLOAT3 position = owner->GetActor()->GetPosition();
 	DirectX::XMFLOAT3 targetPosition = ActorManager::Instance().GetPlayer()->GetPosition();
@@ -27,7 +38,7 @@ bool AttackJudgment::Judgment()
 	float vz = targetPosition.z - position.z;
 	float dist = sqrtf(vx * vx + vy * vy + vz * vz);
 
-	if (dist < owner->GetAdjacentAttackRange())
+	if (dist < owner->GetShortAttackRange())
 	{
 		// AttackNode‚Ö‘JˆÚ‚Å‚«‚é
 		return true;
@@ -35,42 +46,42 @@ bool AttackJudgment::Judgment()
 	return false;
 }
 
-//// AttackNode‚É‘JˆÚ‚Å‚«‚é‚©”»’è
-//bool AdjacentAttackJudgment::Judgment()
-//{
-//	// ‘ÎÛ‚Æ‚Ì‹——£‚ðŽZo
-//	DirectX::XMFLOAT3 position = owner->GetActor()->GetPosition();
-//	DirectX::XMFLOAT3 targetPosition = ActorManager::Instance().GetPlayer()->GetPosition();
-//
-//	float vx = targetPosition.x - position.x;
-//	float vy = targetPosition.y - position.y;
-//	float vz = targetPosition.z - position.z;
-//	float dist = sqrtf(vx * vx + vy * vy + vz * vz);
-//
-//	if (dist < owner->GetAdjacentAttackRange())
-//	{
-//		// AttackNode‚Ö‘JˆÚ‚Å‚«‚é
-//		return true;
-//	}
-//	return false;
-//}
-
-
-
-
-// SkillNode‚É‘JˆÚ‚Å‚«‚é‚©”»’è
-bool SkillShotJudgment::Judgment()
+bool LongAttackJudgment::Judgment()
 {
-	// hp‚ª”¼•ªˆÈ‰º‚ÌŽžskill”­“®‰Â”\
-	int health = owner->GetActor()->GetHealth();
-	int baseHealth = static_cast<int>(owner->GetActor()->GetMaxHealth() * 0.8);
-	if (health < baseHealth)
+	// ‘ÎÛ‚Æ‚Ì‹——£‚ðŽZo
+	DirectX::XMFLOAT3 position = owner->GetActor()->GetPosition();
+	DirectX::XMFLOAT3 targetPosition = ActorManager::Instance().GetPlayer()->GetPosition();
+
+	float vx = targetPosition.x - position.x;
+	float vy = targetPosition.y - position.y;
+	float vz = targetPosition.z - position.z;
+	float dist = sqrtf(vx * vx + vy * vy + vz * vz);
+
+	if (dist < owner->GetLongAttackRange())
 	{
-		// SkillNode‚Ö‘JˆÚ‚Å‚«‚é
+		// AttackNode‚Ö‘JˆÚ‚Å‚«‚é
 		return true;
 	}
 	return false;
 }
+
+
+
+
+
+//// SkillNode‚É‘JˆÚ‚Å‚«‚é‚©”»’è
+//bool SkillShotJudgment::Judgment()
+//{
+//	// hp‚ª”¼•ªˆÈ‰º‚ÌŽžskill”­“®‰Â”\
+//	int health = owner->GetActor()->GetHealth();
+//	int baseHealth = static_cast<int>(owner->GetActor()->GetMaxHealth() * 0.8);
+//	if (health < baseHealth)
+//	{
+//		// SkillNode‚Ö‘JˆÚ‚Å‚«‚é
+//		return true;
+//	}
+//	return false;
+//}
 
 // WanderNode‚É‘JˆÚ‚Å‚«‚é‚©”»’è
 bool WanderJudgment::Judgment()
