@@ -79,11 +79,6 @@ public:
 
 	//DelayTime更新
 	void UpdateDelayTime(DelayTime& delaytime, float maxtime);
-
-	//ダメージを受ける
-	virtual void TakeDamage(float damage);
-	//ダメージを受ける
-	virtual void TakeHeel(float heel);
 public:
 	//////////////////////////////////////////////////////////////////////////
 	//							セッター・ゲッター							//
@@ -158,28 +153,6 @@ public:
     void SetOldTransform(const DirectX::XMFLOAT4X4& transform) { old_transform = transform; }
     const DirectX::XMFLOAT4X4& GetOldTransform() const { return old_transform; }
 
-	//Animationセッター・ゲッター
-    void SetAnimation(Animation animation) { this->animation = animation; }
-	void SetAnimation(int state, bool loop) { this->animation.state = state; this->animation.loop = loop; }
-	void SetAnimation(int state, bool loop, float blend) { this->animation.state = state; this->animation.loop = loop; this->animation.blend = blend;}
-	Animation GetAnimation() const { return animation; }
-
-	//AnimationStateセッター・ゲッター
-    void SetAnimationState(AnimationState state) { animation_state = state; }
-	AnimationState GetAnimationState() const { return animation_state; }
-
-	// 体力セッター・ゲッター
-	void SetHealth(float health) { current_health = health; }
-	float GetHealth() { return current_health; }
-
-	// 体力最大値セッター・ゲッター
-    void SetMaxHealth(float maxhealth) { max_health = maxhealth; }
-    float GetMaxHealth() { return max_health; }
-
-	//死亡フラグ
-    void SetDeadFlag(bool dead) { on_death = dead; }
-    bool GetDeadFlag() { return on_death; }
-
     //姿勢制御フラグ
 	void SetAttitudeControlFlag(bool flag) { attitude_control = flag; }
     bool GetAttitudeControlFlag() { return attitude_control; }
@@ -187,10 +160,6 @@ public:
 	//レイポジション
     void SetRayPosition(const DirectX::XMFLOAT3& position) { ray_position = position; }
     const DirectX::XMFLOAT3& GetRayPosition() const { return ray_position; }
-
-	//ターゲット
-    void SetTarget(std::shared_ptr<Actor> target) { this->target = target.get(); }
-    Actor* GetTarget() const { return target; }
 
 public:
     //////////////////////////////////////////////////////////////////////////
@@ -231,23 +200,15 @@ private:
 		0,1,0,0,
 		0,0,1,0,
 		0,0,0,1 };
-	float max_health = 10;
-	float current_health = max_health;
-	bool on_death = false;
 
 	// フィルター用のタイプ
 	ActorType type = ActorType::None;
 	//質感
     FOM fom_Y = FOM::Normal;
 	FOM fom_XZ = FOM::Normal;
-	//アニメーション
-	Animation  animation;
-	AnimationState animation_state = AnimationState::Idle;
 	//Ray情報
 	bool			  raycast_flg = false;
     DirectX::XMFLOAT3 ray_position = { 0,0,0 };
-	//追跡する対象
-	Actor* target;
 
 
 	std::unique_ptr<Model>	model;
@@ -294,9 +255,6 @@ public:
     {
         return GetActor("Player");
     }
-
-	//死亡Flagが立ってるアクターを死亡させる
-	void DaedUpdate();
 
 	// 近くのアクターを取得
 	bool GetNearActor(Actor* origin,Actor& result, ActorType filter);

@@ -24,8 +24,19 @@ void Character::Update(float elapsedTime)
 
 void Character::DrawImGui()
 {
+    ImGui::SliderFloat("health", &current_health, 0.0f, max_health);
 }
 
 void Character::DrawDebug()
 {
+}
+
+void Character::TakeDamage(float damage)
+{
+    current_health -= damage;
+}
+
+void Character::TakeHeel(float heel)
+{
+    current_health += heel;
 }

@@ -57,7 +57,6 @@ void TrackingObject::Update(float elapsedTime)
                 || Collision::IntersectSphereVsSphere(c2_sphere, t_scphere)
                 )
             {
-                GetActor()->SetDeadFlag(true);
                 ActorManager::Instance().Remove(GetActor());
             }
         }

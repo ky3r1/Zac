@@ -41,8 +41,6 @@ private:
 
 	DirectX::XMFLOAT3 GetMoveVec();
 
-	void AnimationControl(float elapsedTime);
-
 private:
 	//Animation
 	void UpdateIdle();

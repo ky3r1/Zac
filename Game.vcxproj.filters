@@ -266,9 +266,6 @@
     <ClInclude Include="Source\Object.h">
       <Filter>Component\Object</Filter>
     </ClInclude>
-    <ClInclude Include="Source\AnimationComp.h">
-      <Filter>Component\Action</Filter>
-    </ClInclude>
     <ClInclude Include="Source\CollisionObject.h">
       <Filter>Component\Object\CollisionObject</Filter>
     </ClInclude>
@@ -460,9 +457,6 @@
     <ClCompile Include="Source\Object.cpp">
       <Filter>Component\Object</Filter>
     </ClCompile>
-    <ClCompile Include="Source\AnimationComp.cpp">
-      <Filter>Component\Action</Filter>
-    </ClCompile>
     <ClCompile Include="Source\CollisionObject.cpp">
       <Filter>Component\Object\CollisionObject</Filter>
     </ClCompile>
@@ -492,6 +486,9 @@
     </ClCompile>
     <ClCompile Include="Source\AI\NodeBase.cpp">
       <Filter>Component\Action\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Easing.cpp">
+      <Filter>System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

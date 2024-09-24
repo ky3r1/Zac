@@ -13,7 +13,6 @@
 #include "CameraController.h"
 #include "Enemy.h"
 #include "Mathf.h"
-#include "AnimationComp.h"
 #include "StateMachine.h"
 
 
@@ -30,12 +29,9 @@ Player::~Player()
 // 開始処理
 void Player::Start()
 {
-	GetActor()->SetHealth(GetActor()->GetMaxHealth());
+	GetActor()->GetComponent<Character>()->SetHealth(GetActor()->GetComponent<Character>()->GetMaxHealth());
 	GetActor()->GetComponent<Movement>()->SetMoveSpeed(0.8f);
 	GetActor()->SetAttitudeControlFlag(true);
-	// 適当にモーション再生
-	GetActor()->SetAnimation(Anim_Spawn, false);
-	GetActor()->SetAnimationState(AnimationState::Spown);
 }
 
 // 更新
@@ -43,26 +39,15 @@ void Player::Update(float elapsedTime)
 {
 	GamePad& gamePad = Input::Instance().GetGamePad();
 	//gamePad.Update();
-	if (GetActor()->GetAnimationState() != AnimationState::Spown/*||
-		GetActor()->GetAnimationState() != AnimationState::Land||
-		!GetActor()->GetComponent<Movement>()->GetOnGround()*/)
 	{
 		CharacterControl(elapsedTime);
 	}
-	AnimationControl(elapsedTime);
 
 	//Jump
 	if (gamePad.GetButtonDown() & GamePad::BTN_X)
 	{
 		GetActor()->GetComponent<Movement>()->Jump(10.0f);
 		//GetActor()->SetAnimation(Anim_JumpPeak, true);
-	}
-	{
-		float vy=GetActor()->GetComponent<Movement>()->GetVelocity().y;
-		if (vy < -0.2f)
-		{
-			GetActor()->SetAnimationState(AnimationState::GoesDown);
-		}
 	}
 	Actor* enemy = nullptr;
 	//プレイヤーとエネミーの当たり判定
@@ -96,12 +81,6 @@ void Player::Update(float elapsedTime)
 	//	GetActor()->GetModel()->FindNode("Character1_Hips")->worldTransform._42,
 	//	GetActor()->GetModel()->FindNode("Character1_Hips")->worldTransform._43 });
 	GetActor()->SetRayPosition(GetActor()->GetPosition());
-
-	if (GetActor()->GetHealth()<=0)
-	{
-		GetActor()->SetAnimationState(AnimationState::Death);
-	}
-	//Character::Update(elapsedTime);
 }
 
 void Player::DrawImGui()
@@ -234,104 +213,4 @@ DirectX::XMFLOAT3 Player::GetMoveVec()
 	//GetActor()->SetPosition(old_position);
 
 	return vec;
-}
-
-void Player::AnimationControl(float elapsedTime)
-{
-	static AnimationState old_state = GetActor()->GetAnimationState();
-	switch (old_state)
-	{
-	case AnimationState::Idle:
-		UpdateIdle();
-        break;
-	case AnimationState::Walk:
-        break;
-	case AnimationState::Run:
-		UpdateRun();
-        break;
-	case AnimationState::Jump:
-        break;
-	case AnimationState::Attack:
-        break;
-	case AnimationState::Spown:
-		UpdateSpown();
-		break;
-	case AnimationState::Land:
-		UpdateLand();
-		break;
-	case AnimationState::GoesDown:
-		UpdateGoesDown();
-		break;
-	case AnimationState::Death:
-		UpdateDeath();
-		break;
-    default:
-        break;
-	}
-	if (old_state != GetActor()->GetAnimationState())
-	{
-			GetActor()->GetModel()->StopAnimation();
-            old_state = GetActor()->GetAnimationState();
-		
-	}
-}
-
-void Player::UpdateIdle()
-{
-	if (!GetActor()->GetModel()->IsPlayAnimation())
-	{
-		if (GetActor()->GetAnimation().state != Anim_Idle &&
-			GetActor()->GetAnimation().state != Anim_RandomIdle01 &&
-			GetActor()->GetAnimation().state != Anim_RandomIdle02 &&
-			GetActor()->GetAnimation().state != Anim_RandomIdle03)GetActor()->SetAnimation(Anim_Idle, false);
-		switch (rand() % 300)
-		{
-		case 0:
-			GetActor()->SetAnimation(Anim_RandomIdle01, false);
-			break;
-		case 1:
-			GetActor()->SetAnimation(Anim_RandomIdle02, false);
-			break;
-		case 2:
-			GetActor()->SetAnimation(Anim_RandomIdle03, false);
-			break;
-		default:
-			GetActor()->SetAnimation(Anim_Idle, false);
-			break;
-		}
-	}
-	if (!Mathf::Equal(GetMoveVec(), DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f)))GetActor()->SetAnimationState(AnimationState::Run);
-}
-
-void Player::UpdateRun()
-{
-	GetActor()->SetAnimation(Anim_RunForwardInPlace, true);
-	if (Mathf::Equal(GetMoveVec(), DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f)))GetActor()->SetAnimationState(AnimationState::Idle);
-}
-
-void Player::UpdateSpown()
-{
-	GetActor()->SetAnimation(Anim_Spawn, false);
-	if(!GetActor()->GetModel()->IsPlayAnimation())GetActor()->SetAnimationState(AnimationState::Idle);
-}
-
-void Player::UpdateLand()
-{
-	GetActor()->SetAnimation(Anim_IdleLand, false);
-	if (!GetActor()->GetModel()->IsPlayAnimation())GetActor()->SetAnimationState(AnimationState::Idle);
-}
-
-void Player::UpdateGoesDown()
-{
-	GetActor()->SetAnimation(Anim_JumpGoesDown2, true);
-	if (GetActor()->GetComponent<Movement>()->GetVelocity().y == 0)GetActor()->SetAnimationState(AnimationState::Land);
-}
-
-void Player::UpdateDeath()
-{
-	GetActor()->SetAnimation(Anim_Death, false);
-	if (GetActor()->GetModel()->IsPlayAnimation())
-	{
-		GetActor()->SetDeadFlag(true);
-	}
 }

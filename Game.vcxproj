@@ -125,7 +125,6 @@
     <ClInclude Include="Source\AI\JudgmentDerived.h" />
     <ClInclude Include="Source\AI\NodeBase.h" />
     <ClInclude Include="Source\All.h" />
-    <ClInclude Include="Source\AnimationComp.h" />
     <ClInclude Include="Source\Audio\Audio.h" />
     <ClInclude Include="Source\Audio\AudioResource.h" />
     <ClInclude Include="Source\Audio\AudioSource.h" />
@@ -194,7 +193,6 @@
     <ClCompile Include="Source\AI\BehaviorTree.cpp" />
     <ClCompile Include="Source\AI\JudgmentDerived.cpp" />
     <ClCompile Include="Source\AI\NodeBase.cpp" />
-    <ClCompile Include="Source\AnimationComp.cpp" />
     <ClCompile Include="Source\Audio\Audio.cpp" />
     <ClCompile Include="Source\Audio\AudioResource.cpp" />
     <ClCompile Include="Source\Audio\AudioSource.cpp" />
@@ -203,6 +201,7 @@
     <ClCompile Include="Source\Character.cpp" />
     <ClCompile Include="Source\Collision.cpp" />
     <ClCompile Include="Source\CollisionObject.cpp" />
+    <ClCompile Include="Source\Easing.cpp" />
     <ClCompile Include="Source\Effect.cpp" />
     <ClCompile Include="Source\EffectManager.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />

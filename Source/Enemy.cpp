@@ -19,7 +19,7 @@
 
 void Enemy::Start()
 {
-    GetActor()->SetHealth(GetActor()->GetMaxHealth());
+    GetActor()->GetComponent<Character>()->SetHealth(GetActor()->GetComponent<Character>()->GetMaxHealth());
     GetActor()->GetComponent<Movement>()->SetMoveSpeed(0.3f);
 
     //Ai
@@ -88,9 +88,8 @@ void Enemy::Update(float elapsedTime)
     {
 
     }
-    if (GetActor()->GetHealth() <= 0)
+    if (GetActor()->GetComponent<Character>()->GetHealth() <= 0)
     {
-        GetActor()->SetDeadFlag(true);
         {
             for (int i = 0; i < 20; i++)
             {
@@ -164,7 +163,7 @@ void Enemy::DrawImGui()
 {
     if (ImGui::Button("Delete"))
     {
-        GetActor()->SetHealth(0);
+        GetActor()->GetComponent<Character>()->SetHealth(0);
     }
 }
 

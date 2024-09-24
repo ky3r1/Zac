@@ -17,7 +17,6 @@
 //#include "StageMapChip.h"
 //#include "StageMapChip.h"
 
-#include "ProjectileManager.h"
 
 #include "Input/Input.h"
 #include "Ui.h"
@@ -27,7 +26,6 @@
 #include "CollisionObject.h"
 #include "TrackingObject.h"
 #include "SphereTrackingObject.h"
-#include "AnimationComp.h"
 #include "StateMachine.h"
 
 #include "Mathf.h"
@@ -77,7 +75,6 @@ void SceneGame::Initialize()
 		actor->SetActorType(ActorType::Player);
 		actor->AddComponent<Movement>();
 		actor->AddComponent<VsCollision>();
-		actor->AddComponent<AnimationComp>();
 		actor->AddComponent<StateMachine>();
 		actor->AddComponent<Character>();
 		actor->AddComponent<Player>();

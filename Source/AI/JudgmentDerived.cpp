@@ -105,7 +105,7 @@ bool WanderJudgment::Judgment()
 
 bool EscapeJudgment::Judgment()
 {
-	if (owner->GetActor()->GetHealth() < (owner->GetActor()->GetMaxHealth() * 0.5))
+	if (owner->GetActor()->GetComponent<Character>()->GetHealth() < (owner->GetActor()->GetComponent<Character>()->GetMaxHealth() * 0.5))
 	{
 		return true;
 	}

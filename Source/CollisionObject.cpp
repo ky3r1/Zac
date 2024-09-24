@@ -1,5 +1,6 @@
 #include "CollisionObject.h"
 #include "VsCollision.h"
+#include "Character.h"
 
 CollisionObject::CollisionObject()
 {
@@ -21,10 +22,10 @@ void CollisionObject::Update(float elapsedTime)
 		switch (hc_type)
 		{
 		case HitCollisionType::Damage:
-            actor->TakeDamage(hit_num);
+			actor->GetComponent<Character>()->TakeDamage(hit_num);
 			break;
         case HitCollisionType::Heel:
-			actor->TakeHeel(hit_num);
+            actor->GetComponent<Character>()->TakeHeel(hit_num);
             break;
         default:
             break;

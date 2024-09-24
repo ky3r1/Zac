@@ -172,7 +172,6 @@ void Actor::OnGUI()
 		ImGui::SliderFloat("Radius", &parameter.collision_cylinder.sphere.radius, 0.1f, 10.0f);
 		ImGui::SliderFloat("Height", &parameter.collision_cylinder.height, 0.1f, 10.0f);
 		ImGui::SliderFloat("Weight", &parameter.collision_cylinder.sphere.weight, 0.1f, 10.0f);
-		ImGui::SliderFloat("health", &current_health, 0.0f, max_health);
         if (ImGui::Button("Reset"))
         {
 			parameter = parameter_backup;
@@ -219,16 +218,6 @@ void Actor::UpdateDelayTime(DelayTime& delaytime, float maxtime)
 		delaytime.checker = true;
 		delaytime.time = maxtime;
 	}
-}
-
-void Actor::TakeDamage(float damage)
-{
-	current_health -= damage;
-}
-
-void Actor::TakeHeel(float heel)
-{
-	current_health += heel;
 }
 
 // ÉÇÉfÉãÇÃì«Ç›çûÇ›
@@ -356,14 +345,6 @@ Actor* ActorManager::GetActor(std::string name)
 		}
 	}
 	return nullptr;
-}
-
-void ActorManager::DaedUpdate()
-{
-	for(std::shared_ptr<Actor>& actor : updateActors)
-    {
-		if (actor->GetDeadFlag())Remove(actor);
-    }
 }
 
 bool ActorManager::GetNearActor(Actor* origin, Actor& result,ActorType filter)

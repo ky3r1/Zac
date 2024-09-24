@@ -24,7 +24,7 @@ ActionBase::State NormalAction::Run(float elapsedTime)
 		if (!owner->GetActor()->GetModel()->IsPlayAnimation())
 		{
 			owner->SetAttackFlag(false);
-			ActorManager::Instance().GetPlayer()->TakeDamage(1.0f);
+			ActorManager::Instance().GetPlayer()->GetComponent<Character>()->TakeDamage(1.0f);
 			step = 0;
 			// UŒ‚¬Œ÷‚ð•Ô‚·
 			return ActionBase::State::Complete;
@@ -228,7 +228,7 @@ ActionBase::State RecoverAction::Run(float elapsedTime)
 	case 1:
 		if (!owner->GetActor()->GetModel()->IsPlayAnimation())
 		{
-			owner->GetActor()->SetHealth(owner->GetActor()->GetMaxHealth());
+			owner->GetActor()->GetComponent<Character>()->SetHealth(owner->GetActor()->GetComponent<Character>()->GetMaxHealth());
 			step = 0;
 			return ActionBase::State::Complete;
 		}
