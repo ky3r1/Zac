@@ -31,10 +31,8 @@ public:
 
     //デバッグプリミティブ描画
     virtual void DrawDebug() override;
-
-protected:
-    std::shared_ptr<Movement>	movement;
-    std::shared_ptr<VsCollision>	vs_collision;
-
+public:
+    DelayTime GetUndeatableDelay() { return unbeatable_delay; }
+private:
     DelayTime unbeatable_delay;
 };

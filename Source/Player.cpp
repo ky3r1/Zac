@@ -1,7 +1,14 @@
-﻿#include <algorithm>
+﻿#include "Player.h"
+
+#include "Character.h"
+
+#include "Movement.h"
+#include "VsCollision.h"
+
+#include <algorithm>
 #include "Graphics/Graphics.h"
 #include "Camera.h"
-#include "Player.h"
+
 #include "Input/Input.h"
 #include "CameraController.h"
 #include "Enemy.h"
@@ -24,9 +31,7 @@ Player::~Player()
 void Player::Start()
 {
 	GetActor()->SetHealth(GetActor()->GetMaxHealth());
-	movement = GetActor()->GetComponent<Movement>();
-	movement.get()->SetMoveSpeed(0.8f);
-	vs_collision=GetActor()->GetComponent<VsCollision>();
+	GetActor()->GetComponent<Movement>()->SetMoveSpeed(0.8f);
 	GetActor()->SetAttitudeControlFlag(true);
 	// 適当にモーション再生
 	GetActor()->SetAnimation(Anim_Spawn, false);
@@ -49,7 +54,7 @@ void Player::Update(float elapsedTime)
 	//Jump
 	if (gamePad.GetButtonDown() & GamePad::BTN_X)
 	{
-		movement->Jump(10.0f);
+		GetActor()->GetComponent<Movement>()->Jump(10.0f);
 		//GetActor()->SetAnimation(Anim_JumpPeak, true);
 	}
 	{
@@ -61,45 +66,47 @@ void Player::Update(float elapsedTime)
 	}
 	Actor* enemy = nullptr;
 	//プレイヤーとエネミーの当たり判定
-	if (vs_collision->CylinderVsCylinderPushing(ActorType::Enemy, &enemy))
+	if (GetActor()->GetComponent<VsCollision>()->CylinderVsCylinderPushing(ActorType::Enemy, &enemy))
 	{
-		if (unbeatable_delay.checker)
-		{
-			//TakeDamage(1.0f);
-			{
-				DirectX::XMFLOAT3 impulse;
-				//吹き飛ばす力
-				const float power = 10.0f;
-				DirectX::XMVECTOR Enemy_Position = DirectX::XMLoadFloat3(&enemy->GetPosition());
-				DirectX::XMVECTOR Player_Position = DirectX::XMLoadFloat3(&GetActor()->GetPosition());
-				DirectX::XMVECTOR Vec = DirectX::XMVectorSubtract(Player_Position, Enemy_Position);
-				Vec = DirectX::XMVector3Normalize(Vec);
-				DirectX::XMFLOAT3 vec;
-				DirectX::XMStoreFloat3(&vec, Vec);
-				impulse.x = vec.x * power;
-				impulse.y = vec.y * power;
-				impulse.z = vec.z * power;
-				//movement->AddImpulse(vec);
-			}
+		//GetActor()->GetComponent<Character>()->GetUndeatableDelay().checker = true;
+		//if (unbeatable_delay.checker)
+		//{
+		//	//TakeDamage(1.0f);
+		//	{
+		//		DirectX::XMFLOAT3 impulse;
+		//		//吹き飛ばす力
+		//		const float power = 10.0f;
+		//		DirectX::XMVECTOR Enemy_Position = DirectX::XMLoadFloat3(&enemy->GetPosition());
+		//		DirectX::XMVECTOR Player_Position = DirectX::XMLoadFloat3(&GetActor()->GetPosition());
+		//		DirectX::XMVECTOR Vec = DirectX::XMVectorSubtract(Player_Position, Enemy_Position);
+		//		Vec = DirectX::XMVector3Normalize(Vec);
+		//		DirectX::XMFLOAT3 vec;
+		//		DirectX::XMStoreFloat3(&vec, Vec);
+		//		impulse.x = vec.x * power;
+		//		impulse.y = vec.y * power;
+		//		impulse.z = vec.z * power;
+		//		//movement->AddImpulse(vec);
+		//	}
 
-			unbeatable_delay.checker = false;
-		}
+		//	unbeatable_delay.checker = false;
+		//}
 	}
 	//GetActor()->SetRayPosition({
 	//	GetActor()->GetModel()->FindNode("Character1_Hips")->worldTransform._41,
 	//	GetActor()->GetModel()->FindNode("Character1_Hips")->worldTransform._42,
 	//	GetActor()->GetModel()->FindNode("Character1_Hips")->worldTransform._43 });
 	GetActor()->SetRayPosition(GetActor()->GetPosition());
+
 	if (GetActor()->GetHealth()<=0)
 	{
 		GetActor()->SetAnimationState(AnimationState::Death);
 	}
-	Character::Update(elapsedTime);
+	//Character::Update(elapsedTime);
 }
 
 void Player::DrawImGui()
 {
-	Character::DrawImGui();
+	//Character::DrawImGui();
 	DirectX::XMFLOAT3 a=GetMoveVec();
 	ImGui::InputFloat3("Move Vec", &a.x);
 }
@@ -122,8 +129,8 @@ void Player::CharacterControl(float elapsedTime)
 	DirectX::XMFLOAT3 move_vec=GetMoveVec();
 	{
 #if 1
-		movement->Turn(elapsedTime, move_vec);
-		movement->Move(move_vec);
+		GetActor()->GetComponent<Movement>()->Turn(elapsedTime, move_vec);
+		GetActor()->GetComponent<Movement>()->Move(move_vec);
 #else
 		// オイラーで制御する場合
 		std::shared_ptr<Actor>& actor = GetActor();

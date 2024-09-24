@@ -5,7 +5,7 @@
 #include "Stage.h"
 
 //ステージ
-class StageMain:public Stage 
+class StageMain:public Component
 {
 public:
     //名前取得

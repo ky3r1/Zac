@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "Graphics/Shader.h"
+#include "Component.h"
 #include "Character.h"
 
 class BehaviorTree;
@@ -23,7 +24,7 @@ enum
 };
 
 //エネミー
-class Enemy : public Character
+class Enemy:public Component
 {
 public:
 	Enemy() {}

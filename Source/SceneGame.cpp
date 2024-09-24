@@ -24,6 +24,7 @@
 
 #include "CameraController.h"
 #include "Object.h"
+#include "CollisionObject.h"
 #include "TrackingObject.h"
 #include "SphereTrackingObject.h"
 #include "AnimationComp.h"
@@ -78,6 +79,7 @@ void SceneGame::Initialize()
 		actor->AddComponent<VsCollision>();
 		actor->AddComponent<AnimationComp>();
 		actor->AddComponent<StateMachine>();
+		actor->AddComponent<Character>();
 		actor->AddComponent<Player>();
 	}
 #endif // PLAYER
@@ -107,6 +109,7 @@ void SceneGame::Initialize()
 			actor->SetActorType(ActorType::Enemy);
 			actor->AddComponent<Movement>();
 			actor->AddComponent<VsCollision>();
+			actor->AddComponent<Character>();
 			actor->AddComponent<Enemy>();
 		}
 		//// Enemy
@@ -286,13 +289,18 @@ void SceneGame::Initialize()
 			actor->SetColor(DirectX::XMFLOAT4(0.0f, 0.5f, 1.0f, 0.5f));
 			actor->SetRadius(3.0f);
 			actor->SetActorType(ActorType::Object);
+
 			actor->AddComponent<VsCollision>();
+
 			actor->AddComponent<Movement>();
+
+			actor->AddComponent<CollisionObject>();
+			actor->GetComponent<CollisionObject>()->SetHitCollisionType(HitCollisionType::Heel);
+			actor->GetComponent<CollisionObject>()->SetHitNum(1.0f);
+			actor->GetComponent<CollisionObject>()->SetTargetActorType(ActorType::Player);
+
 			actor->AddComponent<TrackingObject>();
-			actor->GetComponent<TrackingObject>()->SetHitCollisionType(HitCollisionType::Heel);
 			actor->GetComponent<TrackingObject>()->SetSphereRadius(FLT_MAX);
-			actor->GetComponent<TrackingObject>()->SetHitNum(1.0f);
-			actor->GetComponent<TrackingObject>()->SetTargetActorType(ActorType::Player);
 		}
 	}
 	{
@@ -311,12 +319,18 @@ void SceneGame::Initialize()
 			actor->SetRadius(3.0f);
 			actor->SetActorType(ActorType::Object);
 			actor->AddComponent<VsCollision>();
+
 			actor->AddComponent<Movement>();
+
+			actor->AddComponent<CollisionObject>();
+            actor->GetComponent<CollisionObject>()->SetHitCollisionType(HitCollisionType::Heel);
+            actor->GetComponent<CollisionObject>()->SetHitNum(1.0f);
+            actor->GetComponent<CollisionObject>()->SetTargetActorType(ActorType::Player);
+
+			actor->AddComponent<TrackingObject>();
+
 			actor->AddComponent<SphereTrackingObject>();
-			actor->GetComponent<SphereTrackingObject>()->SetHitCollisionType(HitCollisionType::Heel);
-			actor->GetComponent<SphereTrackingObject>()->SetHitNum(1.0f);
 			actor->GetComponent<SphereTrackingObject>()->SetRadiusSearch(100.0f);
-			actor->GetComponent<SphereTrackingObject>()->SetTargetActorType(ActorType::Player);
 		}
 	}
 #endif // OBJECT

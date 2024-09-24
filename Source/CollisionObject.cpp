@@ -15,7 +15,6 @@ void CollisionObject::Start()
 
 void CollisionObject::Update(float elapsedTime)
 {
-	Object::Update(elapsedTime);
 	Actor* actor = nullptr;
 	if (GetActor()->GetComponent<VsCollision>()->SphereVsSphere(target_actortype, &actor))
 	{
@@ -30,8 +29,7 @@ void CollisionObject::Update(float elapsedTime)
         default:
             break;
 		}
-		GetActor()->SetDeadFlag(true);
-		ActorManager::Instance().Remove(GetActor());
+		if (deletion_flg)ActorManager::Instance().Remove(GetActor());
 	}
 	target_actor = actor;
 }

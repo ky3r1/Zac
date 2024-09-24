@@ -1,8 +1,10 @@
 ﻿#pragma once
-#include"TrackingObject.h"
+#include "Component.h"
+
+//TrackingObject->SphereTrackingObjectの順に登録
 
 //追従オブジェクト
-class SphereTrackingObject : public TrackingObject
+class SphereTrackingObject : public Component
 {
 public:
     //名前取得
@@ -23,5 +25,5 @@ public:
 public:
     void SetRadiusSearch(float s) { this->radius_search = s; }
 protected:
-    float radius_search=0.0f;
+    float radius_search=0.0f;//目標が範囲内に入っていると追跡開始
 };

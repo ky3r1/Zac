@@ -1,5 +1,5 @@
 #pragma once
-#include "Object.h"
+#include "Component.h"
 
 enum class HitCollisionType
 {
@@ -8,7 +8,7 @@ enum class HitCollisionType
     None
 };
 
-class CollisionObject : public Object
+class CollisionObject : public Component
 {
 public:
     CollisionObject();
@@ -32,12 +32,14 @@ public:
     void SetHitCollisionType(HitCollisionType type){ hc_type = type; }
     HitCollisionType GetHitCollisionType(){ return hc_type; }
     void SetHitNum(float num){ hit_num = num; }
+    Actor* GetTargetActor(){ return target_actor; }
+    void SetDeletionFlg(bool flg){ deletion_flg = flg; }
 private:
 
-protected:
+private:
     HitCollisionType hc_type = HitCollisionType::None;
     ActorType target_actortype = ActorType::None;
     float hit_num = 0.0f;
     Actor* target_actor = nullptr;
-    
+    bool deletion_flg = true;// ê^:ìñÇΩÇ¡ÇΩÇÁè¡Ç¶ÇÈ-ãU:ìñÇΩÇ¡ÇƒÇ‡è¡Ç¶Ç»Ç¢
 };

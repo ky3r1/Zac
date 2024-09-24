@@ -1,6 +1,10 @@
 #include "TrackingObject.h"
+
+#include "CollisionObject.h"
+
 #include "Movement.h"
 #include "VsCollision.h"
+
 #include "Mathf.h"
 
 TrackingObject::TrackingObject()
@@ -26,31 +30,7 @@ void TrackingObject::Start()
 
 void TrackingObject::Update(float elapsedTime)
 {
-    CollisionObject::Update(elapsedTime);
-    //Ž€–S
-    {
-        if (target_actor != nullptr)
-        {
-            float r_h = target_actor->GetRadius()*0.9f;
-            Sphere p_scphere = { ppos, r_h };
-            r_h = GetActor()->GetRadius() * 0.9f;
-            Sphere c2_sphere = { c_sphere.position, r_h };
-            //{
-            //    DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(0.1, 0.8, 0.25, 1);
-            //    Graphics::Instance().GetDebugRenderer()->DrawSphere(p_scphere.position, p_scphere.radius, color);
-            //    color = DirectX::XMFLOAT4(0.77, 0.2, 0.5, 1);
-            //    Graphics::Instance().GetDebugRenderer()->DrawSphere(c2_sphere.position, c2_sphere.radius, color);
-            //}
-            if (timer > delete_timer
-                //Œë·‚ÍGetActor()->GetRadius()‚Ì‚æ‚è¬‚³‚­‚µ‚È‚¢‚Æ“–‚½‚è”»’è‚ª‚Å‚«‚È‚¢
-                || Collision::IntersectSphereVsSphere(c2_sphere, p_scphere)
-                )
-            {
-                GetActor()->SetDeadFlag(true);
-                ActorManager::Instance().Remove(GetActor());
-            }
-        }
-    }
+    Actor* target_actor = GetActor()->GetComponent<CollisionObject>()->GetTargetActor();
     //‰ñ“]
     {
         DirectX::XMFLOAT4 rotation = GetActor()->GetRotation();
@@ -60,16 +40,35 @@ void TrackingObject::Update(float elapsedTime)
         if (rotation.y > 3.14f)GetActor()->SetRotation({ rotation.x, -3.14f, rotation.z, rotation.w });
         if (rotation.z > 3.14f)GetActor()->SetRotation({ rotation.x, rotation.y, -3.14f, rotation.w });
     }
-    c_sphere.position = GetActor()->GetPosition();
-    if (target_actor != nullptr)
-    {
 
+    
+    
+    if (target_actor != nullptr)
+    { 
+        c_sphere.position = GetActor()->GetPosition();
+        //“–‚½‚ç‚È‚©‚Á‚½‚Æ‚«‚Ìíœ(–Ú•W‹ß‚­‚Åíœ)  
+        {
+            float r_h = target_actor->GetRadius() * 0.9f;
+            Sphere t_scphere = { tpos, r_h };
+            r_h = GetActor()->GetRadius() * 0.9f;
+            Sphere c2_sphere = { c_sphere.position, r_h };
+            if (timer > delete_timer
+                //Œë·‚ÍGetActor()->GetRadius()‚Ì‚æ‚è¬‚³‚­‚µ‚È‚¢‚Æ“–‚½‚è”»’è‚ª‚Å‚«‚È‚¢
+                || Collision::IntersectSphereVsSphere(c2_sphere, t_scphere)
+                )
+            {
+                GetActor()->SetDeadFlag(true);
+                ActorManager::Instance().Remove(GetActor());
+            }
+        }
+
+        //–Ú•W‚Ì’ÇÕ(ŽžŠÔor”ÍˆÍ)
         if (timer > max_runtimer || run_obj)
         {
             //‰~Œ`”ÍˆÍ“à‚É‚¢‚é‚Æ‚«‚¾‚¯ƒ^[ƒQƒbƒg‚ÌˆÊ’uî•ñ‚ðXV‚·‚é(c_sphere.radius‚ÅŒø‰Ê”ÍˆÍ‚ð•ÏX:0‚Å”ñŠ®‘S’Ç], FLT_MAX‚ÅŠ®‘S’Ç])
             if (Collision::IntersectSphereVsSphere(c_sphere, target_actor->GetSphere()))
             {
-                ppos = target_actor->GetPosition();
+                tpos = target_actor->GetPosition();
             }
 
             DirectX::XMFLOAT3 nvec = GetActor()->GetComponent<Movement>()->GetVelocity();
@@ -77,10 +76,10 @@ void TrackingObject::Update(float elapsedTime)
             //‘¬—Í
             const float power = /*player->GetComponent<Movement>()->GetMoveSpeed() * 1.2f*/0.1f + Mathf::Length(nvec);
             //DirectX::XMFLOAT3 ppos = target_actor->GetPosition();
-            float ph = target_actor->GetHeight();
+            float th = target_actor->GetHeight();
             DirectX::XMVECTOR Object_Position = DirectX::XMLoadFloat3(&GetActor()->GetPosition());
-            DirectX::XMVECTOR Player_Position = DirectX::XMLoadFloat3(&DirectX::XMFLOAT3(ppos.x, ppos.y + ph * 0.25f, ppos.z));
-            DirectX::XMVECTOR Vec = DirectX::XMVectorSubtract(Player_Position, Object_Position);
+            DirectX::XMVECTOR Target_Position = DirectX::XMLoadFloat3(&DirectX::XMFLOAT3(tpos.x, tpos.y + th * 0.25f, tpos.z));
+            DirectX::XMVECTOR Vec = DirectX::XMVectorSubtract(Target_Position, Object_Position);
             //Vec = DirectX::XMVector3Normalize(DirectX::XMVectorAdd(Vec, NowVec));
             Vec = DirectX::XMVector3Normalize(Vec);
             DirectX::XMFLOAT3 vec;
@@ -96,7 +95,7 @@ void TrackingObject::Update(float elapsedTime)
         }
         else
         {
-            ppos = target_actor->GetPosition();
+            tpos = target_actor->GetPosition();
             if (!desired_flg)
             {
                 {
@@ -141,7 +140,6 @@ void TrackingObject::Update(float elapsedTime)
 
 void TrackingObject::DrawImGui()
 {
-    CollisionObject::DrawImGui();
     ImGui::SliderFloat("Radius", &c_sphere.radius, 0.1f, 10.0f);
     if (ImGui::Button("Run"))
     {

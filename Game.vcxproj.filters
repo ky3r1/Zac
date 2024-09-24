@@ -51,9 +51,6 @@
     <Filter Include="Component\Character\Player">
       <UniqueIdentifier>{586e89f3-e571-4887-bbad-e3063f9e8e0c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Component\Character\Projectile">
-      <UniqueIdentifier>{3a4daa95-d8ff-4d37-8758-65b321fa7eb7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Component\Stage">
       <UniqueIdentifier>{ec65c4ca-6a60-4d92-8c92-c3796c1e0bc8}</UniqueIdentifier>
     </Filter>
@@ -218,26 +215,11 @@
     <ClInclude Include="Source\SceneTutorial.h">
       <Filter>Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Stage.h">
-      <Filter>Component\Stage</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Mathf.h">
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="Source\Player.h">
       <Filter>Component\Character\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Projectile.h">
-      <Filter>Component\Character\Projectile</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ProjectileHoming.h">
-      <Filter>Component\Character\Projectile</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ProjectileManager.h">
-      <Filter>Component\Character\Projectile</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ProjectileStraight.h">
-      <Filter>Component\Character\Projectile</Filter>
     </ClInclude>
     <ClInclude Include="Source\Enemy.h">
       <Filter>Component\Character\Enemy</Filter>
@@ -424,9 +406,6 @@
     <ClCompile Include="Source\SceneTutorial.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Stage.cpp">
-      <Filter>Component\Stage</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Mathf.cpp">
       <Filter>System</Filter>
     </ClCompile>
@@ -435,18 +414,6 @@
     </ClCompile>
     <ClCompile Include="Source\Player.cpp">
       <Filter>Component\Character\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Projectile.cpp">
-      <Filter>Component\Character\Projectile</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ProjectileHoming.cpp">
-      <Filter>Component\Character\Projectile</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ProjectileManager.cpp">
-      <Filter>Component\Character\Projectile</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ProjectileStraight.cpp">
-      <Filter>Component\Character\Projectile</Filter>
     </ClCompile>
     <ClCompile Include="Source\Graphics\ResourceManager.cpp">
       <Filter>Graphics</Filter>

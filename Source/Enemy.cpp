@@ -1,6 +1,13 @@
 #include "Enemy.h"
-#include "Mathf.h"
+
+#include "Movement.h"
+#include "VsCollision.h"
+
+#include "CollisionObject.h"
 #include "TrackingObject.h"
+
+#include "Mathf.h"
+
 
 #include "AI/BehaviorTree.h"
 #include "AI/BehaviorData.h"
@@ -13,36 +20,37 @@
 void Enemy::Start()
 {
     GetActor()->SetHealth(GetActor()->GetMaxHealth());
-    movement = GetActor()->GetComponent<Movement>();
-    movement.get()->SetMoveSpeed(0.3f);
-    vs_collision=GetActor()->GetComponent<VsCollision>();
-    GetActor()->SetAttitudeControlFlag(true);
-    // ビヘイビアツリー設定
-    behaviorData = new BehaviorData();
-    aiTree = new BehaviorTree();
-    // BehaviorTree図を基にBehaviorTreeを構築
-    // ノードを追加
-    aiTree->AddNode("", "Root", 0, BehaviorTree::SelectRule::Priority, nullptr, nullptr);
-    aiTree->AddNode("Root", "Escape", 3, BehaviorTree::SelectRule::Sequence, new EscapeJudgment(this), nullptr);
-    aiTree->AddNode("Root", "Battle", 4, BehaviorTree::SelectRule::Priority, new BattleJudgment(this), nullptr);
-    aiTree->AddNode("Root", "Scout", 5, BehaviorTree::SelectRule::Priority, nullptr, nullptr);
+    GetActor()->GetComponent<Movement>()->SetMoveSpeed(0.3f);
+
+    //Ai
+    {
+        //// ビヘイビアツリー設定
+        //behaviorData = new BehaviorData();
+        //aiTree = new BehaviorTree();
+        //// BehaviorTree図を基にBehaviorTreeを構築
+        //// ノードを追加
+        //aiTree->AddNode("", "Root", 0, BehaviorTree::SelectRule::Priority, nullptr, nullptr);
+        //aiTree->AddNode("Root", "Escape", 3, BehaviorTree::SelectRule::Sequence, new EscapeJudgment(this), nullptr);
+        //aiTree->AddNode("Root", "Battle", 4, BehaviorTree::SelectRule::Priority, new BattleJudgment(this), nullptr);
+        //aiTree->AddNode("Root", "Scout", 5, BehaviorTree::SelectRule::Priority, nullptr, nullptr);
 
 
-    aiTree->AddNode("Scout", "Wander", 1, BehaviorTree::SelectRule::Non, new WanderJudgment(this), new WanderAction(this));
-    aiTree->AddNode("Scout", "Idle", 2, BehaviorTree::SelectRule::Non, nullptr, new IdleAction(this));
+        //aiTree->AddNode("Scout", "Wander", 1, BehaviorTree::SelectRule::Non, new WanderJudgment(this), new WanderAction(this));
+        //aiTree->AddNode("Scout", "Idle", 2, BehaviorTree::SelectRule::Non, nullptr, new IdleAction(this));
 
 
-    aiTree->AddNode("Battle", "Attack", 1, BehaviorTree::SelectRule::Priority, new AttackJudgment(this), nullptr);
-    aiTree->AddNode("Attack", "ShortAttack", 1, BehaviorTree::SelectRule::Non, new ShortAttackJudgment(this), new NormalAction(this)/*nullptr*/);
-    //aiTree->AddNode("ShortAttack", "Normal", 1, BehaviorTree::SelectRule::Non, nullptr, new NormalAction(this));
-    
-    aiTree->AddNode("Attack", "LongAttack", 2, BehaviorTree::SelectRule::Non, new LongAttackJudgment(this), new SkillAction(this)/*nullptr*/);
-    //aiTree->AddNode("LongAttack", "Skill", 1, BehaviorTree::SelectRule::Non, nullptr, new SkillAction(this));
+        //aiTree->AddNode("Battle", "Attack", 1, BehaviorTree::SelectRule::Priority, new AttackJudgment(this), nullptr);
+        //aiTree->AddNode("Attack", "ShortAttack", 1, BehaviorTree::SelectRule::Non, new ShortAttackJudgment(this), new NormalAction(this)/*nullptr*/);
+        ////aiTree->AddNode("ShortAttack", "Normal", 1, BehaviorTree::SelectRule::Non, nullptr, new NormalAction(this));
+        //
+        //aiTree->AddNode("Attack", "LongAttack", 2, BehaviorTree::SelectRule::Non, new LongAttackJudgment(this), new SkillAction(this)/*nullptr*/);
+        ////aiTree->AddNode("LongAttack", "Skill", 1, BehaviorTree::SelectRule::Non, nullptr, new SkillAction(this));
 
-    aiTree->AddNode("Battle", "Pursuit", 2, BehaviorTree::SelectRule::Non, nullptr, new PursuitAction(this));
+        //aiTree->AddNode("Battle", "Pursuit", 2, BehaviorTree::SelectRule::Non, nullptr, new PursuitAction(this));
 
-    aiTree->AddNode("Escape", "Leave", 1, BehaviorTree::SelectRule::Non, new EscapeJudgment(this), new LeaveAction(this));
-    aiTree->AddNode("Escape", "Recover", 2, BehaviorTree::SelectRule::Non, nullptr, new RecoverAction(this));
+        //aiTree->AddNode("Escape", "Leave", 1, BehaviorTree::SelectRule::Non, new EscapeJudgment(this), new LeaveAction(this));
+        //aiTree->AddNode("Escape", "Recover", 2, BehaviorTree::SelectRule::Non, nullptr, new RecoverAction(this));
+    }
 
     // 適当にモーション再生
     Model* model = GetActor()->GetModel();
@@ -54,18 +62,18 @@ void Enemy::Start()
 
 void Enemy::Update(float elapsedTime)
 {
-    // 現在実行されているノードが無ければ
-    if (activeNode == nullptr)
-    {
-        // 次に実行するノードを推論する。
-        activeNode = aiTree->ActiveNodeInference(behaviorData);
-    }
-    // 現在実行するノードがあれば
-    if (activeNode != nullptr)
-    {
-        // ビヘイビアツリーからノードを実行。
-        activeNode = aiTree->Run(activeNode, behaviorData, elapsedTime);
-    }
+    //// 現在実行されているノードが無ければ
+    //if (activeNode == nullptr)
+    //{
+    //    // 次に実行するノードを推論する。
+    //    activeNode = aiTree->ActiveNodeInference(behaviorData);
+    //}
+    //// 現在実行するノードがあれば
+    //if (activeNode != nullptr)
+    //{
+    //    // ビヘイビアツリーからノードを実行。
+    //    activeNode = aiTree->Run(activeNode, behaviorData, elapsedTime);
+    //}
     
     GetActor()->UpdateDelayTime(attack_flag, 2.0f*60.0f);
 
@@ -76,7 +84,7 @@ void Enemy::Update(float elapsedTime)
     //    GetActor()->GetComponent<Movement>()->Turn(elapsedTime, vec_pe);
     //}
     //エネミー同士の衝突判定
-    if (vs_collision->CylinderVsCylinderPushing(ActorType::Enemy,nullptr))
+    if (GetActor()->GetComponent<VsCollision>()->CylinderVsCylinderPushing(ActorType::Enemy, nullptr))
     {
 
     }
@@ -100,19 +108,22 @@ void Enemy::Update(float elapsedTime)
                 actor->SetActorType(ActorType::Object);
                 actor->AddComponent<VsCollision>();
                 actor->AddComponent<Movement>();
+                actor->AddComponent<CollisionObject>();
+                actor->GetComponent<CollisionObject>()->SetTargetActorType(ActorType::Player);
+                actor->GetComponent<CollisionObject>()->SetHitCollisionType(HitCollisionType::Damage);
+                actor->GetComponent<CollisionObject>()->SetHitNum(1.0f);
+
+
                 actor->AddComponent<TrackingObject>();
                 actor->GetComponent<TrackingObject>()->SetMaxRuntimer((rand() % 4 + static_cast<float>(rand() % 1000)/1000) * 60.0f);
-                actor->GetComponent<TrackingObject>()->SetHitCollisionType(HitCollisionType::Damage);
                 actor->GetComponent<TrackingObject>()->SetSphereRadius(0.0f);
-                actor->GetComponent<TrackingObject>()->SetHitNum(1.0f);
-                actor->GetComponent<TrackingObject>()->SetTargetActorType(ActorType::Player);
                 actor->GetComponent<TrackingObject>()->SetDesiredPosition({ position.x + (rand() % 30 - 10), position.y + 3+ (rand() % 20), position.z + (rand() % 30 - 10) });
             }
             ActorManager::Instance().Remove(GetActor());
         }
     }
     GetActor()->SetRayPosition(GetActor()->GetPosition());
-    Character::Update(elapsedTime);
+    //Character::Update(elapsedTime);
 }
 
 void Enemy::ShotObject()
@@ -131,12 +142,16 @@ void Enemy::ShotObject()
     actor->SetActorType(ActorType::Object);
     actor->AddComponent<VsCollision>();
     actor->AddComponent<Movement>();
+    actor->AddComponent<CollisionObject>();
+    actor->GetComponent<CollisionObject>()->SetTargetActorType(ActorType::Player);
+    actor->GetComponent<CollisionObject>()->SetHitCollisionType(HitCollisionType::Damage);
+    actor->GetComponent<CollisionObject>()->SetHitNum(1.0f);
     actor->AddComponent<TrackingObject>();
     actor->GetComponent<TrackingObject>()->SetMaxRuntimer((0.0f));
-    actor->GetComponent<TrackingObject>()->SetHitCollisionType(HitCollisionType::Damage);
-    actor->GetComponent<TrackingObject>()->SetHitNum(1.0f);
-    actor->GetComponent<TrackingObject>()->SetTargetActorType(ActorType::Player);
-    //actor->GetComponent<TrackingObject>()->SetDesiredPosition({ position.x + (rand() % 30 - 10), position.y + 3 + (rand() % 20), position.z + (rand() % 30 - 10) });
+    //actor->GetComponent<TrackingObject>()->SetHitCollisionType(HitCollisionType::Damage);
+    //actor->GetComponent<TrackingObject>()->SetHitNum(1.0f);
+    //actor->GetComponent<TrackingObject>()->SetTargetActorType(ActorType::Player);
+    ////actor->GetComponent<TrackingObject>()->SetDesiredPosition({ position.x + (rand() % 30 - 10), position.y + 3 + (rand() % 20), position.z + (rand() % 30 - 10) });
 }
 
 bool Enemy::Search(DirectX::XMFLOAT3 target_position_s)
@@ -147,7 +162,6 @@ bool Enemy::Search(DirectX::XMFLOAT3 target_position_s)
 
 void Enemy::DrawImGui()
 {
-    Character::DrawImGui();
     if (ImGui::Button("Delete"))
     {
         GetActor()->SetHealth(0);
