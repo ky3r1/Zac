@@ -96,7 +96,7 @@ dcl_output o1.xyz
 dcl_output o2.xyz
 dcl_output o3.xyzw
 dcl_output o4.xy
-dcl_temps 6
+dcl_temps 7
 //
 // Initial variable locations:
 //   v0.x <- position.x; v0.y <- position.y; v0.z <- position.z; v0.w <- position.w; 
@@ -115,57 +115,58 @@ dcl_temps 6
 //   o0.x <- <main return value>.position.x; o0.y <- <main return value>.position.y; o0.z <- <main return value>.position.z; o0.w <- <main return value>.position.w
 //
 #line 13 "E:\Zac\HLSL\Ramp_shader_vs.hlsl"
-itof r0.xyz, l(0, 0, 0, 0)  // r0.x <- p.x; r0.y <- p.y; r0.z <- p.z
+itof r0.xyzw, l(0, 0, 0, 0)  // r0.x <- p.x; r0.y <- p.y; r0.z <- p.z; r0.w <- p.w
 
 #line 14
 itof r1.xyz, l(0, 0, 0, 0)  // r1.x <- n.x; r1.y <- n.y; r1.z <- n.z
 
 #line 15
-mov r0.w, l(0)  // r0.w <- i
+mov r1.w, l(0)  // r1.w <- i
 mov r2.xyz, r1.xyzx  // r2.x <- n.x; r2.y <- n.y; r2.z <- n.z
 mov r3.x, r0.x  // r3.x <- p.x
 mov r3.y, r0.y  // r3.y <- p.y
 mov r3.z, r0.z  // r3.z <- p.z
-mov r1.w, r0.w  // r1.w <- i
+mov r3.w, r0.w  // r3.w <- p.w
+mov r2.w, r1.w  // r2.w <- i
 loop 
-  ilt r2.w, r1.w, l(4)
-  breakc_z r2.w
+  ilt r4.x, r2.w, l(4)
+  breakc_z r4.x
 
 #line 17
-  dp4 r2.w, v5.xyzw, icb[r1.w + 0].xyzw
-  and r4.xyzw, v6.xyzw, icb[r1.w + 4].xyzw
-  or r4.xy, r4.ywyy, r4.xzxx
-  or r3.w, r4.y, r4.x
-  imul null, r3.w, r3.w, l(4)
-  mul r4.xyz, v0.xxxx, cb0[r3.w + 0].xyzx
-  mul r5.xyz, v0.yyyy, cb0[r3.w + 1].xyzx
-  add r4.xyz, r4.xyzx, r5.xyzx
-  mul r5.xyz, v0.zzzz, cb0[r3.w + 2].xyzx
-  add r4.xyz, r4.xyzx, r5.xyzx
-  mul r5.xyz, v0.wwww, cb0[r3.w + 3].xyzx
-  add r4.xyz, r4.xyzx, r5.xyzx
-  mul r4.xyz, r2.wwww, r4.xyzx
-  add r3.xyz, r4.xyzx, r3.xyzx
+  dp4 r4.x, v5.xyzw, icb[r2.w + 0].xyzw
+  and r5.xyzw, v6.xyzw, icb[r2.w + 4].xyzw
+  or r4.yz, r5.yywy, r5.xxzx
+  or r4.y, r4.z, r4.y
+  imul null, r4.y, r4.y, l(4)
+  mul r5.xyzw, v0.xxxx, cb0[r4.y + 0].xyzw
+  mul r6.xyzw, v0.yyyy, cb0[r4.y + 1].xyzw
+  add r5.xyzw, r5.xyzw, r6.xyzw
+  mul r6.xyzw, v0.zzzz, cb0[r4.y + 2].xyzw
+  add r5.xyzw, r5.xyzw, r6.xyzw
+  mul r6.xyzw, v0.wwww, cb0[r4.y + 3].xyzw
+  add r5.xyzw, r5.xyzw, r6.xyzw
+  mul r4.xyzw, r4.xxxx, r5.xyzw
+  add r3.xyzw, r4.xyzw, r3.xyzw
 
 #line 18
-  dp4 r2.w, v5.xyzw, icb[r1.w + 0].xyzw
-  itof r3.w, l(0)
-  and r4.xyzw, v6.xyzw, icb[r1.w + 4].xyzw
-  or r4.xy, r4.ywyy, r4.xzxx
-  or r4.x, r4.y, r4.x
-  imul null, r4.x, r4.x, l(4)
-  mul r4.yzw, v1.xxxx, cb0[r4.x + 0].xxyz
-  mul r5.xyz, v1.yyyy, cb0[r4.x + 1].xyzx
+  dp4 r4.x, v5.xyzw, icb[r2.w + 0].xyzw
+  itof r4.y, l(0)
+  and r5.xyzw, v6.xyzw, icb[r2.w + 4].xyzw
+  or r4.zw, r5.yyyw, r5.xxxz
+  or r4.z, r4.w, r4.z
+  imul null, r4.z, r4.z, l(4)
+  mul r5.xyz, v1.xxxx, cb0[r4.z + 0].xyzx
+  mul r6.xyz, v1.yyyy, cb0[r4.z + 1].xyzx
+  add r5.xyz, r5.xyzx, r6.xyzx
+  mul r6.xyz, v1.zzzz, cb0[r4.z + 2].xyzx
+  add r5.xyz, r5.xyzx, r6.xyzx
+  mul r4.yzw, r4.yyyy, cb0[r4.z + 3].xxyz
   add r4.yzw, r4.yyzw, r5.xxyz
-  mul r5.xyz, v1.zzzz, cb0[r4.x + 2].xyzx
-  add r4.yzw, r4.yyzw, r5.xxyz
-  mul r5.xyz, r3.wwww, cb0[r4.x + 3].xyzx
-  add r4.xyz, r4.yzwy, r5.xyzx
-  mul r4.xyz, r2.wwww, r4.xyzx
+  mul r4.xyz, r4.yzwy, r4.xxxx
   add r2.xyz, r2.xyzx, r4.xyzx
 
 #line 19
-  iadd r1.w, r1.w, l(1)
+  iadd r2.w, r2.w, l(1)
 endloop 
 
 #line 22
@@ -174,7 +175,7 @@ mul r1.xyzw, r3.yyyy, cb2[1].xyzw
 add r0.xyzw, r0.xyzw, r1.xyzw
 mul r1.xyzw, r3.zzzz, cb2[2].xyzw
 add r0.xyzw, r0.xyzw, r1.xyzw
-mul r1.xyzw, cb2[3].xyzw, l(1.000000, 1.000000, 1.000000, 1.000000)
+mul r1.xyzw, r3.wwww, cb2[3].xyzw
 add r0.xyzw, r0.xyzw, r1.xyzw  // r0.x <- vout.position.x; r0.y <- vout.position.y; r0.z <- vout.position.z; r0.w <- vout.position.w
 
 #line 24
@@ -223,4 +224,4 @@ mov o1.xyz, r3.xyzx
 mov o2.xyz, r1.xyzx
 mov o4.xy, r4.xyxx
 ret 
-// Approximately 76 instruction slots used
+// Approximately 77 instruction slots used

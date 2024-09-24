@@ -87,6 +87,9 @@
     <Filter Include="Component\Action\BehaviorTree">
       <UniqueIdentifier>{d30db9e1-27a6-4c33-9104-536b303fdb6a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Component\Object\CollisionObject\FrontObject">
+      <UniqueIdentifier>{b7b22b40-882e-40bb-bfcd-bfcce8ab783c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\imgui\imconfig.h">
@@ -302,6 +305,9 @@
     <ClInclude Include="Source\AI\NodeBase.h">
       <Filter>Component\Action\BehaviorTree</Filter>
     </ClInclude>
+    <ClInclude Include="Source\FrontObject.h">
+      <Filter>Component\Object\CollisionObject\FrontObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="External\imgui\imgui.cpp">
@@ -489,6 +495,9 @@
     </ClCompile>
     <ClCompile Include="Source\Easing.cpp">
       <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\FrontObject.cpp">
+      <Filter>Component\Object\CollisionObject\FrontObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

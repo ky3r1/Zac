@@ -5,6 +5,9 @@
 #include "Movement.h"
 #include "VsCollision.h"
 
+#include "CollisionObject.h"
+#include "FrontObject.h"
+
 #include <algorithm>
 #include "Graphics/Graphics.h"
 #include "Camera.h"
@@ -44,10 +47,35 @@ void Player::Update(float elapsedTime)
 	}
 
 	//Jump
-	if (gamePad.GetButtonDown() & GamePad::BTN_X)
+	if (gamePad.GetButtonDown() & GamePad::BTN_B)
 	{
 		GetActor()->GetComponent<Movement>()->Jump(10.0f);
 		//GetActor()->SetAnimation(Anim_JumpPeak, true);
+	}
+	if (gamePad.GetButtonDown() & GamePad::BTN_X)
+	{
+		const char* filename = "Data/Model/Cube/Cube.mdl";
+		std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
+		std::string name = std::string("TrackingObject:") + std::string(GetActor()->GetName());
+		actor->LoadModel(filename);
+		actor->SetName(name);
+		DirectX::XMFLOAT3 position = GetActor()->GetPosition();
+		actor->SetPosition({ position.x, position.y+100    , position.z });
+		actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
+		actor->SetScale(DirectX::XMFLOAT3(5.0f, 5.0f, 5.0f));
+		actor->SetColor(DirectX::XMFLOAT4(0.0f, 1.0f, 1.0f, 0.5f));
+		actor->SetRadius(3.0f);
+		actor->SetActorType(ActorType::Object);
+		actor->AddComponent<VsCollision>();
+		actor->AddComponent<Movement>();
+		actor->AddComponent<CollisionObject>();
+		actor->GetComponent<CollisionObject>()->SetTargetActorType(ActorType::Enemy);
+		actor->GetComponent<CollisionObject>()->SetHitCollisionType(HitCollisionType::Damage);
+		actor->GetComponent<CollisionObject>()->SetHitNum(1.0f);
+
+		actor->AddComponent<FrontObject>();
+		actor->GetComponent<FrontObject>()->SetForward({ 0, 10, 0 });
+		actor->GetComponent<FrontObject>()->SetPower(1.0f);
 	}
 	Actor* enemy = nullptr;
 	//プレイヤーとエネミーの当たり判定
