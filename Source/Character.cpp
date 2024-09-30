@@ -1,4 +1,5 @@
 #include "Character.h"
+#include "VsCollision.h"
 
 #define MAX_UNBEATABLE 2.0f*60
 
@@ -12,13 +13,17 @@ void Character::Start()
 
 void Character::Update(float elapsedTime)
 {
+
+    
+    //–³“GŽžŠÔXV
     GetActor()->UpdateDelayTime(unbeatable_delay, MAX_UNBEATABLE);
     //RayCast
+    GetActor()->SetRayPosition(GetActor()->GetPosition());
     {
-        //vs_collision->RayCastAxisYUnder();
         GetActor()->GetComponent<VsCollision>()->RayCastAxisXZ();
-        GetActor()->GetComponent<VsCollision>()->RayCastAxisY();
-        //vs_collision->RayCastAxisXZ();
+        GetActor()->GetComponent<VsCollision>()->RayCastAxisYUp();
+        GetActor()->GetComponent<VsCollision>()->RayCastAxisYUnder();
+
     }
 }
 

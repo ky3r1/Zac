@@ -6,7 +6,6 @@
 #include "BehaviorTree.h"
 
 class NodeBase;
-class EnemyBlueSlime;
 
 // Behaviorï€ë∂ÉfÅ[É^
 class BehaviorData

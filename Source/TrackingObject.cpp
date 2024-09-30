@@ -62,7 +62,7 @@ void TrackingObject::Update(float elapsedTime)
         }
 
         //目標の追跡(時間or範囲)
-        if (timer > max_runtimer || run_obj)
+        if (run_obj)
         {
             //円形範囲内にいるときだけターゲットの位置情報を更新する(c_sphere.radiusで効果範囲を変更:0で非完全追従, FLT_MAXで完全追従)
             if (Collision::IntersectSphereVsSphere(c_sphere, target_actor->GetSphere()))

@@ -487,17 +487,15 @@ void ActorManager::DrawLister(ActorType filter)
 				{
 					nodeFlags |= ImGuiTreeNodeFlags_Selected;
 				}
-
 				ImGui::TreeNodeEx(actor.get(), nodeFlags, actor->GetName().c_str());
-
 				if (ImGui::IsItemClicked())
 				{
+					guichecker = true;
 					// ’Pˆê‘I‘ð‚¾‚¯‘Î‰ž‚µ‚Ä‚¨‚­
 					ImGuiIO& io = ImGui::GetIO();
 					selectionActors.clear();
 					selectionActors.insert(actor);
 				}
-
 				ImGui::TreePop();
 			}
 		}

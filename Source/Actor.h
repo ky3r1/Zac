@@ -284,4 +284,5 @@ private:
 
 	bool					hiddenLister = false;
 	bool					hiddenDetail = false;
+	bool					guichecker = false;
 };

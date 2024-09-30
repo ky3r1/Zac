@@ -5,6 +5,7 @@
 
 #include "CollisionObject.h"
 #include "TrackingObject.h"
+#include "TimeTrackingObject.h"
 
 #include "Mathf.h"
 
@@ -112,17 +113,16 @@ void Enemy::Update(float elapsedTime)
                 actor->GetComponent<CollisionObject>()->SetHitCollisionType(HitCollisionType::Damage);
                 actor->GetComponent<CollisionObject>()->SetHitNum(1.0f);
 
-
                 actor->AddComponent<TrackingObject>();
-                actor->GetComponent<TrackingObject>()->SetMaxRuntimer((rand() % 4 + static_cast<float>(rand() % 1000)/1000) * 60.0f);
                 actor->GetComponent<TrackingObject>()->SetSphereRadius(0.0f);
                 actor->GetComponent<TrackingObject>()->SetDesiredPosition({ position.x + (rand() % 30 - 10), position.y + 3+ (rand() % 20), position.z + (rand() % 30 - 10) });
+            
+                actor->AddComponent<TimeTrackingObject>();
+                actor->GetComponent<TimeTrackingObject>()->SetRunTimer((rand() % 4 + static_cast<float>(rand() % 1000) / 1000) * 60.0f);
             }
             ActorManager::Instance().Remove(GetActor());
         }
     }
-    GetActor()->SetRayPosition(GetActor()->GetPosition());
-    //Character::Update(elapsedTime);
 }
 
 void Enemy::ShotObject()
@@ -146,7 +146,7 @@ void Enemy::ShotObject()
     actor->GetComponent<CollisionObject>()->SetHitCollisionType(HitCollisionType::Damage);
     actor->GetComponent<CollisionObject>()->SetHitNum(1.0f);
     actor->AddComponent<TrackingObject>();
-    actor->GetComponent<TrackingObject>()->SetMaxRuntimer((0.0f));
+    actor->GetComponent<TrackingObject>()->Run();
     //actor->GetComponent<TrackingObject>()->SetHitCollisionType(HitCollisionType::Damage);
     //actor->GetComponent<TrackingObject>()->SetHitNum(1.0f);
     //actor->GetComponent<TrackingObject>()->SetTargetActorType(ActorType::Player);

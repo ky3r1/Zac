@@ -16,7 +16,6 @@
 #include "CameraController.h"
 #include "Enemy.h"
 #include "Mathf.h"
-#include "StateMachine.h"
 
 
 // コンストラクタ
@@ -81,7 +80,7 @@ void Player::Update(float elapsedTime)
 	//プレイヤーとエネミーの当たり判定
 	if (GetActor()->GetComponent<VsCollision>()->CylinderVsCylinderPushing(ActorType::Enemy, &enemy))
 	{
-		//GetActor()->GetComponent<Character>()->GetUndeatableDelay().checker = true;
+		//GetActor()->GetComponent<Character>()->SetUndeatableDelay(true);
 		//if (unbeatable_delay.checker)
 		//{
 		//	//TakeDamage(1.0f);
@@ -108,7 +107,6 @@ void Player::Update(float elapsedTime)
 	//	GetActor()->GetModel()->FindNode("Character1_Hips")->worldTransform._41,
 	//	GetActor()->GetModel()->FindNode("Character1_Hips")->worldTransform._42,
 	//	GetActor()->GetModel()->FindNode("Character1_Hips")->worldTransform._43 });
-	GetActor()->SetRayPosition(GetActor()->GetPosition());
 }
 
 void Player::DrawImGui()

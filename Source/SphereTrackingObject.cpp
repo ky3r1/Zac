@@ -13,7 +13,6 @@ SphereTrackingObject::~SphereTrackingObject()
 
 void SphereTrackingObject::Start()
 {
-    GetActor()->GetComponent<TrackingObject>()->SetSphereRadius(FLT_MAX);
 }
 
 void SphereTrackingObject::Update(float elapsedTime)
@@ -23,7 +22,7 @@ void SphereTrackingObject::Update(float elapsedTime)
     {
         if (Mathf::Distance(GetActor()->GetPosition(), target_actor->GetPosition()) < radius_search)
         {
-            GetActor()->GetComponent<TrackingObject>()->SetRunObject(true);
+            GetActor()->GetComponent<TrackingObject>()->Run();
         }
     }
 }

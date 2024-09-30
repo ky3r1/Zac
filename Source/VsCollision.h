@@ -24,9 +24,11 @@ public:
     bool CylinderVsCylinder(ActorType filter, Actor** reactor);
 
     //下方向のレイキャスト
-    bool RayCastAxisY();
-
-    void RayCastAxisYUnder();
+    bool RayCastAxisYUnder();
+    //上方向のレイキャスト
+    bool RayCastAxisYUp();
+    //下方向無限にレイキャスト
+    void RayCastAxisYUnderEx();
 
     //横方向のレイキャスト
     bool RayCastAxisXZ();

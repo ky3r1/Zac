@@ -69,9 +69,6 @@
     <Filter Include="Control">
       <UniqueIdentifier>{aa4836e2-7434-48e6-8942-ee08b696af25}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Control\State">
-      <UniqueIdentifier>{80886cbe-aa3c-4c06-907d-c3a42c58a2fa}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Control\SearchSystem">
       <UniqueIdentifier>{842ef880-36c4-4b2c-8309-da53038747e1}</UniqueIdentifier>
     </Filter>
@@ -81,14 +78,20 @@
     <Filter Include="Component\Action">
       <UniqueIdentifier>{ecca378b-05cb-4fd2-b1d1-bef1516987d2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Component\Action\State">
-      <UniqueIdentifier>{217b9372-919d-481e-a0a8-19e24e54b709}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Component\Action\BehaviorTree">
-      <UniqueIdentifier>{d30db9e1-27a6-4c33-9104-536b303fdb6a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Component\Object\CollisionObject\FrontObject">
       <UniqueIdentifier>{b7b22b40-882e-40bb-bfcd-bfcce8ab783c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Control\State">
+      <UniqueIdentifier>{217b9372-919d-481e-a0a8-19e24e54b709}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Control\State\StateMachine">
+      <UniqueIdentifier>{d6a83b60-b393-4c5f-b7e3-aa226abdad37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Control\BehaviorTree">
+      <UniqueIdentifier>{d30db9e1-27a6-4c33-9104-536b303fdb6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Object\CollisionObject\TrackingObject\TimeTrackingObject">
+      <UniqueIdentifier>{c61e54cd-ce1a-41f9-ade7-df64e18655e5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -278,35 +281,38 @@
     <ClInclude Include="Source\SphereTrackingObject.h">
       <Filter>Component\Object\CollisionObject\TrackingObject\SphereTrackingObject</Filter>
     </ClInclude>
+    <ClInclude Include="Source\AI\ActionBase.h">
+      <Filter>Control\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AI\ActionDerived.h">
+      <Filter>Control\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AI\BehaviorData.h">
+      <Filter>Control\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AI\BehaviorTree.h">
+      <Filter>Control\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AI\JudgmentBase.h">
+      <Filter>Control\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AI\JudgmentDerived.h">
+      <Filter>Control\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AI\NodeBase.h">
+      <Filter>Control\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\FrontObject.h">
+      <Filter>Component\Object\CollisionObject\FrontObject</Filter>
+    </ClInclude>
     <ClInclude Include="Source\StateBase.h">
       <Filter>Control\State</Filter>
     </ClInclude>
     <ClInclude Include="Source\StateMachine.h">
-      <Filter>Component\Action\State</Filter>
+      <Filter>Control\State\StateMachine</Filter>
     </ClInclude>
-    <ClInclude Include="Source\AI\ActionBase.h">
-      <Filter>Component\Action\BehaviorTree</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\AI\ActionDerived.h">
-      <Filter>Component\Action\BehaviorTree</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\AI\BehaviorData.h">
-      <Filter>Component\Action\BehaviorTree</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\AI\BehaviorTree.h">
-      <Filter>Component\Action\BehaviorTree</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\AI\JudgmentBase.h">
-      <Filter>Component\Action\BehaviorTree</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\AI\JudgmentDerived.h">
-      <Filter>Component\Action\BehaviorTree</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\AI\NodeBase.h">
-      <Filter>Component\Action\BehaviorTree</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\FrontObject.h">
-      <Filter>Component\Object\CollisionObject\FrontObject</Filter>
+    <ClInclude Include="Source\TimeTrackingObject.h">
+      <Filter>Component\Object\CollisionObject\TrackingObject\TimeTrackingObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -472,32 +478,35 @@
     <ClCompile Include="Source\SphereTrackingObject.cpp">
       <Filter>Component\Object\CollisionObject\TrackingObject\SphereTrackingObject</Filter>
     </ClCompile>
-    <ClCompile Include="Source\StateBase.cpp">
-      <Filter>Control\State</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\StateMachine.cpp">
-      <Filter>Component\Action\State</Filter>
-    </ClCompile>
     <ClCompile Include="Source\AI\ActionDerived.cpp">
-      <Filter>Component\Action\BehaviorTree</Filter>
+      <Filter>Control\BehaviorTree</Filter>
     </ClCompile>
     <ClCompile Include="Source\AI\BehaviorData.cpp">
-      <Filter>Component\Action\BehaviorTree</Filter>
+      <Filter>Control\BehaviorTree</Filter>
     </ClCompile>
     <ClCompile Include="Source\AI\BehaviorTree.cpp">
-      <Filter>Component\Action\BehaviorTree</Filter>
+      <Filter>Control\BehaviorTree</Filter>
     </ClCompile>
     <ClCompile Include="Source\AI\JudgmentDerived.cpp">
-      <Filter>Component\Action\BehaviorTree</Filter>
+      <Filter>Control\BehaviorTree</Filter>
     </ClCompile>
     <ClCompile Include="Source\AI\NodeBase.cpp">
-      <Filter>Component\Action\BehaviorTree</Filter>
+      <Filter>Control\BehaviorTree</Filter>
     </ClCompile>
     <ClCompile Include="Source\Easing.cpp">
       <Filter>System</Filter>
     </ClCompile>
     <ClCompile Include="Source\FrontObject.cpp">
       <Filter>Component\Object\CollisionObject\FrontObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\StateBase.cpp">
+      <Filter>Control\State</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\StateMachine.cpp">
+      <Filter>Control\State\StateMachine</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TimeTrackingObject.cpp">
+      <Filter>Component\Object\CollisionObject\TrackingObject\TimeTrackingObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

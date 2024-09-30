@@ -91,7 +91,7 @@ void Movement::Update(float elapsedTime)
 	UpdateAxisY(elapsedTime);
 	UpdateAxisZ(elapsedTime);
 	velocity.x*=move_speed;
-    velocity.y*=move_speed;
+    //velocity.y*=move_speed;
     velocity.z*=move_speed;
 	pos = Mathf::Add(velocity, pos);
 

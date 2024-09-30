@@ -2,9 +2,11 @@
 
 //Camera
 #include "Camera.h"
+#include "CameraController.h"
 
 //Character
 #include "Player.h"
+#include "Enemy.h"
 
 //Scene
 #include "SceneManager.h"
@@ -17,22 +19,23 @@
 //#include "StageMapChip.h"
 //#include "StageMapChip.h"
 
+//Action
+#include "Movement.h"
+#include "VsCollision.h"
 
-#include "Input/Input.h"
-#include "Ui.h"
-
-#include "CameraController.h"
+//Object
 #include "Object.h"
 #include "CollisionObject.h"
 #include "TrackingObject.h"
 #include "SphereTrackingObject.h"
-#include "StateMachine.h"
 
 #include "Mathf.h"
 
 #include "EffectManager.h"
 #include "MouseManager.h"
 
+#include "Input/Input.h"
+#include "Ui.h"
 // 初期化
 void SceneGame::Initialize()
 {
@@ -75,7 +78,6 @@ void SceneGame::Initialize()
 		actor->SetActorType(ActorType::Player);
 		actor->AddComponent<Movement>();
 		actor->AddComponent<VsCollision>();
-		actor->AddComponent<StateMachine>();
 		actor->AddComponent<Character>();
 		actor->AddComponent<Player>();
 	}
@@ -264,6 +266,21 @@ void SceneGame::Initialize()
 			actor->SetPosition(DirectX::XMFLOAT3(380, 0.0f, 200));
 			actor->SetRotation(DirectX::XMFLOAT4(3.14f * 0.0f, 3.14f * 0.0f, 3.14f * 0.25f, 1));
 			actor->SetScale(DirectX::XMFLOAT3(100.0f, 100.0f, 100.0f));
+			actor->SetColor(DirectX::XMFLOAT4(0.5f, 0.5f, 1.0f, 1.0f));
+			actor->SetRaycastFlg(true);
+			actor->SetActorType(ActorType::Object);
+			actor->AddComponent<VsCollision>();
+			actor->AddComponent<Object>();
+		}
+		// Object
+		{
+			const char* filename = "Data/Model/Cube/Cube.mdl";
+			std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
+			actor->LoadModel(filename);
+			actor->SetName("Object08");
+			actor->SetPosition(DirectX::XMFLOAT3(-200, 100.0f, 0));
+			actor->SetRotation(DirectX::XMFLOAT4(3.14f * 0.0f, 3.14f * 0.0f, 3.14f * 0.0f, 1));
+			actor->SetScale(DirectX::XMFLOAT3(100.0f, 10.0f, 100.0f));
 			actor->SetColor(DirectX::XMFLOAT4(0.5f, 0.5f, 1.0f, 1.0f));
 			actor->SetRaycastFlg(true);
 			actor->SetActorType(ActorType::Object);

@@ -2,11 +2,11 @@
 
 #include "All.h"
 #include "Input/Input.h"
-//#include "StageMain.h"
 #include "Effect.h"
+
 #include "Component.h"
-#include "Movement.h"
-#include "VsCollision.h"
+
+#include "StateMachine.h"
 
 //キャラクター
 class Character :public Component
@@ -38,7 +38,10 @@ public:
     //ダメージを受ける
     virtual void TakeHeel(float heel);
 public:
+    //無敵時間のゲッターセッター
     DelayTime GetUndeatableDelay() { return unbeatable_delay; }
+    void SetUndeatableDelay(bool c) { unbeatable_delay.checker = c; }
+
     // 体力セッター・ゲッター
     void SetHealth(float health) { current_health = health; }
     float GetHealth() { return current_health; }
@@ -46,8 +49,13 @@ public:
     // 体力最大値セッター・ゲッター
     void SetMaxHealth(float maxhealth) { max_health = maxhealth; }
     float GetMaxHealth() { return max_health; }
+
+    //state_machineのゲッター・セッター
+    StateMachine* GetStateMachine() { return state_machine; }
+    void SetStateMachine(StateMachine* state) { state_machine = state; }
 private:
     DelayTime unbeatable_delay;
     float max_health = 10;
     float current_health = max_health;
+    StateMachine* state_machine = nullptr;
 };

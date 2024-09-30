@@ -129,7 +129,7 @@ bool VsCollision::CylinderVsCylinder(ActorType filter, Actor** reactor)
 	return false;
 }
 
-bool VsCollision::RayCastAxisY()
+bool VsCollision::RayCastAxisYUnder()
 {
 	DirectX::XMFLOAT3 position = {
 	GetActor()->GetRayPosition().x,
@@ -185,7 +185,66 @@ bool VsCollision::RayCastAxisY()
 	return false;
 }
 
-void VsCollision::RayCastAxisYUnder()
+bool VsCollision::RayCastAxisYUp()
+{
+	DirectX::XMFLOAT3 position = {
+		GetActor()->GetRayPosition().x,
+		GetActor()->GetRayPosition().y,
+		GetActor()->GetRayPosition().z
+	};
+	DirectX::XMFLOAT3 vec = GetActor()->GetComponent<Movement>()->GetVelocity();
+
+	DirectX::XMFLOAT3 start = {
+		GetActor()->GetPosition().x,
+		GetActor()->GetPosition().y + GetActor()->GetHeight(),
+		GetActor()->GetPosition().z
+	};
+
+	DirectX::XMFLOAT3 end = {
+		GetActor()->GetPosition().x,
+		GetActor()->GetPosition().y + GetActor()->GetHeight() + GetActor()->GetComponent<Movement>()->GetVelocity().y,
+		GetActor()->GetPosition().z
+	};
+
+	Actor* actor = nullptr;
+	HitResult hit_result;
+	if (ActorManager::Instance().GetNearActorRayCast(start, end, hit_result, &actor))
+	{
+		GetActor()->GetComponent<Movement>()->SetOnGround(true);
+		switch (actor->GetFomY())
+		{
+		case FOM::Normal:
+			GetActor()->GetComponent<Movement>()->SetVelocity(DirectX::XMFLOAT3(vec.x, 0.0f, vec.z));
+			break;
+		case FOM::Bounse:
+			GetActor()->GetComponent<Movement>()->SetVelocity(DirectX::XMFLOAT3(vec.x, -vec.y * repulsion_coefficient, vec.z));
+			break;
+		case FOM::Friction:
+			GetActor()->GetComponent<Movement>()->SetVelocity(DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f));
+			break;
+		case FOM::Friction_One:
+			GetActor()->GetComponent<Movement>()->SetVelocity(DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f));
+			break;
+		case FOM::None:
+			break;
+			//default:
+			//	GetActor()->GetComponent<Movement>()->SetVelocity(DirectX::XMFLOAT3(vec.x, 0.0f, vec.z));
+			//	break;
+		}
+		hit_result.position.y = hit_result.position.y
+			- GetActor()->GetHeight()
+			;
+
+		GetActor()->SetPosition(hit_result.position);
+		GetActor()->GetComponent<Movement>()->SetNormal(hit_result.normal);
+		return true;
+	}
+	//GetActor()->GetComponent<Movement>()->SetNormal(DirectX::XMFLOAT3(0, 1, 0));
+	GetActor()->GetComponent<Movement>()->SetOnGround(false);
+	return false;
+}
+
+void VsCollision::RayCastAxisYUnderEx()
 {
 	DirectX::XMFLOAT3 position = {
 		GetActor()->GetPosition().x,

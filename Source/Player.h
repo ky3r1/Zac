@@ -9,12 +9,8 @@
 #include "Effect.h"
 
 #include "Component.h"
-#include "Movement.h"
-#include "Character.h"
 
-#include "StateBase.h"
-
-class Player : public Character
+class Player : public Component
 {
 public:
 	Player();
@@ -41,14 +37,6 @@ private:
 
 	DirectX::XMFLOAT3 GetMoveVec();
 
-private:
-	//Animation
-	void UpdateIdle();
-	void UpdateRun();
-	void UpdateSpown();
-	void UpdateLand();
-	void UpdateGoesDown();
-	void UpdateDeath();
 private:
 	enum
 	{
