@@ -206,7 +206,7 @@ void Model::UpdateAnimation(float elapsedTime)
 	}
 
 	// 時間経過
-	currentAnimationSeconds += elapsedTime*animation_speed;
+	currentAnimationSeconds += elapsedTime * animation_speed * hit_stop_animation_speed;
 	// 再生時間が終端時間を超えたら
 	if (currentAnimationSeconds >= animation.secondsLength)
 	{
@@ -240,13 +240,23 @@ void Model::UpdateAnimation(float elapsedTime)
 	//}
 }
 // アニメーション再生
-void Model::PlayAnimation(int playerNo, bool loop, float blendSeconds)
+void Model::PlayAnimation(int playerNo, bool loop)
+{
+	PlayAnimation(playerNo, loop, 0.2f, 1.0f);
+}
+void Model::PlayAnimation(int playerNo, bool loop, float animspeed)
+{
+	PlayAnimation(playerNo, loop, 0.2f, animspeed);
+}
+void Model::PlayAnimation(int playerNo, bool loop, float blendSeconds, float animspeed)
 {
 	prevAnimationIndex = currentAnimationIndex;
 	currentAnimationIndex = playerNo;
+	animationBlendSeconds = blendSeconds;
 	currentAnimationSeconds = 0.0f;
 	animationLoopFlag = loop;
 	animationEndFlag = false;
+	animation_speed = animspeed;
 }
 void Model::StopAnimation()
 {

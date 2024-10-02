@@ -189,6 +189,10 @@ public:
     void SetRayPosition(const DirectX::XMFLOAT3& position) { ray_position = position; }
     const DirectX::XMFLOAT3& GetRayPosition() const { return ray_position; }
 
+	//アニメーションスピード
+    void SetAnimationSpeed(float speed) { animspeed = speed; }
+    float GetAnimationSpeed() const { return animspeed; }
+
 public:
     //////////////////////////////////////////////////////////////////////////
     //							コンポーネント							//
@@ -238,6 +242,7 @@ private:
 	bool			  raycast_flg = false;
     DirectX::XMFLOAT3 ray_position = { 0,0,0 };
 
+	float animspeed = 1.0f;
 
 	std::unique_ptr<Model>	model;
 	std::vector<std::shared_ptr<Component>>	components;
@@ -298,6 +303,17 @@ public:
 	// アクター数を取得
 	int GetActorCount(ActorType filter);
 
+	//ヒットストップ管理
+	void ActorHitStop(float elapsedTime);
+
+public:
+	void SetHitStop(ActorType filter,float timer,float anim_speed)
+	{ 
+		hit_stop = true;					//使いたいときtrue
+		hit_stop_filter = filter;			//ヒットストップ掛けたいタイプにフィルター
+		hit_stop_timer = timer;				//ヒットストップする時間
+		hit_stop_anim_speed = anim_speed;	//ヒットストップで減速するアニメーションの倍率(0.0f~1.0f)
+	}
 public:
 	void DrawLister(ActorType filter);
 	void DrawDetail();
@@ -313,4 +329,10 @@ private:
 	bool					hiddenLister = false;
 	bool					hiddenDetail = false;
 	bool					guichecker = false;
+
+	//hitstop用
+	bool					hit_stop = false;
+	ActorType				hit_stop_filter = ActorType::All;
+	float					hit_stop_timer = 1.0f;
+	float					hit_stop_anim_speed = 1.0f;
 };

@@ -180,6 +180,10 @@ void Actor::OnGUI()
 		{
 			ActorManager::Instance().Remove(shared_from_this());
 		}
+		if (ImGui::Button("HitStop"))
+		{
+			ActorManager::Instance().SetHitStop(ActorType::All, 1.0f, 0.5f);
+		}
 	}
 
 	// コンポーネント
@@ -266,6 +270,7 @@ void ActorManager::Update(float elapsedTime)
 	for (std::shared_ptr<Actor>& actor : updateActors)
 	{
 		actor->Update(elapsedTime);
+		ActorHitStop(elapsedTime);
 	}
 
 	for (const std::shared_ptr<Actor>& actor : removeActors)
@@ -464,6 +469,42 @@ int ActorManager::GetActorCount(ActorType filter)
 		}
 	}
 	return count;
+}
+
+void ActorManager::ActorHitStop(float elapsedTime)
+{
+	static int num = 0;
+	static float time = 0.0f;
+	if (!hit_stop)return;
+	switch (num)
+	{
+	case 0:
+		for (std::shared_ptr<Actor> actor : updateActors)
+		{
+			if (actor->GetActorType() == hit_stop_filter || hit_stop_filter == ActorType::All)
+			{
+				actor->SetAnimationSpeed(hit_stop_anim_speed);
+			}
+		}
+		time = hit_stop_timer;
+		num++;
+		break;
+	case 1:
+		if (time < 0.0f)
+		{
+			for (std::shared_ptr<Actor> actor : updateActors)
+			{
+				if (actor->GetActorType() == hit_stop_filter || hit_stop_filter == ActorType::All)
+				{
+					actor->SetAnimationSpeed(1.0f);
+					num = 0;
+					hit_stop = false;
+				}
+			}
+		}
+		time -= elapsedTime / updateActors.size();
+		break;
+	}
 }
 
 

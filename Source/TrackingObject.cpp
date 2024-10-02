@@ -148,14 +148,6 @@ void TrackingObject::DrawImGui()
 
 void TrackingObject::DrawDebug()
 {
-    // デバッグ球描画
-    {
-        DirectX::XMFLOAT3 position = GetActor()->GetPosition();
-        float radius = GetActor()->GetRadius();
-        float height = GetActor()->GetHeight();
-        DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(1, 0, 0, 1);
-        Graphics::Instance().GetDebugRenderer()->DrawSphere(position, radius, color);
-    }
     {
         DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(1, 1, 0, 1);
         Graphics::Instance().GetDebugRenderer()->DrawSphere(c_sphere.position, c_sphere.radius, color);

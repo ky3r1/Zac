@@ -61,7 +61,9 @@ public:
 	// アニメーション更新処理
 	void UpdateAnimation(float elapsedTime);
 	// アニメーション再生
-	void PlayAnimation(int playerNo, bool loop, float blendSeconds = 0.2f);
+	void PlayAnimation(int playerNo, bool loop);
+	void PlayAnimation(int playerNo, bool loop,float animspeed);
+	void PlayAnimation(int playerNo, bool loop, float blendSeconds,float animspeed);
     // アニメーション停止
     void StopAnimation();
 	// 再生アニメーション番号取得
@@ -72,7 +74,7 @@ public:
 	// アニメーション再生中か
 	bool IsPlayAnimation()const;
 public:
-	void SetAnimationSpeed(float speed) { animation_speed = speed; }
+	void SetHitStopAnimationSpeed(float speed) { hit_stop_animation_speed = speed; }
 
 private:
 	std::shared_ptr<ModelResource>	resource;
@@ -86,4 +88,5 @@ private:
 	float animationBlendTime = 0.0f;
 	float animationBlendSeconds = 0.0f;
 	float animation_speed = 1.0f;
+	float hit_stop_animation_speed = 1.0f;
 };

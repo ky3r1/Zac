@@ -361,9 +361,32 @@ void SceneGame::Initialize()
             actor->GetComponent<CollisionObject>()->SetTargetActorType(ActorType::Player);
 
 			actor->AddComponent<TrackingObject>();
+			actor->GetComponent<TrackingObject>()->SetSphereRadius(FLT_MAX);
 
 			actor->AddComponent<SphereTrackingObject>();
 			actor->GetComponent<SphereTrackingObject>()->SetRadiusSearch(100.0f);
+		}
+		{
+			std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
+
+			const char* filename = "Data/Model/Cube/Cube.mdl";
+			actor->LoadModel(filename);
+			std::string name = std::string("CollisionTestObject:");
+			actor->SetName(name);
+			actor->SetPosition({ 0.0f, 12.0f, -50.0f });
+			actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
+			actor->SetScale(DirectX::XMFLOAT3(5.0f, 5.0f, 5.0f));
+			actor->SetColor(DirectX::XMFLOAT4(1.0f, 0.6f, 1.0f, 0.5f));
+			actor->SetRadius(3.0f);
+			actor->SetActorType(ActorType::Object);
+			actor->AddComponent<VsCollision>();
+
+			//actor->AddComponent<Movement>();
+
+			actor->AddComponent<CollisionObject>();
+			actor->GetComponent<CollisionObject>()->SetHitCollisionType(HitCollisionType::Heel);
+			actor->GetComponent<CollisionObject>()->SetHitNum(1.0f);
+			actor->GetComponent<CollisionObject>()->SetTargetActorType(ActorType::Player);
 		}
 	}
 #endif // OBJECT
@@ -386,9 +409,9 @@ void SceneGame::Update(float elapsedTime)
 	ID3D11DeviceContext* dc = graphics.GetDeviceContext();
 	//MouseManager::GetInstance().MouseTransform(dc, Camera::Instance().GetView(), Camera::Instance().GetProjection());
 
-#ifdef  ALLPLAYER
     //Actor更新
 	ActorManager::Instance().Update(elapsedTime);
+
 	//if(Player::Instance().GetHealth() <= 0)SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult(false)));
 	//Player* player = ActorManager::Instance().GetActor<Player>("Player");
 	Actor* player=ActorManager::Instance().GetActor("Player");
@@ -400,7 +423,6 @@ void SceneGame::Update(float elapsedTime)
 	//カメラ更新処理
 	camera_controller.Update(elapsedTime, player->GetPosition(), *camera);
 	//camera_controller.SyncControllerToCamera(*camera);
-#endif //  ALLPLAYER
 
 #ifdef SPOWNENEMY
     spown->Update(elapsedTime);

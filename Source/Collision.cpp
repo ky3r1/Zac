@@ -81,65 +81,22 @@ bool Collision::IntersectSphereVsCylinder(
         return false;
 
     // 球の足元( .y - radius)が円柱の頭(.y + Height)より上なら false
-    if (sphere.position.y - sphere.radius > cylinder.sphere.position.y + cylinder.sphere.radius)
+    if (sphere.position.y - sphere.radius > cylinder.sphere.position.y + cylinder.height)
         return false;
 
-    return IntersectSphereVsSphere(sphere, cylinder.sphere);
-    //{
-    //// XZ 平面での範囲チェック
-    //// positionB - positionA の距離が
-    //DirectX::XMFLOAT2 posA(spherePosition.x, spherePosition.z);
-    //DirectX::XMFLOAT2 posB(cylinderPosition.x, cylinderPosition.z);
-    //
-    //// posA を XMVECTOR に変換
-    //DirectX::XMVECTOR PositionA = DirectX::XMLoadFloat2(&posA);
-    //// posB を XMVECTOR に変換
-    //DirectX::XMVECTOR PositionB = DirectX::XMLoadFloat2(&posB);
-    //// posA から posB へのベクトルを計算(posB - posA)
-    //DirectX::XMVECTOR Vec = DirectX::XMVectorSubtract(PositionB, PositionA);
-    //// Vec の長さを計算(XMVector2LengthSq を利用しても良い)
-    //DirectX::XMVECTOR LengthSq = DirectX::XMVector2LengthSq(Vec);
-    //float lengthSq;
-    //DirectX::XMStoreFloat(&lengthSq, LengthSq);
-    //
-    //// radiusA と radiusB の長さ
-    //float range = sphereRadius + cylinderRadius;
-    //
-    //// radisuA + radisuB より大きかったら
-    //if (lengthSq > range)
-    //{
-    //    // 当たってない
-    //    return false;
-    //}
-    //
-    ////正規化
-    //Vec = DirectX::XMVector3Normalize(Vec);
-    //// めり込み量を求める
-    //float diff = range - lengthSq;
-    //Vec = DirectX::XMVectorScale(Vec, diff);
-    //
-    //// ２つの球の重さから押し出し比率を求める
-    //float rateA = sphereWeight / (sphereWeight + cylinderWeight);
-    //float rateB = 1.0f - rateA;
-    //
-    //// 球Bの補正後の座標
-    //DirectX::XMVECTOR VelocityB = DirectX::XMVectorScale(Vec, rateA);
-    //PositionB = DirectX::XMVectorAdd(PositionB, VelocityB);
-    //
-    //// 球Aの補正後の座標
-    //DirectX::XMVECTOR VelocityA = DirectX::XMVectorScale(Vec, rateB);
-    //PositionA = DirectX::XMVectorSubtract(PositionA, VelocityA);
-    //
-    //DirectX::XMFLOAT2 position;
-    //DirectX::XMStoreFloat2(&position, PositionA);
-    //cylinder.sphere.position.x = cylinder.sphere.position.x + position.x;
-    //cylinder.sphere.position.z = cylinder.sphere.position.z + position.y;
-    //DirectX::XMStoreFloat2(&position, PositionB);
-    //sphere.position.x = position.x;
-    //sphere.position.z = position.y;
-    //
-    //return true;
-    //}
+    //return IntersectSphereVsSphere(sphere, cylinder.sphere);
+
+    {
+        // XZ 平面での範囲チェック
+        DirectX::XMFLOAT2 pos(sphere.position.x, sphere.position.z);
+        DirectX::XMFLOAT2 pos2(cylinder.sphere.position.x, cylinder.sphere.position.z);
+        if (CircleVsCircle(pos, sphere.radius, pos2, cylinder.sphere.radius))
+        {
+            IntersectSphereVsSphere(sphere, cylinder.sphere);
+            return true;
+        }
+        return false;
+    }
 }
 
 bool Collision::IntersectSphereVsSphere(Sphere& A, Sphere& B)
@@ -607,4 +564,11 @@ void Collision::UpdateSphere(DirectX::XMFLOAT3 p, float r, float w, Sphere& s)
     s.position = p;
     s.radius = r;
     s.weight = w;
+}
+
+bool Collision::CircleVsCircle(DirectX::XMFLOAT2 Apos, float Ar, DirectX::XMFLOAT2 Bpos, float Br)
+{
+    float distance = pow(Bpos.x - Apos.x, 2) + pow(Bpos.y - Apos.y, 2);
+    float radius = pow(Ar + Br, 2);
+    return distance <= radius;
 }

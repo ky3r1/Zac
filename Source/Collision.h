@@ -95,4 +95,12 @@ public:
         float w,
         Sphere& s
     );
+
+    //‰~‚Æ‰~‚Ì“–‚½‚è”»’è
+    static bool CircleVsCircle(
+        DirectX::XMFLOAT2 Apos,
+        float Ar,
+        DirectX::XMFLOAT2 Bpos,
+        float Br
+    );
 };

@@ -34,7 +34,7 @@ void Player::Start()
 	GetActor()->GetComponent<Character>()->SetHealth(GetActor()->GetComponent<Character>()->GetMaxHealth());
 	GetActor()->GetComponent<Movement>()->SetMoveSpeed(0.8f);
 	GetActor()->SetAttitudeControlFlag(true);
-	GetActor()->GetModel()->PlayAnimation(5, true);
+	GetActor()->GetModel()->PlayAnimation(5, true, 1.0f);
 }
 
 // 更新
@@ -50,11 +50,12 @@ void Player::Update(float elapsedTime)
 	if (gamePad.GetButtonDown() & GamePad::BTN_B)
 	{
 		GetActor()->GetComponent<Movement>()->Jump(10.0f);
-		//GetActor()->GetModel()->SetAnimationSpeed(2.0f);
+		//GetActor()->GetModel()->SetAnimationSpeed(1.0f);
 		//GetActor()->SetAnimation(Anim_JumpPeak, true);
 	}
 	if (gamePad.GetButtonDown() & GamePad::BTN_X)
 	{
+		//GetActor()->GetModel()->SetAnimationSpeed(0.0f);
 		const char* filename = "Data/Model/Cube/Cube.mdl";
 		std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
 		std::string name = std::string("TrackingObject:") + std::string(GetActor()->GetName());

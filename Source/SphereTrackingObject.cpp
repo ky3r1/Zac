@@ -29,6 +29,7 @@ void SphereTrackingObject::Update(float elapsedTime)
 
 void SphereTrackingObject::DrawImGui()
 {
+    ImGui::SliderFloat("Search Radius", &radius_search, 0.1f, 100.0f);
 }
 
 void SphereTrackingObject::DrawDebug()

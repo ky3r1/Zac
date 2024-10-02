@@ -17,18 +17,18 @@ void CollisionObject::Start()
 void CollisionObject::Update(float elapsedTime)
 {
 	Actor* actor = nullptr;
-	if (GetActor()->GetComponent<VsCollision>()->SphereVsSphere(target_actortype, &actor))
+	if (GetActor()->GetComponent<VsCollision>()->SphereVsCylinder(target_actortype, &actor, true))
 	{
 		switch (hc_type)
 		{
 		case HitCollisionType::Damage:
 			actor->GetComponent<Character>()->TakeDamage(hit_num);
 			break;
-        case HitCollisionType::Heel:
-            actor->GetComponent<Character>()->TakeHeel(hit_num);
-            break;
-        default:
-            break;
+		case HitCollisionType::Heel:
+			actor->GetComponent<Character>()->TakeHeel(hit_num);
+			break;
+		default:
+			break;
 		}
 		if (deletion_flg)ActorManager::Instance().Remove(GetActor());
 	}
@@ -79,4 +79,12 @@ void CollisionObject::DrawImGui()
 
 void CollisionObject::DrawDebug()
 {
+	// デバッグ球描画
+	{
+		DirectX::XMFLOAT3 position = GetActor()->GetPosition();
+		float radius = GetActor()->GetRadius();
+		float height = GetActor()->GetHeight();
+		DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(1, 0, 0, 1);
+		Graphics::Instance().GetDebugRenderer()->DrawSphere(position, radius, color);
+	}
 }

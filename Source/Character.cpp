@@ -14,7 +14,7 @@ void Character::Start()
 void Character::Update(float elapsedTime)
 {
 
-    
+    GetActor()->GetModel()->SetHitStopAnimationSpeed(GetActor()->GetAnimationSpeed());
     //–³“GŽžŠÔXV
     GetActor()->UpdateDelayTime(unbeatable_delay, MAX_UNBEATABLE);
     //RayCast
