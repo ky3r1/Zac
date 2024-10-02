@@ -5,14 +5,6 @@
 #include <DirectXMath.h>
 #include "Graphics/ModelResource.h"
 
-//アニメーション
-struct Animation
-{
-	int state = 0;		// 再生アニメーション番号
-	bool loop = false;	// ループフラグ
-	float blend = 0;	// ブレンド時間
-};
-
 //// アニメーションのタイプ分け
 //enum class AnimType
 //{
@@ -70,7 +62,6 @@ public:
 	void UpdateAnimation(float elapsedTime);
 	// アニメーション再生
 	void PlayAnimation(int playerNo, bool loop, float blendSeconds = 0.2f);
-	void PlayAnimation(Animation anim);
     // アニメーション停止
     void StopAnimation();
 	// 再生アニメーション番号取得
@@ -80,6 +71,8 @@ public:
 	float GetCurrentAnimationSeconds() const { return currentAnimationSeconds; }
 	// アニメーション再生中か
 	bool IsPlayAnimation()const;
+public:
+	void SetAnimationSpeed(float speed) { animation_speed = speed; }
 
 private:
 	std::shared_ptr<ModelResource>	resource;
@@ -92,4 +85,5 @@ private:
 	bool animationEndFlag = false;
 	float animationBlendTime = 0.0f;
 	float animationBlendSeconds = 0.0f;
+	float animation_speed = 1.0f;
 };

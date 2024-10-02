@@ -2,6 +2,7 @@
 
 #include"Graphics/Model.h"
 #include "All.h"
+#include "Actor.h"
 
 enum class Axis2D
 {

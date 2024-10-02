@@ -13,13 +13,15 @@ public:
 	void SyncControllerToCamera(Camera& camera);
 
 	// 更新処理
-	void Update(DirectX::XMFLOAT3 target, Camera& camera);
+	void Update(float elapsedTime, DirectX::XMFLOAT3 target, Camera& camera);
 
 	// 更新処理
 	void UpdateKey(float elapsedTime,DirectX::XMFLOAT3 target,Camera& camera);
 
 	//デバッグ用Imgui表示
 	void DrawDebugGUI();
+private:
+	void CameraShake(float elapsedTime, Camera& camera);
 private:
 	DirectX::XMFLOAT3		eye;
 	DirectX::XMFLOAT3		focus;

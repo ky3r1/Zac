@@ -41,6 +41,7 @@ public:
     //無敵時間のゲッターセッター
     DelayTime GetUndeatableDelay() { return unbeatable_delay; }
     void SetUndeatableDelay(bool c) { unbeatable_delay.checker = c; }
+    void SetUndeatableDelay() { unbeatable_delay.checker = false; }
 
     // 体力セッター・ゲッター
     void SetHealth(float health) { current_health = health; }

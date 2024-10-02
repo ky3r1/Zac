@@ -34,6 +34,7 @@ void Player::Start()
 	GetActor()->GetComponent<Character>()->SetHealth(GetActor()->GetComponent<Character>()->GetMaxHealth());
 	GetActor()->GetComponent<Movement>()->SetMoveSpeed(0.8f);
 	GetActor()->SetAttitudeControlFlag(true);
+	GetActor()->GetModel()->PlayAnimation(5, true);
 }
 
 // 更新
@@ -49,6 +50,7 @@ void Player::Update(float elapsedTime)
 	if (gamePad.GetButtonDown() & GamePad::BTN_B)
 	{
 		GetActor()->GetComponent<Movement>()->Jump(10.0f);
+		//GetActor()->GetModel()->SetAnimationSpeed(2.0f);
 		//GetActor()->SetAnimation(Anim_JumpPeak, true);
 	}
 	if (gamePad.GetButtonDown() & GamePad::BTN_X)
@@ -80,28 +82,12 @@ void Player::Update(float elapsedTime)
 	//プレイヤーとエネミーの当たり判定
 	if (GetActor()->GetComponent<VsCollision>()->CylinderVsCylinderPushing(ActorType::Enemy, &enemy))
 	{
-		//GetActor()->GetComponent<Character>()->SetUndeatableDelay(true);
-		//if (unbeatable_delay.checker)
-		//{
-		//	//TakeDamage(1.0f);
-		//	{
-		//		DirectX::XMFLOAT3 impulse;
-		//		//吹き飛ばす力
-		//		const float power = 10.0f;
-		//		DirectX::XMVECTOR Enemy_Position = DirectX::XMLoadFloat3(&enemy->GetPosition());
-		//		DirectX::XMVECTOR Player_Position = DirectX::XMLoadFloat3(&GetActor()->GetPosition());
-		//		DirectX::XMVECTOR Vec = DirectX::XMVectorSubtract(Player_Position, Enemy_Position);
-		//		Vec = DirectX::XMVector3Normalize(Vec);
-		//		DirectX::XMFLOAT3 vec;
-		//		DirectX::XMStoreFloat3(&vec, Vec);
-		//		impulse.x = vec.x * power;
-		//		impulse.y = vec.y * power;
-		//		impulse.z = vec.z * power;
-		//		//movement->AddImpulse(vec);
-		//	}
-
-		//	unbeatable_delay.checker = false;
-		//}
+		if(GetActor()->GetComponent<Character>()->GetUndeatableDelay().checker)
+		{
+			ActorManager::Instance().GetActor("MainCamera")->GetComponent<Camera>()->SetCameraShake(true);
+			GetActor()->GetComponent<Character>()->TakeDamage(1.0f);
+		}
+		GetActor()->GetComponent<Character>()->SetUndeatableDelay();
 	}
 	//GetActor()->SetRayPosition({
 	//	GetActor()->GetModel()->FindNode("Character1_Hips")->worldTransform._41,

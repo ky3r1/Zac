@@ -4,6 +4,7 @@
 #include "Mathf.h"
 #include "Actor.h"
 #include "Movement.h"
+#include "Collision.h"
 
 
 // UŒ‚s“®

@@ -62,32 +62,51 @@ void SceneGame::Initialize()
 
 
 #ifdef ALLPLAYER
-	// プレイヤー
 	{
-		const char* filename = "Data/Model/Assets/Wizard/Wizard.mdl";
-		//const char* filename = "Data/Model/GP5_UnityChan/unitychan.mdl";
-		std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
-		actor->LoadModel(filename);
-		actor->SetName("Player");
-		actor->SetPosition(DirectX::XMFLOAT3(0, 0, -200));
-		actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
-		actor->SetScale(DirectX::XMFLOAT3(10.0f, 10.0f, 10.0f));
-		actor->SetWeight(10.0f);
-		actor->SetRadius(5.0f);
-		actor->SetHeight(15.0f);
-		actor->SetActorType(ActorType::Player);
-		actor->AddComponent<Movement>();
-		actor->AddComponent<VsCollision>();
-		actor->AddComponent<Character>();
-		actor->AddComponent<Player>();
-	}
+		//プレイヤーの初期位置を設定(下のCameraの初期位置で使用)
+		DirectX::XMFLOAT3 position = DirectX::XMFLOAT3(0, 0, -200);
+		// プレイヤー
+		{
+			
+
+			const char* filename = "Data/Model/Assets/Wizard/Wizard.mdl";
+			//const char* filename = "Data/Model/GP5_UnityChan/unitychan.mdl";
+			std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
+			actor->LoadModel(filename);
+			actor->SetName("Player");
+			actor->SetPosition(position);
+			actor->SetRotation(DirectX::XMFLOAT4(0, 0, 0, 1));
+			actor->SetScale(DirectX::XMFLOAT3(10.0f, 10.0f, 10.0f));
+			actor->SetWeight(10.0f);
+			actor->SetRadius(5.0f);
+			actor->SetHeight(15.0f);
+			actor->SetActorType(ActorType::Player);
+			actor->AddComponent<Movement>();
+			actor->AddComponent<VsCollision>();
+			actor->AddComponent<Character>();
+			actor->AddComponent<Player>();
+		}
 #endif // PLAYER
-	// カメラ
-	{
-		std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
-		actor->SetName("MainCamera");
-		actor->SetActorType(ActorType::Camera);
-		actor->AddComponent<Camera>();
+		// カメラ
+		{
+			std::shared_ptr<Actor> actor = ActorManager::Instance().Create();
+			actor->SetName("MainCamera");
+			actor->SetActorType(ActorType::Camera);
+			actor->AddComponent<Camera>();
+			Camera* camera = actor->GetComponent<Camera>().get();
+			camera->SetPerspectiveFov(
+				DirectX::XMConvertToRadians(45),	// 画角
+				screenWidth / screenHeight,			// 画面アスペクト比
+				0.1f,								// ニアクリップ
+				1000.0f								// ファークリップ
+			);
+			camera->SetLookAt(
+				{ position.x, position.y+20, position.z - 50 },		// 視点
+				position,		// 注視点
+				{ 0, 1, 0 }			// 上ベクトル
+			);
+			camera_controller.SyncCameraToController(*camera);
+		}
 	}
 #ifdef ALLENEMY
 	{
@@ -375,13 +394,12 @@ void SceneGame::Update(float elapsedTime)
 	Actor* player=ActorManager::Instance().GetActor("Player");
 	//if (player->GetComponent<Player>()->GetHealth() <= 0)SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult(true)));
 	
-	CameraController camera_controller;
 	Camera* camera = ActorManager::Instance().GetActor("MainCamera")->GetComponent<Camera>().get();
-	camera_controller.UpdateKey(elapsedTime,player->GetPosition(), *camera);
+	//camera_controller.UpdateKey(elapsedTime,player->GetPosition(), *camera);
 
-
-	////カメラ更新処理
-	//camera_controller.Update(player->GetPosition());
+	//カメラ更新処理
+	camera_controller.Update(elapsedTime, player->GetPosition(), *camera);
+	//camera_controller.SyncControllerToCamera(*camera);
 #endif //  ALLPLAYER
 
 #ifdef SPOWNENEMY

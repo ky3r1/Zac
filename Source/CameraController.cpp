@@ -8,47 +8,47 @@
 // カメラからコントローラーへパラメータを同期する
 void CameraController::SyncCameraToController(const Camera& camera)
 {
-	//eye = camera.GetEye();
-	//focus = camera.GetFocus();
-	//up = camera.GetUp();
-	//right = camera.GetRight();
+	eye = camera.GetEye();
+	focus = camera.GetFocus();
+	up = camera.GetUp();
+	right = camera.GetRight();
 
-	//// 視点から注視点までの距離を算出
-	//DirectX::XMVECTOR Eye = DirectX::XMLoadFloat3(&eye);
-	//DirectX::XMVECTOR Focus = DirectX::XMLoadFloat3(&focus);
-	//DirectX::XMVECTOR Vec = DirectX::XMVectorSubtract(Focus, Eye);
-	//DirectX::XMVECTOR Distance = DirectX::XMVector3Length(Vec);
-	//DirectX::XMStoreFloat(&distance, Distance);
+	// 視点から注視点までの距離を算出
+	DirectX::XMVECTOR Eye = DirectX::XMLoadFloat3(&eye);
+	DirectX::XMVECTOR Focus = DirectX::XMLoadFloat3(&focus);
+	DirectX::XMVECTOR Vec = DirectX::XMVectorSubtract(Focus, Eye);
+	DirectX::XMVECTOR Distance = DirectX::XMVector3Length(Vec);
+	DirectX::XMStoreFloat(&distance, Distance);
 
-	//// 回転角度を算出
-	//const DirectX::XMFLOAT3& front = camera.GetFront();
-	//angle.x = ::asinf(-front.y);
-	//if (up.y < 0)
-	//{
-	//	if (front.y > 0)
-	//	{
-	//		angle.x = -DirectX::XM_PI - angle.x;
-	//	}
-	//	else
-	//	{
-	//		angle.x = DirectX::XM_PI - angle.x;
-	//	}
-	//	angle.y = ::atan2f(front.x, front.z);
-	//}
-	//else
-	//{
-	//	angle.y = ::atan2f(-front.x, -front.z);
-	//}
+	// 回転角度を算出
+	const DirectX::XMFLOAT3& front = camera.GetFront();
+	angle.x = ::asinf(-front.y);
+	if (up.y < 0)
+	{
+		if (front.y > 0)
+		{
+			angle.x = -DirectX::XM_PI - angle.x;
+		}
+		else
+		{
+			angle.x = DirectX::XM_PI - angle.x;
+		}
+		angle.y = ::atan2f(front.x, front.z);
+	}
+	else
+	{
+		angle.y = ::atan2f(-front.x, -front.z);
+	}
 }
 
 // コントローラーからカメラへパラメータを同期する
 void CameraController::SyncControllerToCamera(Camera& camera)
 {
-	//camera.SetLookAt(eye, focus, up);
+	camera.SetLookAt(eye, focus, up);
 }
 
 // 更新処理
-void CameraController::Update(DirectX::XMFLOAT3 target, Camera& camera)
+void CameraController::Update(float elapsedTime, DirectX::XMFLOAT3 target, Camera& camera)
 {
 	// デバッグウインドウ操作中は処理しない
 	if (ImGui::IsWindowFocused(ImGuiFocusedFlags_AnyWindow))
@@ -158,6 +158,7 @@ void CameraController::Update(DirectX::XMFLOAT3 target, Camera& camera)
 	//カメラの視点と注視点を設定
 	//CameraManager::Instance().GetMainCamera().SetLookAt(eye, target, DirectX::XMFLOAT3(0, 1, 0));
 	camera.SetLookAt(eye, target, DirectX::XMFLOAT3(0, 1, 0));
+	CameraShake(elapsedTime, camera);
 }
 
 void CameraController::UpdateKey(float elapsedTime, DirectX::XMFLOAT3 target, Camera& camera)
@@ -230,4 +231,58 @@ void CameraController::DrawDebugGUI()
 	//	}
 	//}
 	//ImGui::End();
+}
+
+void CameraController::CameraShake(float elapsedTime, Camera& camera)
+{
+	if (camera.GetCameraShake())
+	{
+		static int num = 0;
+		static float shake_time = 1.0f;
+		switch (num)
+		{
+		case 0:
+			shake_time = camera.GetShakeTime();
+            num = 1;
+			break;
+		case 1:
+			//カメラシェイクする時間
+			shake_time -= elapsedTime;
+			if (shake_time < 0)
+			{
+				shake_time = 1.0f;
+				num = 0;
+				camera.SetCameraShake(false);
+			}
+
+			// カメラシェイク処理
+			{
+				// -1.0~1.0のランダム値を取得する関数
+				auto getRand = []()->float
+				{
+					return rand() / (float)RAND_MAX * 2.0f - 1.0f;
+				};
+
+				//// ヒットストップ時間が少なくとも揺れが小さくなるようにする係数
+				//float t = hitStopLastSeconds / hitStopSecondsLength;
+
+				// 注視点を揺らすオフセット値を求める
+				DirectX::XMFLOAT3 shake;
+				float cameraShakeRange = camera.GetShakeRange();
+				shake.x = getRand() * shake_time * cameraShakeRange;
+				shake.y = getRand() * shake_time * cameraShakeRange;
+				shake.z = getRand() * shake_time * cameraShakeRange;
+
+				// 注視点に揺れ値を加える
+				DirectX::XMFLOAT3 focus = camera.GetFocus();
+				focus.x += shake.x;
+				focus.y += shake.y;
+				focus.z += shake.z;
+
+				camera.SetLookAt(camera.GetEye(), focus, camera.GetUp());
+				break;
+			}
+		}
+
+	}
 }

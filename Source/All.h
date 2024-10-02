@@ -82,30 +82,30 @@
 //動く床
 //#define STAGEMOVE
 
-struct HitResult
-{
-    DirectX::XMFLOAT3 position = { 0,0,0 }; //レイとポリゴンの交点
-    DirectX::XMFLOAT3 normal = { 0,0,0 };   //衝突したポリゴンの法線ベクトル
-    float             distance = 0.0f;      //レイの始点から交点までの距離
-    int               materialIndex = -1;   //衝突したポリゴンのマテリアル番号
-    DirectX::XMFLOAT3 rotation = { 0,0,0 };   //角度
-};
-
-struct Sphere
-{
-    DirectX::XMFLOAT3 position = { 0,0,0 };
-    float             radius = 0.0f;
-    float             weight = 0.0f;
-};
-
-struct Cylinder
-{
-    Sphere            sphere;
-    float             height = 0.0f;
-};
-
-struct DelayTime
-{
-    float time;
-    bool checker = false;
-};
+//struct HitResult
+//{
+//    DirectX::XMFLOAT3 position = { 0,0,0 }; //レイとポリゴンの交点
+//    DirectX::XMFLOAT3 normal = { 0,0,0 };   //衝突したポリゴンの法線ベクトル
+//    float             distance = 0.0f;      //レイの始点から交点までの距離
+//    int               materialIndex = -1;   //衝突したポリゴンのマテリアル番号
+//    DirectX::XMFLOAT3 rotation = { 0,0,0 };   //角度
+//};
+//
+//struct Sphere
+//{
+//    DirectX::XMFLOAT3 position = { 0,0,0 };
+//    float             radius = 0.0f;
+//    float             weight = 0.0f;
+//};
+//
+//struct Cylinder
+//{
+//    Sphere            sphere;
+//    float             height = 0.0f;
+//};
+//
+//struct DelayTime
+//{
+//    float time;
+//    bool checker = false;
+//};

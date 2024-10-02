@@ -2,6 +2,7 @@
 
 #include "Scene.h"
 #include "Spown.h"
+#include "CameraController.h"
 #include "Graphics/Sprite.h"
 #include "Graphics/Font.h"
 
@@ -32,6 +33,8 @@ private:
 	std::unique_ptr<Spown> spown = nullptr;
 	std::unique_ptr<Sprite> gauge = nullptr;
 	std::unique_ptr<Font> font;
+
+	CameraController camera_controller;
 
 	int mapcategory = 0;
 

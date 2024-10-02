@@ -5,15 +5,22 @@
     <Compartments>
       <Compartment Name="Nested Types" Collapsed="false" />
     </Compartments>
+    <NestedTypes>
+      <Enum Name="Enemy::slimeAnimation" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Enemy.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AgQAAgAAAKAAAAQAAAAAAQAAAAAAAAAAAAAAAAAABAA=</HashCode>
+      <HashCode>CgQAAiIEACAQAQQAIAAEFUAAACAAAACEBIBAAAFhFAI=</HashCode>
       <FileName>Source\Enemy.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Character">
     <Position X="8.25" Y="1.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AQQBAAAAACEEAAQAAAAQEQQCAAAAAAAAAAAAgiAAKAA=</HashCode>
+      <HashCode>AYQAAABAACiEAAYAAAAQAQQAAAAAAEAAAAAAgiAALAA=</HashCode>
       <FileName>Source\Character.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -75,6 +82,13 @@
   </Class>
   <Class Name="Player">
     <Position X="4.75" Y="2.75" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="Player::__unnamed_enum_0467_1" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Player.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
     <TypeIdentifier>
       <HashCode>AAQAgAAAACAAAAQEAAAAAQAAAAAAAAAAAAAAAQAABBA=</HashCode>
       <FileName>Source\Player.h</FileName>
