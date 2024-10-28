@@ -32,7 +32,7 @@ Player::~Player()
 void Player::Start()
 {
 	GetActor()->GetComponent<Character>()->SetHealth(GetActor()->GetComponent<Character>()->GetMaxHealth());
-	GetActor()->GetComponent<Movement>()->SetMoveSpeed(0.8f);
+	//GetActor()->GetComponent<Movement>()->SetMoveSpeed(5.0f);
 	GetActor()->SetAttitudeControlFlag(true);
 	GetActor()->GetModel()->PlayAnimation(5, true, 1.0f);
 }
@@ -202,28 +202,6 @@ DirectX::XMFLOAT3 Player::GetMoveVec()
 	vec.x = (cameraRightX * ax) + (cameraFrontX * ay);
 	vec.y = 0;
 	vec.z = (cameraRightZ * ax) + (cameraFrontZ * ay);
-	
-
-	//{
-	//	DirectX::XMFLOAT3 rotation = { GetActor()->GetRotation().x,GetActor()->GetRotation().y,GetActor()->GetRotation().z };
-	//	DirectX::XMVECTOR Normal = DirectX::XMLoadFloat3(&GetActor()->GetComponent<Movement>()->GetNormal());
-	//	DirectX::XMFLOAT3 normal = GetActor()->GetComponent<Movement>()->GetNormal();
-	//	DirectX::XMVECTOR Vec = DirectX::XMLoadFloat3(&vec);
-	//	DirectX::XMVECTOR parallelDirection = DirectX::XMVector3Normalize(DirectX::XMVectorSubtract(Vec, DirectX::XMVectorScale(Normal, DirectX::XMVectorGetX(DirectX::XMVector3Dot(Vec, Normal)))));
-	//	//DirectX::XMStoreFloat3(&vec, parallelDirection);
-
-	//	if (vec.x < 0)normal = DirectX::XMFLOAT3(normal.x*1.0f, normal.y*1.0f, normal.z*1.0f);
-	//	float sub = GetActor()->GetPosition().y - old_position.x;
-	//	if(sub)
-	//	//float VdotN=Mathf::Dot(normal, vec);
-	//	//normal.x *= VdotN;
-	//	//normal.y *= VdotN;
-	//	//normal.z *= VdotN;
-	//	//vec.x -= normal.x;
-	//	//vec.y -= normal.y;
-	//	//vec.z -= normal.z;
-	//}
-	//GetActor()->SetPosition(old_position);
 
 	return vec;
 }

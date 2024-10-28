@@ -30,13 +30,13 @@ Movement::~Movement()
 
 void Movement::DrawImGui()
 {
-    ImGui::InputFloat("Move Speed", &move_speed);
-    ImGui::InputFloat("Turn Speed", &turnSpeed);
-	ImGui::InputFloat("Gravity", &gravity);
+    ImGui::InputFloat("MoveSpeed", &move_speed);
+    ImGui::InputFloat("Friction", &friction);
+	ImGui::InputFloat3("MoveVec", &move_vec.x);
+	ImGui::InputFloat("Mass", &mass);
 	ImGui::InputFloat3("Velocity", &velocity.x);
-	ImGui::InputFloat3("Move Vec", &move_vec.x);
-	ImGui::InputFloat3("Normal", &normal.x);
-	ImGui::InputFloat("Friction", &friction);
+	ImGui::InputFloat3("Acceleration", &acceleration.x);
+	ImGui::InputFloat3("Resultant", &resultant.x);
 }
 
 void Movement::DrawDebug()
@@ -46,18 +46,14 @@ void Movement::DrawDebug()
 
 void Movement::Start()
 {
-	move_vec={7.5f,7.5f,7.5f};
 }
 
 void Movement::Update(float elapsedTime)
 {
 	DirectX::XMFLOAT3 pos=GetActor()->GetPosition();
-	//UpdateAxisX(elapsedTime);
-	////AddImpulse({ 0.1f, 0.0f, 0.1f });
-	//UpdateAxisY(elapsedTime);
-	//UpdateAxisZ(elapsedTime);
 
 	//スロープの傾斜
+	if(false)
 	{
 		//傾斜率の計算
 		float normalLengthXZ = sqrtf(normal.x* normal.x + normal.z * normal.z);
@@ -66,7 +62,7 @@ void Movement::Update(float elapsedTime)
 		DirectX::XMVECTOR velVel = DirectX::XMLoadFloat2(&vel);
 		float length = DirectX::XMVectorGetX(DirectX::XMVector2Length(velVel));
 		//下り坂でガタガタしないようにする
-		if (on_ground && slope_rate > 0.0f)
+		if (slope_rate > 0.0f)
 		{
 			velocity.y -= length * slope_rate * elapsedTime;
 		}
@@ -86,54 +82,40 @@ void Movement::Update(float elapsedTime)
 		DirectX::XMFLOAT4 rotation = { rotation_X, GetActor()->GetRotation().y, rotation_Z, GetActor()->GetRotation().w };
 		GetActor()->SetRotation(rotation);
 	}
+	//摩擦
+	{
 
-	UpdateAxisX(elapsedTime);
-	UpdateAxisY(elapsedTime);
-	UpdateAxisZ(elapsedTime);
-	velocity.x*=move_speed;
-    //velocity.y*=move_speed;
-    velocity.z*=move_speed;
-	pos = Mathf::Add(velocity, pos);
+		{
+			DirectX::XMVECTOR f = DirectX::XMLoadFloat3(&velocity);
+			f=DirectX::XMVectorScale(f, -1);
+			f = DirectX::XMVectorAdd(DirectX::XMVectorScale(f, friction), DirectX::XMLoadFloat3(&velocity));
+			DirectX::XMStoreFloat3(&velocity, f);
+		}
+	}
+	//速度更新
+	{
 
+		assert(mass > 0);
 
-	//if(pos.y < 0.0f)pos.y = 0.0f;
-	GetActor()->SetPosition(pos);
+		DirectX::XMStoreFloat3(&acceleration, DirectX::XMVectorScale(DirectX::XMLoadFloat3(&resultant), 1 / mass));
+		DirectX::XMStoreFloat3(&velocity, DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&velocity), DirectX::XMVectorScale(DirectX::XMLoadFloat3(&acceleration), elapsedTime)));
+		DirectX::XMStoreFloat3(&pos, DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&pos), DirectX::XMVectorScale(DirectX::XMLoadFloat3(&velocity), elapsedTime)));
+		GetActor()->SetPosition(pos);
+		resultant = {};
+	}
 }
 void Movement::Move(DirectX::XMFLOAT3 v)
 {
 	if (!Mathf::Equal(v, { 0.0f,0.0f,0.0f }))
 	{
-		move_vec = { abs(v.x) ,abs(v.y) ,abs(v.z) };
+		move_vec = v;
 		//移動方向ベクトル
 		{
-			velocity.x += v.x;
-			//velocity.y += v.y;
-			velocity.z += v.z;
+			AddForce({v.x*move_speed,v.y*move_speed,v.z*move_speed});
 		}
 	}
-	else
-	{
-		int test = 0;
-	}
 }
 
-void Movement::MoveLocal(const DirectX::XMFLOAT3& direction, float elapsedTime)
-{
-	std::shared_ptr<Actor> actor = GetActor();
-	float speed = /*moveSpeed **/ elapsedTime;
-	DirectX::XMVECTOR Direction = DirectX::XMLoadFloat3(&direction);
-	DirectX::XMVECTOR Velocity = DirectX::XMVectorScale(Direction, speed);
-	DirectX::XMVECTOR Rotation = DirectX::XMLoadFloat4(&actor->GetRotation());
-	DirectX::XMMATRIX Transform = DirectX::XMMatrixRotationQuaternion(Rotation);
-	DirectX::XMVECTOR Move = DirectX::XMVector3TransformNormal(Velocity, Transform);
-	DirectX::XMVECTOR Position = DirectX::XMLoadFloat3(&actor->GetPosition());
-
-	Position = DirectX::XMVectorAdd(Position, Move);
-
-	DirectX::XMFLOAT3 position;
-	DirectX::XMStoreFloat3(&position, Position);
-	actor->SetPosition(position);
-}
 
 void Movement::MoveTarget(DirectX::XMFLOAT3 tp, float elapsedTime)
 {
@@ -205,12 +187,13 @@ void Movement::Turn(float elapsedTime, DirectX::XMFLOAT3 v)
 void Movement::Jump(float jump_power)
 {
 	velocity.y += jump_power;
-	on_ground = false;
 }
 
-void Movement::AddImpulse(const DirectX::XMFLOAT3& impulse)
+void Movement::AddForce(const DirectX::XMFLOAT3& impulse)
 {
-	velocity = Mathf::Add(velocity, impulse);
+	resultant.x += impulse.x;
+	resultant.y += impulse.y;
+	resultant.z += impulse.z;
 }
 
 void Movement::ResetVelocity()
@@ -218,132 +201,4 @@ void Movement::ResetVelocity()
 	velocity.x = 0;
 	velocity.y = 0;
 	velocity.z = 0;
-}
-
-void Movement::ChangeVector(DirectX::XMFLOAT3& v, DirectX::XMFLOAT3& normal)
-{
-}
-
-void Movement::UpdateAxisX(float elapsedTime)
-{
-#ifdef VLOCITY_MIN_FLG_X
-	//velocity増減処理
-	{
-		if (velocity.x < 0.0f)
-		{
-			velocity.x = velocity.x + friction* move_vec.x;
-			if (velocity.x > 0.0f)velocity.x = 0.0f;
-		}
-		if (velocity.x > 0.0f)
-		{
-			velocity.x = velocity.x - friction* move_vec.x;
-			if (velocity.x < 0.0f)velocity.x = 0.0f;
-		}
-	}
-#endif // VLOCITY_MIN_FLG_X
-
-#ifdef VLOCITY_MAX_FLG_X
-	//velocityの最大値
-	{
-		//velocityの最大値を超えないようにする
-		{
-			//if (velocity.x > MAX_MINI_VELOCITY_X + MAX_VELOCITY_X * (move_vec.x + 1)) velocity.x = MAX_MINI_VELOCITY_X + MAX_VELOCITY_X * (move_vec.x + 1);
-			//if (velocity.x < -(MAX_MINI_VELOCITY_X + MAX_VELOCITY_X * (move_vec.x+1)))velocity.x = -(MAX_MINI_VELOCITY_X + MAX_VELOCITY_X * (move_vec.x+1));
-			if (velocity.x > MAX_MINI_VELOCITY_X + MAX_VELOCITY_X * (move_vec.x )) velocity.x = MAX_MINI_VELOCITY_X + MAX_VELOCITY_X * (move_vec.x);
-			if (velocity.x < -(MAX_MINI_VELOCITY_X + MAX_VELOCITY_X * (move_vec.x )))velocity.x = -(MAX_MINI_VELOCITY_X + MAX_VELOCITY_X * (move_vec.x ));
-			//if (sqrtf(velocity.x * velocity.x + velocity.z * velocity.z) > moveSpeed)
-			//{
-
-			//}
-			//if (velocity.x > MAX_MINI_VELOCITY_X +(move_vec.x + 1)) velocity.x = MAX_MINI_VELOCITY_X + (move_vec.x + 1);
-			//if (velocity.x < -(MAX_MINI_VELOCITY_X + (move_vec.x + 1)))velocity.x = -(MAX_MINI_VELOCITY_X + (move_vec.x + 1));
-			//if (velocity.x > MAX_MINI_VELOCITY_X ) velocity.x = MAX_MINI_VELOCITY_X;
-			//if (velocity.x < -(MAX_MINI_VELOCITY_X))velocity.x = -(MAX_MINI_VELOCITY_X);
-			//if(velocity.x > MAX_VELOCITY_X) velocity.x = MAX_VELOCITY_X;
-			//if(velocity.x < -MAX_VELOCITY_X) velocity.x = -MAX_VELOCITY_X;
-			//if (velocity.x >   MAX_MINI_VELOCITY_X + MAX_VELOCITY_X) velocity.x =   MAX_MINI_VELOCITY_X + MAX_VELOCITY_X;
-			//if (velocity.x < -(MAX_MINI_VELOCITY_X + MAX_VELOCITY_X))velocity.x = -(MAX_MINI_VELOCITY_X + MAX_VELOCITY_X);
-		}
-	}
-#endif // VLOCITY_MAX_FLG_X
-}
-
-void Movement::UpdateAxisY(float elapsedTime)
-{
-#ifdef VLOCITY_MIN_FLG_Y
-	//velocity増減処理
-	{
-		if (velocity.y < 0.0f)
-		{
-			velocity.y = velocity.y + friction;
-			if (velocity.y > 0.0f)velocity.y = 0.0f;
-		}
-		if (velocity.y > 0.0f)
-		{
-			velocity.y = velocity.y - friction;
-			if (velocity.y < 0.0f)velocity.y = 0.0f;
-		}
-	}
-#endif // VLOCITY_MIN_FLG_Y
-#ifdef VLOCITY_MAX_FLG_Y
-	//velocityの最大値
-	{
-		if(on_ground)
-		//velocityの最大値を超えないようにする
-		{
-			if (velocity.y >  MAX_VELOCITY_Y*move_vec.y)velocity.y =  MAX_VELOCITY_Y*move_vec.y;
-			if (velocity.y < -MAX_VELOCITY_Y*move_vec.y)velocity.y = -MAX_VELOCITY_Y*move_vec.y;
-		}
-	}
-#endif // VLOCITY_MAX_FLG_Y
-	//重力処理
-	{
-		{
-			now_gravity += gravity;
-			if (now_gravity > MAX_GRAVITY)now_gravity = MAX_GRAVITY;
-		}
-		if (on_ground)
-		{
-			//velocity.y = 0;
-			now_gravity = 0;
-		}
-		velocity.y -= now_gravity;
-	}
-}
-
-void Movement::UpdateAxisZ(float elapsedTime)
-{
-#ifdef VLOCITY_MIN_FLG_Z
-	//velocity増減処理
-	{
-		if (velocity.z < 0.0f)
-		{
-			velocity.z = velocity.z + friction* move_vec.z;
-			if (velocity.z > 0.0f)velocity.z = 0.0f;
-		}
-		if (velocity.z > 0.0f)
-		{
-			velocity.z = velocity.z - friction* move_vec.z;
-			if (velocity.z < 0.0f)velocity.z = 0.0f;
-		}
-	}
-#endif // VLOCITY_MIN_FLG_Z
-#ifdef VLOCITY_MAX_FLG_Z
-	//velocityの最大値
-	{
-		//velocityの最大値を超えないようにする
-		{
-			//if (velocity.z > MAX_MINI_VELOCITY_Z + MAX_VELOCITY_Z * (move_vec.z + 1)) velocity.z = MAX_MINI_VELOCITY_Z + MAX_VELOCITY_Z * (move_vec.z + 1);
-			//if (velocity.z < -(MAX_MINI_VELOCITY_Z + MAX_VELOCITY_Z * (move_vec.z + 1)))velocity.z = -(MAX_MINI_VELOCITY_Z + MAX_VELOCITY_Z * (move_vec.z + 1));
-			if (velocity.z > MAX_MINI_VELOCITY_Z + MAX_VELOCITY_Z * (move_vec.z)) velocity.z = MAX_MINI_VELOCITY_Z + MAX_VELOCITY_Z * (move_vec.z);
-			if (velocity.z < -(MAX_MINI_VELOCITY_Z + MAX_VELOCITY_Z * (move_vec.z)))velocity.z = -(MAX_MINI_VELOCITY_Z + MAX_VELOCITY_Z * (move_vec.z));
-			//if (velocity.z > MAX_MINI_VELOCITY_Z) velocity.z = MAX_MINI_VELOCITY_Z;
-			//if (velocity.z < -(MAX_MINI_VELOCITY_Z))velocity.z = -(MAX_MINI_VELOCITY_Z);
-			//if (velocity.z > MAX_MINI_VELOCITY_Z +  (move_vec.z + 1)) velocity.z = MAX_MINI_VELOCITY_Z +  (move_vec.z + 1);
-			//if (velocity.z < -(MAX_MINI_VELOCITY_Z +  (move_vec.z + 1)))velocity.z = -(MAX_MINI_VELOCITY_Z + (move_vec.z + 1));
-			//if (velocity.z >   MAX_MINI_VELOCITY_Z + MAX_VELOCITY_Z) velocity.z =   MAX_MINI_VELOCITY_Z + MAX_VELOCITY_Z;
-			//if (velocity.z < -(MAX_MINI_VELOCITY_Z + MAX_VELOCITY_Z))velocity.z = -(MAX_MINI_VELOCITY_Z + MAX_VELOCITY_Z);
-		}
-	}
-#endif // VLOCITY_MAX_FLG_Z
 }

@@ -314,6 +314,9 @@
     <ClInclude Include="Source\TimeTrackingObject.h">
       <Filter>Component\Object\CollisionObject\TrackingObject\TimeTrackingObject</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Gravity.h">
+      <Filter>Component\Action</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="External\imgui\imgui.cpp">
@@ -507,6 +510,9 @@
     </ClCompile>
     <ClCompile Include="Source\TimeTrackingObject.cpp">
       <Filter>Component\Object\CollisionObject\TrackingObject\TimeTrackingObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Gravity.cpp">
+      <Filter>Component\Action</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

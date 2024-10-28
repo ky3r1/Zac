@@ -156,6 +156,7 @@
     <ClInclude Include="Source\Graphics\Sprite.h" />
     <ClInclude Include="Source\Graphics\sprite_bach.h" />
     <ClInclude Include="Source\Graphics\texture.h" />
+    <ClInclude Include="Source\Gravity.h" />
     <ClInclude Include="Source\HighResolutionTimer.h" />
     <ClInclude Include="Source\Input\GamePad.h" />
     <ClInclude Include="Source\Input\Input.h" />
@@ -223,6 +224,7 @@
     <ClCompile Include="Source\Graphics\Sprite.cpp" />
     <ClCompile Include="Source\Graphics\sprite_bach.cpp" />
     <ClCompile Include="Source\Graphics\texture.cpp" />
+    <ClCompile Include="Source\Gravity.cpp" />
     <ClCompile Include="Source\Input\GamePad.cpp" />
     <ClCompile Include="Source\Input\Input.cpp" />
     <ClCompile Include="Source\Input\Mouse.cpp" />

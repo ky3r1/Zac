@@ -22,7 +22,6 @@ public:
 
     // 移動
     void Move(DirectX::XMFLOAT3 v);
-    void MoveLocal(const DirectX::XMFLOAT3& direction, float elapsedTime);
     void MoveTarget(DirectX::XMFLOAT3 tp,float elapsedTime);
 
     // 旋回
@@ -32,18 +31,10 @@ public:
     void Jump(float jump_power);
 
     //衝撃を加える
-    void AddImpulse(const DirectX::XMFLOAT3& impulse);
+    void AddForce(const DirectX::XMFLOAT3& impulse);
 
     //velocityを0にする
     void ResetVelocity();
-
-    //法線を使って任意の方向に変える
-    void ChangeVector(DirectX::XMFLOAT3& v, DirectX::XMFLOAT3& normal);
-private:
-    //軸事の更新処理
-    void UpdateAxisX(float elapsedTime);
-    void UpdateAxisY(float elapsedTime);
-    void UpdateAxisZ(float elapsedTime);
 public:
     //セッター・ゲッター
     //移動速度
@@ -52,36 +43,41 @@ public:
     //旋回速度
     float GetTurnSpeed()const { return turnSpeed; }
     void SetTurnSpeed(float value) { turnSpeed = value; }
-    //重力
-    float GetGravity()const { return gravity; }
-    void SetGravity(float value) { gravity = value; }
-    //現在の重力
-    float GetNowGravity()const { return now_gravity; }
-    void SetNowGravity(float value) { now_gravity = value; }
-    //速度
-    DirectX::XMFLOAT3 GetVelocity()const { return velocity; }
-    void SetVelocity(const DirectX::XMFLOAT3& value) { velocity = value; }
     //摩擦
     float GetFriction()const { return friction; }
     void SetFriction(const float& value) { friction = value; }
-    //地面の上
-    bool GetOnGround()const { return on_ground; }
-    void SetOnGround(bool value) { on_ground = value; }
     //法線
     DirectX::XMFLOAT3 GetNormal()const { return normal; }
     void SetNormal(const DirectX::XMFLOAT3& value) { normal = value; }
 private:
-    float		move_speed = 5.0f;
+    float		move_speed = 50.0f;
     float		turnSpeed = 6.28f;
 
-    DirectX::XMFLOAT3 velocity = {};
-    float friction = { 0.000f };
-
-    float       gravity = 0.05f;
-    float       now_gravity = 0;
-    bool        on_ground = false;
+    //DirectX::XMFLOAT3 velocity = {};
+    float friction = { 1.2f };
 
     DirectX::XMFLOAT3 normal = { 0.0f,0.0f,0.0f };
-    DirectX::XMFLOAT3 move_vec = {};
     float slope_rate;
+public:
+    //加速度
+    DirectX::XMFLOAT3 GetAcceleration()const { return acceleration; }
+    void SetAcceleration(const DirectX::XMFLOAT3& value) { acceleration = value; }
+
+    //合力
+    DirectX::XMFLOAT3 GetResultant()const { return resultant; }
+    void SetResultant(const DirectX::XMFLOAT3& value) { resultant = value; }
+
+    //速度
+    DirectX::XMFLOAT3 GetVelocity()const { return velocity; }
+    void SetVelocity(const DirectX::XMFLOAT3& value) { velocity = value; }
+
+    //重量
+    float GetMass()const { return mass; }
+    void SetMass(float value) { mass = value; }
+private:
+    float mass = 1.0f;//質量
+    DirectX::XMFLOAT3 velocity = {};//速度
+    DirectX::XMFLOAT3 acceleration = {};//加速度
+    DirectX::XMFLOAT3 resultant = {};//合力
+    DirectX::XMFLOAT3 move_vec = {};
 };

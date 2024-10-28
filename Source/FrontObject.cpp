@@ -6,7 +6,6 @@
 void FrontObject::Start()
 {
     Movement* movement = GetActor()->GetComponent<Movement>().get();
-    movement->SetGravity(0.0f);
     movement->SetFriction({ 0.0f });
     movement->SetMoveSpeed(1.0f);
 }
@@ -32,7 +31,7 @@ void FrontObject::Update(float elapsedTime)
     forward = Mathf::Add(forward, impulse);
 
     GetActor()->GetComponent<Movement>()->SetVelocity({ 0,0,0 });
-    GetActor()->GetComponent<Movement>()->AddImpulse(impulse);
+    GetActor()->GetComponent<Movement>()->AddForce(impulse);
 }
 
 void FrontObject::DrawImGui()

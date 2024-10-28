@@ -23,7 +23,6 @@ void TrackingObject::Start()
     }
     default_position = desired_position;
     Movement* movement = GetActor()->GetComponent<Movement>().get();
-    movement->SetGravity(0.0f);
     movement->SetFriction({ 0.0f});
     movement->SetMoveSpeed(1.0f);
 }
@@ -88,7 +87,7 @@ void TrackingObject::Update(float elapsedTime)
             impulse.y = vec.y * power;
             impulse.z = vec.z * power;
             GetActor()->GetComponent<Movement>()->SetVelocity({ 0,0,0 });
-            GetActor()->GetComponent<Movement>()->AddImpulse(impulse);
+            GetActor()->GetComponent<Movement>()->AddForce(impulse);
 
             run_obj = true;
         }
@@ -113,7 +112,7 @@ void TrackingObject::Update(float elapsedTime)
                     impulse.y = vec.y * power;
                     impulse.z = vec.z * power;
                     GetActor()->GetComponent<Movement>()->SetVelocity({ 0,0,0 });
-                    GetActor()->GetComponent<Movement>()->AddImpulse(impulse);
+                    GetActor()->GetComponent<Movement>()->AddForce(impulse);
                 }
                 Sphere s = { desired_position ,1.0f };
                 if (Collision::IntersectSphereVsSphere(s, GetActor()->GetSphere()))
@@ -130,7 +129,7 @@ void TrackingObject::Update(float elapsedTime)
 
                     impulse.y = -0.01f;
                 }
-                GetActor()->GetComponent<Movement>()->AddImpulse(impulse);
+                GetActor()->GetComponent<Movement>()->AddForce(impulse);
             }
         }
     }
