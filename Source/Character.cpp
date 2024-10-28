@@ -19,10 +19,10 @@ void Character::Update(float elapsedTime)
     GetActor()->UpdateDelayTime(unbeatable_delay, MAX_UNBEATABLE);
     //RayCast
     GetActor()->SetRayPosition(GetActor()->GetPosition());
-    if(false)
+    if(true)
     {
-        GetActor()->GetComponent<VsCollision>()->RayCastAxisXZ();
-        GetActor()->GetComponent<VsCollision>()->RayCastAxisYUp();
+        //GetActor()->GetComponent<VsCollision>()->RayCastAxisXZ();
+        //GetActor()->GetComponent<VsCollision>()->RayCastAxisYUp();
         GetActor()->GetComponent<VsCollision>()->RayCastAxisYUnder();
     }
     else

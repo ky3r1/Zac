@@ -82,10 +82,6 @@ void SceneGame::Initialize()
 			actor->SetRadius(5.0f);
 			actor->SetHeight(15.0f);
 			actor->SetActorType(ActorType::Player);
-			actor->AddComponent<Movement>();
-			actor->AddComponent<Gravity>();
-			actor->AddComponent<VsCollision>();
-			actor->AddComponent<Character>();
 			actor->AddComponent<Player>();
 		}
 #endif // PLAYER
@@ -130,7 +126,7 @@ void SceneGame::Initialize()
 			actor->AddComponent<Movement>();
 			actor->AddComponent<Gravity>();
 			actor->AddComponent<VsCollision>();
-			actor->AddComponent<Character>();
+			//actor->AddComponent<Character>();
 			actor->AddComponent<Enemy>();
 		}
 		//// Enemy

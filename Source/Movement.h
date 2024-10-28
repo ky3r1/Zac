@@ -50,11 +50,11 @@ public:
     DirectX::XMFLOAT3 GetNormal()const { return normal; }
     void SetNormal(const DirectX::XMFLOAT3& value) { normal = value; }
 private:
-    float		move_speed = 50.0f;
+    float		move_speed = 500.0f;
     float		turnSpeed = 6.28f;
 
     //DirectX::XMFLOAT3 velocity = {};
-    float friction = { 1.2f };
+    float friction = { 0.08f };
 
     DirectX::XMFLOAT3 normal = { 0.0f,0.0f,0.0f };
     float slope_rate;
@@ -75,9 +75,8 @@ public:
     float GetMass()const { return mass; }
     void SetMass(float value) { mass = value; }
 private:
-    float mass = 1.0f;//éøó 
+    float mass = 0.1f;//éøó 
     DirectX::XMFLOAT3 velocity = {};//ë¨ìx
     DirectX::XMFLOAT3 acceleration = {};//â¡ë¨ìx
     DirectX::XMFLOAT3 resultant = {};//çáóÕ
-    DirectX::XMFLOAT3 move_vec = {};
 };

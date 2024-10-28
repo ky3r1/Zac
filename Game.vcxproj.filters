@@ -93,6 +93,12 @@
     <Filter Include="Component\Object\CollisionObject\TrackingObject\TimeTrackingObject">
       <UniqueIdentifier>{c61e54cd-ce1a-41f9-ade7-df64e18655e5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Component\Action\Movement">
+      <UniqueIdentifier>{5f5b3517-0352-4442-ba62-f6ee715cb449}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Object\TimeDeleteObject">
+      <UniqueIdentifier>{70617a52-2262-45b6-9ae0-64b750d86d87}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\imgui\imconfig.h">
@@ -263,9 +269,6 @@
     <ClInclude Include="Source\Component.h">
       <Filter>Component</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Movement.h">
-      <Filter>Component\Action</Filter>
-    </ClInclude>
     <ClInclude Include="Source\VsCollision.h">
       <Filter>Component\Action</Filter>
     </ClInclude>
@@ -315,7 +318,13 @@
       <Filter>Component\Object\CollisionObject\TrackingObject\TimeTrackingObject</Filter>
     </ClInclude>
     <ClInclude Include="Source\Gravity.h">
-      <Filter>Component\Action</Filter>
+      <Filter>Component\Action\Movement</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Movement.h">
+      <Filter>Component\Action\Movement</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TimeDeleteObject.h">
+      <Filter>Component\Object\TimeDeleteObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -463,9 +472,6 @@
     <ClCompile Include="Source\Actor.cpp">
       <Filter>Component</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Movement.cpp">
-      <Filter>Component\Action</Filter>
-    </ClCompile>
     <ClCompile Include="Source\VsCollision.cpp">
       <Filter>Component\Action</Filter>
     </ClCompile>
@@ -512,7 +518,13 @@
       <Filter>Component\Object\CollisionObject\TrackingObject\TimeTrackingObject</Filter>
     </ClCompile>
     <ClCompile Include="Source\Gravity.cpp">
-      <Filter>Component\Action</Filter>
+      <Filter>Component\Action\Movement</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Movement.cpp">
+      <Filter>Component\Action\Movement</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TimeDeleteObject.cpp">
+      <Filter>Component\Object\TimeDeleteObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -179,6 +179,7 @@
     <ClInclude Include="Source\StageMain.h" />
     <ClInclude Include="Source\StateBase.h" />
     <ClInclude Include="Source\StateMachine.h" />
+    <ClInclude Include="Source\TimeDeleteObject.h" />
     <ClInclude Include="Source\TimeTrackingObject.h" />
     <ClInclude Include="Source\TrackingObject.h" />
     <ClInclude Include="Source\Ui.h" />
@@ -246,6 +247,7 @@
     <ClCompile Include="Source\MouseManager.cpp" />
     <ClCompile Include="Source\StateBase.cpp" />
     <ClCompile Include="Source\StateMachine.cpp" />
+    <ClCompile Include="Source\TimeDeleteObject.cpp" />
     <ClCompile Include="Source\TimeTrackingObject.cpp" />
     <ClCompile Include="Source\TrackingObject.cpp" />
     <ClCompile Include="Source\Ui.cpp" />

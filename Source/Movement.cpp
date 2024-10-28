@@ -32,7 +32,6 @@ void Movement::DrawImGui()
 {
     ImGui::InputFloat("MoveSpeed", &move_speed);
     ImGui::InputFloat("Friction", &friction);
-	ImGui::InputFloat3("MoveVec", &move_vec.x);
 	ImGui::InputFloat("Mass", &mass);
 	ImGui::InputFloat3("Velocity", &velocity.x);
 	ImGui::InputFloat3("Acceleration", &acceleration.x);
@@ -106,9 +105,8 @@ void Movement::Update(float elapsedTime)
 }
 void Movement::Move(DirectX::XMFLOAT3 v)
 {
-	if (!Mathf::Equal(v, { 0.0f,0.0f,0.0f }))
+	//if (!Mathf::Equal(v, { 0.0f,0.0f,0.0f }))
 	{
-		move_vec = v;
 		//ˆÚ“®•ûŒüƒxƒNƒgƒ‹
 		{
 			AddForce({v.x*move_speed,v.y*move_speed,v.z*move_speed});
@@ -119,21 +117,12 @@ void Movement::Move(DirectX::XMFLOAT3 v)
 
 void Movement::MoveTarget(DirectX::XMFLOAT3 tp, float elapsedTime)
 {
-	//DirectX::XMFLOAT3 vec = Mathf::Distance3(GetActor()->GetPosition(),tp);
 	DirectX::XMFLOAT3 vec = {};
 	DirectX::XMFLOAT3 zero = {};
-	DirectX::XMStoreFloat3(&vec,DirectX::XMVectorSubtract(DirectX::XMLoadFloat3(&tp), DirectX::XMLoadFloat3(&GetActor()->GetPosition())));
+	DirectX::XMVECTOR Vec = DirectX::XMVector3Normalize(DirectX::XMVectorSubtract(DirectX::XMLoadFloat3(&tp), DirectX::XMLoadFloat3(&GetActor()->GetPosition())));
+	DirectX::XMStoreFloat3(&vec, Vec);
 	Turn(elapsedTime, vec);
-	//DirectX::XMFLOAT3 vec = Mathf::Distance3(GetActor()->GetPosition(), { 0,0,0 });
-	//DirectX::XMFLOAT3 pos = GetActor()->GetPosition();
-
-	float length = Mathf::Length(vec);
-	vec = { vec.x / length,vec.y / length,vec.z / length };
 	Move(vec);
-	//pos.x += vec.x*0.01f;
-	//pos.y += vec.y*0.01f;
-	//pos.z += vec.z*0.01f;
-	//GetActor()->SetPosition(pos);
 }
 
 void Movement::Turn(float elapsedTime, DirectX::XMFLOAT3 v)

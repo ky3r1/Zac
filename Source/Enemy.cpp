@@ -20,8 +20,9 @@
 
 void Enemy::Start()
 {
+    GetActor()->AddComponent<Character>();
     GetActor()->GetComponent<Character>()->SetHealth(GetActor()->GetComponent<Character>()->GetMaxHealth());
-    GetActor()->GetComponent<Movement>()->SetMoveSpeed(0.3f);
+    //GetActor()->GetComponent<Movement>()->SetMoveSpeed(0.3f);
 
     //Ai
     {
@@ -77,7 +78,7 @@ void Enemy::Update(float elapsedTime)
     //}
     
     GetActor()->UpdateDelayTime(attack_flag, 2.0f*60.0f);
-
+    //GetActor()->GetComponent<Movement>()->MoveTarget(ActorManager::Instance().GetPlayer()->GetPosition(), elapsedTime);
     //GetActor()->GetComponent<Movement>()->MoveTarget(ActorManager::Instance().GetPlayer()->GetPosition(), elapsedTime);
     //{
     //    DirectX::XMFLOAT3 vec_pe;

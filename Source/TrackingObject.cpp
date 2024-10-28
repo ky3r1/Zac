@@ -23,8 +23,8 @@ void TrackingObject::Start()
     }
     default_position = desired_position;
     Movement* movement = GetActor()->GetComponent<Movement>().get();
-    movement->SetFriction({ 0.0f});
-    movement->SetMoveSpeed(1.0f);
+    movement->SetFriction({ 0.000f});
+    movement->SetMoveSpeed(100.0f);
 }
 
 void TrackingObject::Update(float elapsedTime)
@@ -60,7 +60,7 @@ void TrackingObject::Update(float elapsedTime)
             }
         }
 
-        //目標の追跡(時間or範囲)
+        //目標の追跡
         if (run_obj)
         {
             //円形範囲内にいるときだけターゲットの位置情報を更新する(c_sphere.radiusで効果範囲を変更:0で非完全追従, FLT_MAXで完全追従)
@@ -68,11 +68,9 @@ void TrackingObject::Update(float elapsedTime)
             {
                 tpos = target_actor->GetPosition();
             }
-
-            DirectX::XMFLOAT3 nvec = GetActor()->GetComponent<Movement>()->GetVelocity();
             DirectX::XMFLOAT3 impulse;
             //速力
-            const float power = /*player->GetComponent<Movement>()->GetMoveSpeed() * 1.2f*/0.1f + Mathf::Length(nvec);
+            float power = /*player->GetComponent<Movement>()->GetMoveSpeed() * 1.2f*/10.0f+Mathf::Length(GetActor()->GetComponent<Movement>()->GetVelocity());
             //DirectX::XMFLOAT3 ppos = target_actor->GetPosition();
             float th = target_actor->GetHeight();
             DirectX::XMVECTOR Object_Position = DirectX::XMLoadFloat3(&GetActor()->GetPosition());
@@ -86,9 +84,7 @@ void TrackingObject::Update(float elapsedTime)
             impulse.x = vec.x * power;
             impulse.y = vec.y * power;
             impulse.z = vec.z * power;
-            GetActor()->GetComponent<Movement>()->SetVelocity({ 0,0,0 });
-            GetActor()->GetComponent<Movement>()->AddForce(impulse);
-
+            GetActor()->GetComponent<Movement>()->SetVelocity(impulse);
             run_obj = true;
         }
         else
@@ -99,8 +95,7 @@ void TrackingObject::Update(float elapsedTime)
                 {
                     DirectX::XMFLOAT3 nvec = GetActor()->GetComponent<Movement>()->GetVelocity();
                     DirectX::XMFLOAT3 impulse;
-                    //吹き飛ばす力
-                    const float power = /*player->GetComponent<Movement>()->GetMoveSpeed() * 1.2f*/0.1f + Mathf::Length(nvec);
+                    float power = /*player->GetComponent<Movement>()->GetMoveSpeed() * 1.2f*/10.f + Mathf::Length(nvec);
                     DirectX::XMVECTOR Object_Position = DirectX::XMLoadFloat3(&GetActor()->GetPosition());
                     DirectX::XMVECTOR Desired_Position = DirectX::XMLoadFloat3(&desired_position);
                     DirectX::XMVECTOR Vec = DirectX::XMVectorSubtract(Desired_Position, Object_Position);
@@ -111,8 +106,7 @@ void TrackingObject::Update(float elapsedTime)
                     impulse.x = vec.x * power;
                     impulse.y = vec.y * power;
                     impulse.z = vec.z * power;
-                    GetActor()->GetComponent<Movement>()->SetVelocity({ 0,0,0 });
-                    GetActor()->GetComponent<Movement>()->AddForce(impulse);
+                    GetActor()->GetComponent<Movement>()->SetVelocity(impulse);
                 }
                 Sphere s = { desired_position ,1.0f };
                 if (Collision::IntersectSphereVsSphere(s, GetActor()->GetSphere()))
@@ -120,16 +114,6 @@ void TrackingObject::Update(float elapsedTime)
                     GetActor()->GetComponent<Movement>()->SetVelocity({ 0,0,0 });
                     desired_flg = true;
                 }
-            }
-            else
-            {
-                DirectX::XMFLOAT3 impulse = { 0,0.01f,0 };
-                if (GetActor()->GetPosition().y > default_position.y + 4)
-                {
-
-                    impulse.y = -0.01f;
-                }
-                GetActor()->GetComponent<Movement>()->AddForce(impulse);
             }
         }
     }
