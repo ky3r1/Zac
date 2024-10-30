@@ -42,8 +42,8 @@ struct HitResult
 	DirectX::XMFLOAT3 position = { 0,0,0 }; //レイとポリゴンの交点
 	DirectX::XMFLOAT3 normal = { 0,0,0 };   //衝突したポリゴンの法線ベクトル
 	float             distance = 0.0f;      //レイの始点から交点までの距離
-	int               materialIndex = -1;   //衝突したポリゴンのマテリアル番号
-	DirectX::XMFLOAT3 rotation = { 0,0,0 };   //角度
+	//int               materialIndex = -1;   //衝突したポリゴンのマテリアル番号
+	//DirectX::XMFLOAT3 rotation = { 0,0,0 };   //角度
 };
 
 struct Sphere
@@ -120,6 +120,10 @@ public:
 	// 位置のセッター・ゲッター
 	void SetPosition(const DirectX::XMFLOAT3& position) { this->parameter.collision_cylinder.sphere.position = position; }
 	const DirectX::XMFLOAT3& GetPosition() const { return parameter.collision_cylinder.sphere.position; }
+	void SetPosition_X(float x) { this->parameter.collision_cylinder.sphere.position.x = x; }
+    void SetPosition_Y(float y) { this->parameter.collision_cylinder.sphere.position.y = y; }
+    void SetPosition_Z(float z) { this->parameter.collision_cylinder.sphere.position.z = z; }
+
 
 	// 回転のセッター・ゲッター
 	void SetRotation(const DirectX::XMFLOAT4& rotation){ this->parameter.rotation = rotation;}
@@ -156,6 +160,8 @@ public:
     Cylinder GetCylinder() const { return parameter.collision_cylinder; }
     void SetCylinder(const Cylinder& cylinder) {parameter.collision_cylinder = cylinder;}
 
+	DirectX::XMFLOAT3 GetFront() const { return DirectX::XMFLOAT3(parameter.transform._31, parameter.transform._32, parameter.transform._33); }
+
 
 	// モデルのセッター・ゲッター
 	void LoadModel(const char* filename);
@@ -173,7 +179,7 @@ public:
 	void SetFomXZ(FOM f) { fom_XZ = f; }
 	FOM GetFomXZ() const { return fom_XZ; }
 
-	// レイキャストフラグのセッター・ゲッター
+	// レイキャストフラグ(trueならレイキャスト対象)
     void SetRaycastFlg(bool flg) { raycast_flg = flg; }
     bool GetRaycastFlg() const { return raycast_flg; }
 
@@ -188,6 +194,10 @@ public:
 	//レイポジション
     void SetRayPosition(const DirectX::XMFLOAT3& position) { ray_position = position; }
     const DirectX::XMFLOAT3& GetRayPosition() const { return ray_position; }
+
+	//RenderFlag(trueなら描画)
+    void SetRenderFlag(bool flag) { render_flg = flag; }
+    bool GetRenderFlag() const { return render_flg; }
 
 	//アニメーションスピード
     void SetAnimationSpeed(float speed) { animspeed = speed; }
@@ -241,6 +251,8 @@ private:
 	//Ray情報
 	bool			  raycast_flg = false;
     DirectX::XMFLOAT3 ray_position = { 0,0,0 };
+	//RednerFlag
+	bool 			  render_flg = true;
 
 	float animspeed = 1.0f;
 
@@ -295,8 +307,11 @@ public:
 	//std::unique_ptr<Actor> GetNearActor(Actor* origin, ActorType filter);
 
 	//RayCast用アクター取得
-	bool GetNearActorRayCast(DirectX::XMFLOAT3 start, DirectX::XMFLOAT3 end, HitResult& hit_result,Actor** reactor);
-	bool GetNearActorRayCast(DirectX::XMFLOAT3 start, DirectX::XMFLOAT3 end, HitResult& hit_result);
+	bool GetNearActorRayCast(
+		const DirectX::XMFLOAT3& start,
+		const DirectX::XMFLOAT3& end,
+		HitResult& hit_result,
+		Actor** reactor);
 	//SphereCast用アクター取得
 	bool GetNearActorSphereCast(DirectX::XMFLOAT3 start, DirectX::XMFLOAT3 end,float radius, HitResult& hit_result, Actor** reactor);
 

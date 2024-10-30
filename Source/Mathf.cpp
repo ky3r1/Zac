@@ -129,3 +129,15 @@ DirectX::XMFLOAT3 Mathf::Subtruct(DirectX::XMFLOAT3 A, DirectX::XMFLOAT3 B)
     DirectX::XMStoreFloat3(&result, DirectX::XMVectorSubtract(a, b));
     return result;
 }
+
+float Mathf::GetTransform(DirectX::XMFLOAT4X4 t, int x, int y)
+{
+    float Transform[4][4] =
+    {
+        { t._11,t._12,t._13,t._14 },
+        { t._21,t._22,t._23,t._24 },
+        { t._31,t._32,t._33,t._34 },
+        { t._41,t._42,t._43,t._44 },
+    };
+    return Transform[x][y];
+}

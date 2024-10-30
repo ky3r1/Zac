@@ -31,16 +31,22 @@ Movement::~Movement()
 void Movement::DrawImGui()
 {
     ImGui::InputFloat("MoveSpeed", &move_speed);
+	ImGui::InputFloat3("RayCastNormal", &normal.x);
     ImGui::InputFloat("Friction", &friction);
 	ImGui::InputFloat("Mass", &mass);
 	ImGui::InputFloat3("Velocity", &velocity.x);
 	ImGui::InputFloat3("Acceleration", &acceleration.x);
-	ImGui::InputFloat3("Resultant", &resultant.x);
 }
 
 void Movement::DrawDebug()
 {
 	//Graphics::Instance().GetDebugRenderer()->DrawCube({ velocity.x,0,velocity.z }, { GetActor()->GetPosition() .x,0,GetActor()->GetPosition().z}, { 1,0,0,1 });
+}
+
+void Movement::Reset()
+{
+	velocity = {};
+	acceleration = {};
 }
 
 void Movement::Start()
@@ -85,10 +91,11 @@ void Movement::Update(float elapsedTime)
 	{
 
 		{
-			DirectX::XMVECTOR f = DirectX::XMLoadFloat3(&velocity);
-			f=DirectX::XMVectorScale(f, -1);
-			f = DirectX::XMVectorAdd(DirectX::XMVectorScale(f, friction), DirectX::XMLoadFloat3(&velocity));
-			DirectX::XMStoreFloat3(&velocity, f);
+			DirectX::XMVECTOR F = DirectX::XMLoadFloat3(&velocity);
+			F=DirectX::XMVectorScale(F, -1);
+			F = DirectX::XMVectorAdd(DirectX::XMVectorScale(F, friction * elapsedTime), DirectX::XMLoadFloat3(&velocity));
+			velocity = { DirectX::XMVectorGetX(F),velocity.y,DirectX::XMVectorGetZ(F) };
+			//AddForce({ velocity.x * -1 * friction, 0, velocity.z * -1 * friction });
 		}
 	}
 	//‘¬“xXV
@@ -112,6 +119,11 @@ void Movement::Move(DirectX::XMFLOAT3 v)
 			AddForce({v.x*move_speed,v.y*move_speed,v.z*move_speed});
 		}
 	}
+}
+
+void Movement::Move(DirectX::XMFLOAT3 v, float force)
+{
+	AddForce({ v.x * force,v.y * force,v.z * force });
 }
 
 
@@ -171,11 +183,6 @@ void Movement::Turn(float elapsedTime, DirectX::XMFLOAT3 v)
 		angle_y -= rot;
 		actor->SetRotation({ actor->GetRotation().x, angle_y, actor->GetRotation().z, actor->GetRotation().w });
 	}
-}
-
-void Movement::Jump(float jump_power)
-{
-	velocity.y += jump_power;
 }
 
 void Movement::AddForce(const DirectX::XMFLOAT3& impulse)

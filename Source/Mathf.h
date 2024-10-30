@@ -42,4 +42,6 @@ public:
 	//-‰‰Z
 	static DirectX::XMFLOAT3 Subtruct(DirectX::XMFLOAT3 A, DirectX::XMFLOAT3 B);
 
+	//t‚ÌsxA—ñy‚Ì’l‚ğ•Ô‚·
+	float GetTransform(DirectX::XMFLOAT4X4 t, int x, int y);
 };

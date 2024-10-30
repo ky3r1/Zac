@@ -14,6 +14,7 @@ public:
     void DrawImGui()override;
     void DrawDebug()override;
 
+    void Reset()override;
 
     //初期化
     virtual void Start()override;
@@ -22,13 +23,11 @@ public:
 
     // 移動
     void Move(DirectX::XMFLOAT3 v);
+    void Move(DirectX::XMFLOAT3 v,float force);
     void MoveTarget(DirectX::XMFLOAT3 tp,float elapsedTime);
 
     // 旋回
     void Turn(float elapsedTime, DirectX::XMFLOAT3 v);
-
-    //ジャンプ
-    void Jump(float jump_power);
 
     //衝撃を加える
     void AddForce(const DirectX::XMFLOAT3& impulse);
@@ -54,7 +53,7 @@ private:
     float		turnSpeed = 6.28f;
 
     //DirectX::XMFLOAT3 velocity = {};
-    float friction = { 0.08f };
+    float friction = { 6.00f };
 
     DirectX::XMFLOAT3 normal = { 0.0f,0.0f,0.0f };
     float slope_rate;
@@ -75,7 +74,7 @@ public:
     float GetMass()const { return mass; }
     void SetMass(float value) { mass = value; }
 private:
-    float mass = 0.1f;//質量
+    float mass = 1.0f;//質量
     DirectX::XMFLOAT3 velocity = {};//速度
     DirectX::XMFLOAT3 acceleration = {};//加速度
     DirectX::XMFLOAT3 resultant = {};//合力

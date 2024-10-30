@@ -27,6 +27,9 @@ public:
 	// アクター設定
 	void SetActor(std::shared_ptr<Actor> actor) { this->actor = actor; }
 
+	//初期化
+    virtual void Reset() {}
+
 	// アクター取得
 	std::shared_ptr<Actor> GetActor() { return actor.lock(); }
 

@@ -33,14 +33,19 @@ Player::~Player()
 // 開始処理
 void Player::Start()
 {
-	GetActor()->AddComponent<Movement>();
 	GetActor()->AddComponent<Gravity>();
+	GetActor()->GetComponent<Gravity>()->SetSpeed(1.0f);
+	GetActor()->AddComponent<Movement>();
+	Movement* movement = GetActor()->GetComponent<Movement>().get();
+	movement->SetMass(1.0f);
 	GetActor()->AddComponent<VsCollision>();
 	GetActor()->AddComponent<Character>();
 	GetActor()->GetComponent<Character>()->SetHealth(GetActor()->GetComponent<Character>()->GetMaxHealth());
 	//GetActor()->GetComponent<Movement>()->SetMoveSpeed(5.0f);
 	GetActor()->SetAttitudeControlFlag(true);
 	GetActor()->GetModel()->PlayAnimation(5, true, 1.0f);
+	//GetActor()->AddComponent<Gravity>();
+	//GetActor()->GetComponent<Gravity>()->SetSpeed(1.0f);
 }
 
 // 更新
@@ -55,9 +60,7 @@ void Player::Update(float elapsedTime)
 	//Jump
 	if (gamePad.GetButtonDown() & GamePad::BTN_B)
 	{
-		GetActor()->GetComponent<Movement>()->Jump(10.0f);
-		//GetActor()->GetModel()->SetAnimationSpeed(1.0f);
-		//GetActor()->SetAnimation(Anim_JumpPeak, true);
+		GetActor()->GetComponent<Gravity>()->Jump(10000.0f);
 	}
 	if (gamePad.GetButton() & GamePad::BTN_X)
 	{

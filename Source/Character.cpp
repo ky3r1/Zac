@@ -21,9 +21,14 @@ void Character::Update(float elapsedTime)
     GetActor()->SetRayPosition(GetActor()->GetPosition());
     if(true)
     {
-        //GetActor()->GetComponent<VsCollision>()->RayCastAxisXZ();
-        //GetActor()->GetComponent<VsCollision>()->RayCastAxisYUp();
         GetActor()->GetComponent<VsCollision>()->RayCastAxisYUnder();
+        GetActor()->GetComponent<VsCollision>()->RayCastAxisXZ();
+        //GetActor()->GetComponent<VsCollision>()->RayCastAxisYUp();
+        //GetActor()->GetComponent<VsCollision>()->RayCastAxisYUnder();
+        //if (GetActor()->GetPosition().y < 0.0f)
+        //{
+        //    GetActor()->SetPosition({ GetActor()->GetPosition().x, 0.0f, GetActor()->GetPosition().z });
+        //}
     }
     else
     {

@@ -35,21 +35,15 @@ public:
     );
 
     //レイとモデルの交点判定
-    static bool IntersectRayVsModel(
+    static bool RayCast(
         const DirectX::XMFLOAT3& start,
         const DirectX::XMFLOAT3& end,
+        const DirectX::XMFLOAT4X4& worldTransform,
         const Model* model,
-        HitResult& result
-    );
+        HitResult& result);
 
     //スフィアとモデルの交差判定
-    static bool IntersectSphereVsModel(
-        const DirectX::XMFLOAT3& start,
-        const DirectX::XMFLOAT3& end,
-        float radius,
-        const Model* model,
-        HitResult& result
-    );
+
 
     //HPbarの位置
     static bool HPbarPoint(

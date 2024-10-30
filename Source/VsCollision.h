@@ -27,14 +27,18 @@ public:
     bool RayCastAxisYUnder();
     //上方向のレイキャスト
     bool RayCastAxisYUp();
-    //下方向無限にレイキャスト
-    void RayCastAxisYUnderEx();
 
     //横方向のレイキャスト
     bool RayCastAxisXZ();
 
-    //bool CheckRayAxisY();
+    //ImGui描画
+    void DrawImGui()override;
+    void DrawDebug()override;
 private:
     float repulsion_coefficient = 0.7f;//反発係数
+    DirectX::XMFLOAT3 raycastcast_y_start = {};
+    DirectX::XMFLOAT3 raycastcast_y_end = {};
+    DirectX::XMFLOAT3 raycastcast_xz_start = {};
+    DirectX::XMFLOAT3 raycastcast_xz_end = {};
     //bool checke = true;
 };

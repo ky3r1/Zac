@@ -33,7 +33,7 @@ void TrackingObject::Update(float elapsedTime)
     //‰ñ“]
     {
         DirectX::XMFLOAT4 rotation = GetActor()->GetRotation();
-        float rot = 0.1f / 3.14f;
+        float rot = (3.14 *elapsedTime) / 3.14f;
         GetActor()->SetRotation({ rotation.x + rot, rotation.y, rotation.z + rot, rotation.w });
         if (rotation.x > 3.14f)GetActor()->SetRotation({ -3.14f, rotation.y, rotation.z, rotation.w });
         if (rotation.y > 3.14f)GetActor()->SetRotation({ rotation.x, -3.14f, rotation.z, rotation.w });
@@ -122,7 +122,7 @@ void TrackingObject::Update(float elapsedTime)
 
 void TrackingObject::DrawImGui()
 {
-    ImGui::SliderFloat("Radius", &c_sphere.radius, 0.1f, 10.0f);
+    ImGui::InputFloat("SearchRadius", &c_sphere.radius);
     if (ImGui::Button("Run"))
     {
         run_obj = true;

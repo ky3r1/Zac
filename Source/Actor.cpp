@@ -23,7 +23,7 @@ void Actor::Update(float elapsedTime)
 	}
 	for (std::shared_ptr<Component>& component : components)
 	{
-		component->Update(elapsedTime);
+ 		component->Update(elapsedTime);
 	}
 }
 
@@ -41,14 +41,26 @@ void Actor::UpdateTransform()
 	DirectX::XMMATRIX T = DirectX::XMMatrixTranslation(parameter.collision_cylinder.sphere.position.x, parameter.collision_cylinder.sphere.position.y, parameter.collision_cylinder.sphere.position.z);
 	//3つの行列を組み合わせ、ワールド行列を作成
 	DirectX::XMMATRIX W = S * R * T;
+
+	//for (int i = 0; i < 4; i++) {
+	//	for (int j = 0; j < 4; j++) {
+	//		DirectX::XMFLOAT4X4 t = old_transform;
+	//		//float value1 = Mathf::GetTransform(t, i, j);
+	//		//float value2 = Mathf::GetTransform(parameter.transform, i, j);
+	//		if (value1 != value2) 
+	//		{
+	//			return;
+	//		}
+	//	}
+	//}
 	//計算したワールド行列を取り出す
 	DirectX::XMStoreFloat4x4(&parameter.transform, W);
-
 	// モデルの行列更新
 	if (model != nullptr)
 	{
 		model->UpdateTransform(parameter.transform);
 	}
+	old_transform = parameter.transform;
 }
 
 void Actor::Render(ID3D11DeviceContext* dc, Shader* shader)
@@ -172,9 +184,15 @@ void Actor::OnGUI()
 		ImGui::SliderFloat("Radius", &parameter.collision_cylinder.sphere.radius, 0.1f, 10.0f);
 		ImGui::SliderFloat("Height", &parameter.collision_cylinder.height, 0.1f, 10.0f);
 		ImGui::SliderFloat("Weight", &parameter.collision_cylinder.sphere.weight, 0.1f, 10.0f);
+		DirectX::XMFLOAT3 front = GetFront();
+		ImGui::SliderFloat3("Front", &front.x, -10.0f, 10.0f);
         if (ImGui::Button("Reset"))
         {
 			parameter = parameter_backup;
+			for (std::shared_ptr<Component>& component : components)
+			{
+				component->Reset();
+			}
         }
 		if (ImGui::Button("Death"))
 		{
@@ -322,7 +340,9 @@ void ActorManager::Render(ID3D11DeviceContext* dc, Shader* shader)
 	{
 		// モデルがあれば描画
 		Model* model = actor->GetModel();
-		if (model != nullptr)
+		if (model != nullptr
+			&&actor->GetRenderFlag()
+			)
 		{
 			shader->Draw(dc, actor->GetModel(), actor->GetColor());
 		}
@@ -398,40 +418,8 @@ Actor* ActorManager::GetNearActor(Actor* origin, ActorType filter)
 	return result;
 }
 
-bool ActorManager::GetNearActorRayCast(DirectX::XMFLOAT3 start, DirectX::XMFLOAT3 end, HitResult& hit_result, Actor** reactor)
-{
-    float min = FLT_MAX;
-    float distance = 0.0f;
-    Actor* result = nullptr;
-	HitResult local_hit_result;
-    for (std::shared_ptr<Actor> actor : updateActors)
-    {
-		//Actor生成時にRayCastFlgを設定する
-        if (actor->GetRaycastFlg())
-        {
-			if (Collision::IntersectRayVsModel(start, end, actor->GetModel(), local_hit_result))
-			{
-				if (hit_result.distance < min)
-				{
-					min= local_hit_result.distance;
-					hit_result = local_hit_result;
-					result = actor.get();
-					*reactor = actor.get();
-				}
-			}
-        }
-    }
-	if (result != nullptr)return true;
-    return false;
-}
 
-bool ActorManager::GetNearActorRayCast(DirectX::XMFLOAT3 start, DirectX::XMFLOAT3 end, HitResult& hit_result)
-{
-	Actor* result = nullptr;
-	return GetNearActorRayCast(start, end, hit_result, &result);
-}
-
-bool ActorManager::GetNearActorSphereCast(DirectX::XMFLOAT3 start, DirectX::XMFLOAT3 end, float radius, HitResult& hit_result, Actor** reactor)
+bool ActorManager::GetNearActorRayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit_result, Actor** reactor)
 {
 	float min = FLT_MAX;
 	float distance = 0.0f;
@@ -442,19 +430,61 @@ bool ActorManager::GetNearActorSphereCast(DirectX::XMFLOAT3 start, DirectX::XMFL
 		//Actor生成時にRayCastFlgを設定する
 		if (actor->GetRaycastFlg())
 		{
-			if (Collision::IntersectSphereVsModel(start, end,radius, actor->GetModel(), local_hit_result))
+			if (actor->GetName() != "MainStage")
 			{
+				int i = 0;
+			}
+			actor->GetModel()->UpdateTransform({
+				1,0,0,0,
+				0,1,0,0,
+				0,0,1,0,
+				0,0,0,1 });
+			if (Collision::RayCast(start, end, actor->GetTransform(), actor->GetModel(), hit_result))
+			{
+				if (actor->GetName() != "MainStage")
+				{
+					int i = 0;
+				}
 				if (hit_result.distance < min)
 				{
 					min = local_hit_result.distance;
-					hit_result = local_hit_result;
+					local_hit_result = hit_result;
+					hit_result = HitResult{};
 					result = actor.get();
 					*reactor = actor.get();
 				}
 			}
 		}
 	}
+	hit_result  = local_hit_result;
 	if (result != nullptr)return true;
+	return false;
+}
+
+bool ActorManager::GetNearActorSphereCast(DirectX::XMFLOAT3 start, DirectX::XMFLOAT3 end, float radius, HitResult& hit_result, Actor** reactor)
+{
+	//float min = FLT_MAX;
+	//float distance = 0.0f;
+	//Actor* result = nullptr;
+	//HitResult local_hit_result;
+	//for (std::shared_ptr<Actor> actor : updateActors)
+	//{
+	//	//Actor生成時にRayCastFlgを設定する
+	//	if (actor->GetRaycastFlg())
+	//	{
+	//		if (Collision::IntersectSphereVsModel(start, end,radius, actor->GetModel(), local_hit_result))
+	//		{
+	//			if (hit_result.distance < min)
+	//			{
+	//				min = local_hit_result.distance;
+	//				hit_result = local_hit_result;
+	//				result = actor.get();
+	//				*reactor = actor.get();
+	//			}
+	//		}
+	//	}
+	//}
+	//if (result != nullptr)return true;
 	return false;
 }
 

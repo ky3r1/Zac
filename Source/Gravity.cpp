@@ -24,16 +24,27 @@ void Gravity::Update(float elapsedTime)
     DirectX::XMVECTOR Actor_Pos = DirectX::XMLoadFloat3(&actor_pos);
     DirectX::XMVECTOR Delta=DirectX::XMVectorSubtract(Pos, Actor_Pos);
     Delta = DirectX::XMVector3Normalize(Delta);
-    Delta = DirectX::XMVectorScale(Delta, force_magnitude);
+    Delta = DirectX::XMVectorScale(Delta, force_magnitude*speed);
 
     DirectX::XMStoreFloat3(&force, Delta);
-    GetActor()->GetComponent<Movement>()->AddForce(force);
+    power = force;
+    Movement* movement = GetActor()->GetComponent<Movement>().get();
+    DirectX::XMFLOAT3 acc = movement->GetAcceleration();
+    //movement->SetAcceleration(Mathf::Add(force, acc));
+    movement->AddForce({ force.x,force.y,force.z });
 }
 
 void Gravity::DrawImGui()
 {
+    ImGui::InputFloat("GravitySpeed", &speed);
 }
 
 void Gravity::DrawDebug()
 {
+}
+
+void Gravity::Jump(float power)
+{
+    GetActor()->GetComponent<Movement>()->AddForce({ 0,power,0 });
+    on_ground = false;
 }
