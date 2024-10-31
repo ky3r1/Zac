@@ -38,18 +38,6 @@
 ///Enemy
 //エネミー
 #define ALLENEMY
-////スポーン
-//#define SPOWNENEMY
-
-////01
-//#define ENEMY01 
-////02
-//#define ENEMY02
-////03
-//#define ENEMY03 
-//BOSS
-//#define ENEMYBOSS 
-
 // 攻撃
 #define ENEMYATTACK
 
@@ -59,10 +47,7 @@
 #define ENEMYANIMATION
 
 /////////////Projectile////////////////////////
-//弾のダメージ
-#define PROJECTILEDAMAGE
-//弾の衝撃
-#define PROJECTILEHIT
+
 
 ///////////////////UI////////////////////////
 

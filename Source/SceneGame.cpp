@@ -163,18 +163,6 @@ void SceneGame::Initialize()
 		//	actor->AddComponent<Enemy>();
 		//}
 	}
-#ifdef ENEMY01
-	
-#endif // ENEMY01
-#ifdef ENEMY02
-
-#endif // ENEMY02
-#ifdef ENEMY03
-
-#endif // ENEMY03
-#ifdef ENEMYBOSS
-
-#endif // ENEMYBOSS
 #endif // ALLENEMY
 
 #ifdef OBJECT	

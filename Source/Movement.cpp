@@ -72,9 +72,6 @@ void Movement::Update(float elapsedTime)
 			velocity.y -= length * slope_rate * elapsedTime;
 		}
 	}
-
-
-
 	//地面の向きに沿うようにXZ軸回転
 	if(GetActor()->GetAttitudeControlFlag())
 	{
@@ -89,13 +86,11 @@ void Movement::Update(float elapsedTime)
 	}
 	//摩擦
 	{
-
 		{
 			DirectX::XMVECTOR F = DirectX::XMLoadFloat3(&velocity);
-			F=DirectX::XMVectorScale(F, -1);
-			F = DirectX::XMVectorAdd(DirectX::XMVectorScale(F, friction * elapsedTime), DirectX::XMLoadFloat3(&velocity));
-			velocity = { DirectX::XMVectorGetX(F),velocity.y,DirectX::XMVectorGetZ(F) };
-			//AddForce({ velocity.x * -1 * friction, 0, velocity.z * -1 * friction });
+			F = DirectX::XMVectorAdd(DirectX::XMVectorScale(F, friction* -1), DirectX::XMLoadFloat3(&velocity));
+			//velocity = { DirectX::XMVectorGetX(F),velocity.y,DirectX::XMVectorGetZ(F) };
+			AddForce({ DirectX::XMVectorGetX(F),0,DirectX::XMVectorGetZ(F) });
 		}
 	}
 	//速度更新
