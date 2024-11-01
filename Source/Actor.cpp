@@ -430,10 +430,10 @@ bool ActorManager::GetNearActorRayCast(const DirectX::XMFLOAT3& start, const Dir
 		//Actor¶¬Žž‚ÉRayCastFlg‚ðÝ’è‚·‚é
 		if (actor->GetRaycastFlg())
 		{
-			if (actor->GetName() != "MainStage")
-			{
-				int i = 0;
-			}
+			//if (actor->GetName() != "MainStage")
+			//{
+			//	int i = 0;
+			//}
 			actor->GetModel()->UpdateTransform({
 				1,0,0,0,
 				0,1,0,0,
@@ -441,14 +441,10 @@ bool ActorManager::GetNearActorRayCast(const DirectX::XMFLOAT3& start, const Dir
 				0,0,0,1 });
 			if (Collision::RayCast(start, end, actor->GetTransform(), actor->GetModel(), hit_result))
 			{
-				if (actor->GetName() != "MainStage")
-				{
-					int i = 0;
-				}
 				if (hit_result.distance < min)
 				{
-					min = local_hit_result.distance;
 					local_hit_result = hit_result;
+					min = local_hit_result.distance;
 					hit_result = HitResult{};
 					result = actor.get();
 					*reactor = actor.get();

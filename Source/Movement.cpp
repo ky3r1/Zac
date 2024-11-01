@@ -95,11 +95,10 @@ void Movement::Update(float elapsedTime)
 	}
 	//‘¬“xXV
 	{
-
 		assert(mass > 0);
-
 		DirectX::XMStoreFloat3(&acceleration, DirectX::XMVectorScale(DirectX::XMLoadFloat3(&resultant), 1 / mass));
 		DirectX::XMStoreFloat3(&velocity, DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&velocity), DirectX::XMVectorScale(DirectX::XMLoadFloat3(&acceleration), elapsedTime)));
+		//DirectX::XMStoreFloat3(&velocity, DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&velocity), DirectX::XMLoadFloat3(&acceleration)));
 		DirectX::XMStoreFloat3(&pos, DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&pos), DirectX::XMVectorScale(DirectX::XMLoadFloat3(&velocity), elapsedTime)));
 		GetActor()->SetPosition(pos);
 		resultant = {};
@@ -186,6 +185,7 @@ void Movement::AddForce(const DirectX::XMFLOAT3& impulse)
 	resultant.y += impulse.y;
 	resultant.z += impulse.z;
 }
+
 
 void Movement::ResetVelocity()
 {

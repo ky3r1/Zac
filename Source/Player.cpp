@@ -60,7 +60,7 @@ void Player::Update(float elapsedTime)
 	//Jump
 	if (gamePad.GetButtonDown() & GamePad::BTN_B)
 	{
-		GetActor()->GetComponent<Gravity>()->Jump(10000.0f);
+		GetActor()->GetComponent<Gravity>()->Jump(jumpPower);
 	}
 	if (gamePad.GetButton() & GamePad::BTN_X)
 	{
@@ -116,6 +116,7 @@ void Player::DrawImGui()
 	//Character::DrawImGui();
 	DirectX::XMFLOAT3 a=GetMoveVec();
 	ImGui::InputFloat3("Move Vec", &a.x);
+	ImGui::InputFloat("JumpPower", &jumpPower);
 }
 
 void Player::DrawDebug()

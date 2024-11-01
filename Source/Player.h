@@ -36,6 +36,8 @@ private:
 	void CharacterControl(float elapsedTime);
 
 	DirectX::XMFLOAT3 GetMoveVec();
+private:
+	float jumpPower = 1000.0f;
 
 private:
 	enum

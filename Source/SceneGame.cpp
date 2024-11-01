@@ -206,7 +206,7 @@ void SceneGame::Initialize()
 			actor->SetPosition(DirectX::XMFLOAT3(300, 00, 150));
 			actor->SetRotation(DirectX::XMFLOAT4(3.14f * 0.25f, 3.14f * 0.0f, 3.14f * 0.0f, 1));
 			actor->SetScale(DirectX::XMFLOAT3(100.0f, 100.0f, 100.0f));
-			actor->SetColor(DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
+			actor->SetColor(DirectX::XMFLOAT4(0.0f, 0.5f, 0.23f, 1.0f));
 			actor->SetRaycastFlg(true);
 			actor->SetActorType(ActorType::Object);
 			actor->AddComponent<VsCollision>();

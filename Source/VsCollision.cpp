@@ -150,7 +150,7 @@ bool VsCollision::RayCastAxisYUnder()
 
 	DirectX::XMFLOAT3 end = {
 		GetActor()->GetPosition().x,
-		GetActor()->GetPosition().y - 1.0f,
+		GetActor()->GetPosition().y - 0.5f,
 		GetActor()->GetPosition().z
 	};
 	raycastcast_y_end = end;
@@ -179,15 +179,19 @@ bool VsCollision::RayCastAxisYUnder()
 		//	//	break;
 		//}
 
-		GetActor()->SetPosition_Y(hit_result.position.y);
-		movement->SetNormal(hit_result.normal);
-		//DirectX::XMFLOAT3 up = { GetActor()->GetTransform()._21,GetActor()->GetTransform()._22 ,GetActor()->GetTransform()._23 };
-		//movement->AddForce({ GetActor()->GetComponent<Gravity>()->GetPower().y * hit_result.normal.x,-GetActor()->GetComponent<Gravity>()->GetPower().y * hit_result.normal.y, GetActor()->GetComponent<Gravity>()->GetPower().y * hit_result.normal.z });
-		//movement->AddForce({ 0,-GetActor()->GetComponent<Gravity>()->GetPower().y * hit_result.normal.y,0});
-		movement->SetVelocity({ vec.x,0,vec.z });
-		//movement->SetAcceleration({ movement->GetAcceleration().x,0,movement->GetAcceleration().z });
+		if (movement->GetVelocity().y<0)
+		{
+			GetActor()->SetPosition_Y(hit_result.position.y);
+			movement->SetNormal(hit_result.normal);
+			//DirectX::XMFLOAT3 up = { GetActor()->GetTransform()._21,GetActor()->GetTransform()._22 ,GetActor()->GetTransform()._23 };
+			//movement->AddForce({ GetActor()->GetComponent<Gravity>()->GetPower().y * hit_result.normal.x,-GetActor()->GetComponent<Gravity>()->GetPower().y * hit_result.normal.y, GetActor()->GetComponent<Gravity>()->GetPower().y * hit_result.normal.z });
+			//movement->AddForce({ 0,-GetActor()->GetComponent<Gravity>()->GetPower().y * hit_result.normal.y,0});
+			movement->SetVelocity({ vec.x,0,vec.z });
+			//movement->SetAcceleration({ movement->GetAcceleration().x,0,movement->GetAcceleration().z });
+		}
 		return true;
 	}
+	movement->SetNormal({ 0,1,0 });
 	//GetActor()->GetComponent<Movement>()->SetNormal(DirectX::XMFLOAT3(0, 1, 0));
 	return false;
 }
@@ -325,7 +329,7 @@ bool VsCollision::RayCastAxisXZ()
 			//	GetActor()->GetComponent<Movement>()->SetVelocity(DirectX::XMFLOAT3(0.0f, vec.y, 0.0f));
 			//	break;
 			//case FOM::Bounse:
-			//	GetActor()->GetComponent<Movement>()->SetVelocity(DirectX::XMFLOAT3(-vec.x * repulsion_coefficient, vec.y, -vec.z * repulsion_coefficient));
+			//	GetActor()->GetComponent<Movement>()->SetVelocity(DirectX::XMFLOAT3(-vec.x * repulsion_coefficient, vec.y, -vec.z * repulsion_coefficient));--
 			//	break;
 			//case FOM::Friction:
 			//	GetActor()->GetComponent<Movement>()->SetVelocity(DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f));
@@ -356,9 +360,9 @@ void VsCollision::DrawImGui()
 
 void VsCollision::DrawDebug()
 {
-	//// //デバッグ球描画
-	//DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(0, 1, 0, 1);
-	//Graphics::Instance().GetDebugRenderer()->DrawCube(raycastcast_y_start, raycastcast_y_end, color);
-	//color = DirectX::XMFLOAT4(0, 0, 1, 1);
-	//Graphics::Instance().GetDebugRenderer()->DrawCube(raycastcast_xz_start, raycastcast_xz_end, color);
+	// //デバッグ球描画
+	DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(0, 1, 0, 1);
+	Graphics::Instance().GetDebugRenderer()->DrawCube(raycastcast_y_start, raycastcast_y_end, color);
+	color = DirectX::XMFLOAT4(0, 0, 1, 1);
+	Graphics::Instance().GetDebugRenderer()->DrawCube(raycastcast_xz_start, raycastcast_xz_end, color);
 }

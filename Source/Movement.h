@@ -48,6 +48,9 @@ public:
     //法線
     DirectX::XMFLOAT3 GetNormal()const { return normal; }
     void SetNormal(const DirectX::XMFLOAT3& value) { normal = value; }
+
+    bool GetOnGround() { return on_ground; }
+    void SetOnGround(bool on_ground) { this->on_ground = on_ground; }//true:地表 false:空中
 private:
     float		move_speed = 500.0f;
     float		turnSpeed = 6.28f;
@@ -57,6 +60,8 @@ private:
 
     DirectX::XMFLOAT3 normal = { 0.0f,0.0f,0.0f };
     float slope_rate;
+
+    bool on_ground = false;
 public:
     //加速度
     DirectX::XMFLOAT3 GetAcceleration()const { return acceleration; }
