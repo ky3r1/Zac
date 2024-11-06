@@ -199,6 +199,19 @@ void LineRenderer::Render(ID3D11DeviceContext* context, const DirectX::XMFLOAT4X
 	vertices.clear();
 }
 
+void LineRenderer::Line(const DirectX::XMFLOAT3& start_position, const DirectX::XMFLOAT3& end_position, const DirectX::XMFLOAT4& color)
+{
+	Vertex v;
+	v.position = start_position;
+	v.color = color;
+	vertices.emplace_back(v);
+
+	v.position = end_position;
+	v.color = color;
+	vertices.emplace_back(v);
+}
+
+
 // ’¸“_’Ç‰Á
 void LineRenderer::AddVertex(const DirectX::XMFLOAT3& position, const DirectX::XMFLOAT4& color)
 {

@@ -134,7 +134,9 @@
     <ClInclude Include="Source\Collision.h" />
     <ClInclude Include="Source\CollisionObject.h" />
     <ClInclude Include="Source\Component.h" />
+    <ClInclude Include="Source\DijkstraAlgorithm.h" />
     <ClInclude Include="Source\Easing.h" />
+    <ClInclude Include="Source\Edge.h" />
     <ClInclude Include="Source\Effect.h" />
     <ClInclude Include="Source\EffectManager.h" />
     <ClInclude Include="Source\Enemy.h" />
@@ -176,7 +178,9 @@
     <ClInclude Include="Source\SceneTutorial.h" />
     <ClInclude Include="Source\SphereTrackingObject.h" />
     <ClInclude Include="Source\Spown.h" />
+    <ClInclude Include="Source\Stage.h" />
     <ClInclude Include="Source\StageMain.h" />
+    <ClInclude Include="Source\StageManager.h" />
     <ClInclude Include="Source\StateBase.h" />
     <ClInclude Include="Source\StateMachine.h" />
     <ClInclude Include="Source\TimeDeleteObject.h" />
@@ -205,6 +209,7 @@
     <ClCompile Include="Source\Character.cpp" />
     <ClCompile Include="Source\Collision.cpp" />
     <ClCompile Include="Source\CollisionObject.cpp" />
+    <ClCompile Include="Source\DijkstraAlgorithm.cpp" />
     <ClCompile Include="Source\Easing.cpp" />
     <ClCompile Include="Source\Effect.cpp" />
     <ClCompile Include="Source\EffectManager.cpp" />
@@ -243,8 +248,10 @@
     <ClCompile Include="Source\SceneTutorial.cpp" />
     <ClCompile Include="Source\SphereTrackingObject.cpp" />
     <ClCompile Include="Source\Spown.cpp" />
+    <ClCompile Include="Source\Stage.cpp" />
     <ClCompile Include="Source\StageMain.cpp" />
     <ClCompile Include="Source\MouseManager.cpp" />
+    <ClCompile Include="Source\StageManager.cpp" />
     <ClCompile Include="Source\StateBase.cpp" />
     <ClCompile Include="Source\StateMachine.cpp" />
     <ClCompile Include="Source\TimeDeleteObject.cpp" />

@@ -24,7 +24,7 @@ public:
     // ˆÚ“®
     void Move(DirectX::XMFLOAT3 v);
     void Move(DirectX::XMFLOAT3 v,float force);
-    void MoveTarget(DirectX::XMFLOAT3 tp,float elapsedTime);
+    void MoveTarget(DirectX::XMFLOAT3 target,float elapsedTime);
 
     // ù‰ñ
     void Turn(float elapsedTime, DirectX::XMFLOAT3 v);

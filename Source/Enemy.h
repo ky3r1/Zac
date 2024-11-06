@@ -2,6 +2,7 @@
 #include "Graphics/Shader.h"
 #include "Component.h"
 #include "Character.h"
+#include "DijkstraAlgorithm.h"
 
 class BehaviorTree;
 class BehaviorData;
@@ -98,4 +99,11 @@ protected:
 	BehaviorTree* aiTree = nullptr;
 	BehaviorData* behaviorData = nullptr;
 	NodeBase* activeNode = nullptr;
+private:
+	//Dijkstra
+	int target_id = -1;
+	DirectX::XMFLOAT3 next_waypoint = {};
+	DirectX::XMFLOAT3 last_waypoint = {};
+	std::vector<int> shortest_path;
+	std::vector<bool> visited;
 };

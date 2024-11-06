@@ -180,7 +180,7 @@ void Actor::OnGUI()
 		ImGui::InputFloat3("Position_Input", &parameter.collision_cylinder.sphere.position.x);
 		ImGui::SliderFloat3("Position_Slider", &parameter.collision_cylinder.sphere.position.x,-200.0f,200.0f);
 		ImGui::SliderFloat3("Rotation", &parameter.rotation.x, -3.14f, 3.14f);
-		ImGui::SliderFloat3("Scale", &parameter.scale.x, 0.001f, 10.0f);
+		ImGui::InputFloat3("Scale", &parameter.scale.x);
 		ImGui::SliderFloat("Radius", &parameter.collision_cylinder.sphere.radius, 0.1f, 10.0f);
 		ImGui::SliderFloat("Height", &parameter.collision_cylinder.height, 0.1f, 10.0f);
 		ImGui::SliderFloat("Weight", &parameter.collision_cylinder.sphere.weight, 0.1f, 10.0f);
@@ -201,6 +201,10 @@ void Actor::OnGUI()
 		if (ImGui::Button("HitStop"))
 		{
 			ActorManager::Instance().SetHitStop(ActorType::All, 1.0f, 0.5f);
+		}
+		if (ImGui::Button("AnimationPause"))
+		{
+			model->PauseAnimation();
 		}
 	}
 

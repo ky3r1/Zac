@@ -60,7 +60,7 @@ float Mathf::Angle(DirectX::XMFLOAT3 A, DirectX::XMFLOAT3 B)
 //‹——£
 float Mathf::Distance(DirectX::XMFLOAT3 A, DirectX::XMFLOAT3 B)
 {
-DirectX::XMVECTOR a, b;
+    DirectX::XMVECTOR a, b;
     a = DirectX::XMLoadFloat3(&A);
     b = DirectX::XMLoadFloat3(&B);
     return DirectX::XMVectorGetX(DirectX::XMVector3Length(DirectX::XMVectorSubtract(a, b)));

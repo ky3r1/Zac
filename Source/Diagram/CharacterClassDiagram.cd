@@ -13,7 +13,7 @@
       </Enum>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>CgQAAiIEACAQAQQAIAAEFUAAACAAAACEBIBAAAFhFAI=</HashCode>
+      <HashCode>CgRBAiKEACAQCQRAIAAEFUAAACAAAACEBIBAAAFhFAI=</HashCode>
       <FileName>Source\Enemy.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -83,14 +83,14 @@
   <Class Name="Player">
     <Position X="4.75" Y="2.75" Width="1.5" />
     <NestedTypes>
-      <Enum Name="Player::__unnamed_enum_0467_1" Collapsed="true">
+      <Enum Name="Player::Animation" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>Source\Player.h</NewMemberFileName>
         </TypeIdentifier>
       </Enum>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAQAgAAAACAAAAQEAAAAAQAAAAAAAAAAAAAAAQAABBA=</HashCode>
+      <HashCode>AAQAgAIAACAAAAQEAAAAAQAAAAAAAAAAABAAAQAABBA=</HashCode>
       <FileName>Source\Player.h</FileName>
     </TypeIdentifier>
   </Class>

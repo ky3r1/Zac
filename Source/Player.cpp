@@ -43,7 +43,7 @@ void Player::Start()
 	GetActor()->GetComponent<Character>()->SetHealth(GetActor()->GetComponent<Character>()->GetMaxHealth());
 	//GetActor()->GetComponent<Movement>()->SetMoveSpeed(5.0f);
 	GetActor()->SetAttitudeControlFlag(true);
-	GetActor()->GetModel()->PlayAnimation(5, true, 1.0f);
+	GetActor()->GetModel()->PlayAnimation(Animation::Anim_idle, true, 1.0f);
 	//GetActor()->AddComponent<Gravity>();
 	//GetActor()->GetComponent<Gravity>()->SetSpeed(1.0f);
 }
@@ -111,24 +111,68 @@ void Player::Update(float elapsedTime)
 	//	GetActor()->GetModel()->FindNode("Character1_Hips")->worldTransform._43 });
 }
 
+void Player::Render(ID3D11DeviceContext* dc, Shader* shader)
+{
+	//DirectX::XMFLOAT4X4 hand_transform = { 1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1 };
+	//DirectX::XMFLOAT3 actor_position = GetActor()->GetPosition();
+	//DirectX::XMFLOAT3 actor_scale = GetActor()->GetScale();
+	//DirectX::XMFLOAT3 actor_rotation = {GetActor()->GetRotation().x,GetActor()->GetRotation().y,GetActor()->GetRotation().z};
+	//DirectX::XMFLOAT3 offset = { GetActor()->GetFront().x + 0.9f,GetActor()->GetFront().y + GetActor()->GetHeight() * 0.90f+0.5f,GetActor()->GetFront().z + 5.0f };
+	//DirectX::XMFLOAT3 position = Mathf::Add(actor_position, offset);
+	//DirectX::XMFLOAT3 scale = { 0.1f,0.1f,0.1f };
+	//DirectX::XMFLOAT3 rotation = Mathf::Add(actor_rotation, { 3.14f * 0.0f,3.14f * 0.95f ,3.14f * -0.05f });
+	//Mathf::UpdateTransform(hand_transform,position,scale,rotation);
+	////Gun.UpdateWorldTransform(hand_transform);
+	////hand_transform=GetActor()->GetModel()->FindNode("mixamorig9:RightHand")->worldTransform;
+
+
+	////hand_transform._11 = hand_transform._11 + 3.14 * 0.0f;
+	////hand_transform._12 = hand_transform._12 + 3.14 * 0.0f;
+	////hand_transform._13 = hand_transform._13 + 3.14 * 1.0f;
+	////hand_transform._21 = hand_transform._21+3.14*0.0f;
+ ////   hand_transform._22 = hand_transform._22+3.14*0.0f;
+ ////   hand_transform._23 = hand_transform._23+3.14*0.0f;
+
+	//Gun.UpdateWorldTransform(hand_transform);
+	//shader->Draw(dc, &Gun, { 1,1,1,1 });
+}
+
 void Player::DrawImGui()
 {
 	//Character::DrawImGui();
 	DirectX::XMFLOAT3 a=GetMoveVec();
 	ImGui::InputFloat3("Move Vec", &a.x);
 	ImGui::InputFloat("JumpPower", &jumpPower);
+	int anim = GetActor()->GetModel()->GetCurrentAnimationNo();
+	const char* anim_items[] = 
+	{ 
+		"Anim_shot_auto",
+		"Anim_shot_semiauto",
+		"Anim_reload",
+		"Anim_idle",
+		"Anim_jump",
+		"Anim_run_front",
+		"Anim_run_back",
+		"Anim_run_left",
+		"Anim_walk_left",
+		"Anim_walk_right",
+		"Anim_run_right",
+		"Anim_throw",
+		"Anim_aim_left",
+		"Anim_aim_right",
+		"Anim_aim_back",
+		"Anim_aim_front",
+		"None"
+	};
+	ImGui::Combo("Animation", &anim, anim_items, IM_ARRAYSIZE(anim_items));
+	if(anim != GetActor()->GetModel()->GetCurrentAnimationNo())
+    {
+        GetActor()->GetModel()->PlayAnimation(anim, true, 1.0f);
+    }
 }
 
 void Player::DrawDebug()
 {
-	// デバッグ球描画
-	DirectX::XMFLOAT3 position = GetActor()->GetPosition();
-	float radius = GetActor()->GetRadius();
-	float height = GetActor()->GetHeight();
-	DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(1, 0, 0, 1);
-	Graphics::Instance().GetDebugRenderer()->DrawSphere(position, radius, color);
-	//衝突判定用のデバッグ円柱を描画
-	Graphics::Instance().GetDebugRenderer()->DrawCylinder(position, radius, height, color);
 }
 
 // キャラクター操作

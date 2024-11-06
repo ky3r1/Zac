@@ -6,9 +6,7 @@
 // コンストラクタ
 Model::Model(const char* filename)
 {
-	//// リソース読み込み
-	//resource = std::make_shared<ModelResource>();
-	//resource->Load(Graphics::Instance().GetDevice(), filename);
+	// リソース読み込み
 	resource = ResourceManager::Instance().LoadModelResource(filename);
 
 	// ノード
@@ -97,6 +95,52 @@ void Model::UpdateTransform(const DirectX::XMFLOAT4X4& transform)
 
 		// 計算結果を格納
 		DirectX::XMStoreFloat4x4(&node.localTransform, LocalTransform);
+		DirectX::XMStoreFloat4x4(&node.worldTransform, WorldTransform);
+	}
+}
+
+void Model::UpdateLocalTransform(const DirectX::XMFLOAT4X4& transform)
+{
+	DirectX::XMMATRIX Transform = DirectX::XMLoadFloat4x4(&transform);
+
+	for (Node& node : nodes)
+	{
+		// ローカル行列算出
+		DirectX::XMMATRIX S = DirectX::XMMatrixScaling(node.scale.x, node.scale.y, node.scale.z);
+		DirectX::XMMATRIX R = DirectX::XMMatrixRotationQuaternion(DirectX::XMLoadFloat4(&node.rotate));
+		DirectX::XMMATRIX T = DirectX::XMMatrixTranslation(node.translate.x, node.translate.y, node.translate.z);
+		DirectX::XMMATRIX LocalTransform = S * R * T;
+
+		// 計算結果を格納
+		DirectX::XMStoreFloat4x4(&node.localTransform, LocalTransform);
+	}
+}
+
+void Model::UpdateWorldTransform(const DirectX::XMFLOAT4X4& transform)
+{
+	DirectX::XMMATRIX Transform = DirectX::XMLoadFloat4x4(&transform);
+
+	for (Node& node : nodes)
+	{
+		// ローカル行列算出
+		DirectX::XMMATRIX S = DirectX::XMMatrixScaling(node.scale.x, node.scale.y, node.scale.z);
+		DirectX::XMMATRIX R = DirectX::XMMatrixRotationQuaternion(DirectX::XMLoadFloat4(&node.rotate));
+		DirectX::XMMATRIX T = DirectX::XMMatrixTranslation(node.translate.x, node.translate.y, node.translate.z);
+		DirectX::XMMATRIX LocalTransform = S * R * T;
+
+		// ワールド行列算出
+		DirectX::XMMATRIX ParentTransform;
+		if (node.parent != nullptr)
+		{
+			ParentTransform = DirectX::XMLoadFloat4x4(&node.parent->worldTransform);
+		}
+		else
+		{
+			ParentTransform = Transform;
+		}
+		DirectX::XMMATRIX WorldTransform = LocalTransform * ParentTransform;
+
+		// 計算結果を格納
 		DirectX::XMStoreFloat4x4(&node.worldTransform, WorldTransform);
 	}
 }
@@ -221,23 +265,6 @@ void Model::UpdateAnimation(float elapsedTime)
 			animationEndFlag = true;
 		}
 	}
-	
-	//// 時間経過
-	//currentAnimationSeconds -= elapsedTime;
-	//// 再生時間が終端時間を超えたら
-	//if (currentAnimationSeconds < 0)
-	//{
-	//	// 再生時間を巻き戻す
-	//	if (animationLoopFlag)
-	//	{
-	//		currentAnimationSeconds += animation.secondsLength;
-	//	}
-	//	else
-	//	{
-	//		currentAnimationSeconds = 0;
-	//		animationEndFlag = true;
-	//	}
-	//}
 }
 // アニメーション再生
 void Model::PlayAnimation(int playerNo, bool loop)
@@ -261,8 +288,22 @@ void Model::PlayAnimation(int playerNo, bool loop, float blendSeconds, float ani
 void Model::StopAnimation()
 {
 	currentAnimationIndex = resource->GetAnimations().size();
-	//currentAnimationIndex = 0;
 	animationLoopFlag = false;
+}
+
+void Model::PauseAnimation()
+{
+	if (!pause_anim_checker)
+	{
+		pause_anim_vault = animation_speed;
+		animation_speed = 0;
+		pause_anim_checker = true;
+	}
+	else
+	{
+		animation_speed = pause_anim_vault;
+		pause_anim_checker = false;
+	}
 }
 
 // アニメーション再生中か

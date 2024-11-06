@@ -121,11 +121,11 @@ void Movement::Move(DirectX::XMFLOAT3 v, float force)
 }
 
 
-void Movement::MoveTarget(DirectX::XMFLOAT3 tp, float elapsedTime)
+void Movement::MoveTarget(DirectX::XMFLOAT3 target, float elapsedTime)
 {
 	DirectX::XMFLOAT3 vec = {};
 	DirectX::XMFLOAT3 zero = {};
-	DirectX::XMVECTOR Vec = DirectX::XMVector3Normalize(DirectX::XMVectorSubtract(DirectX::XMLoadFloat3(&tp), DirectX::XMLoadFloat3(&GetActor()->GetPosition())));
+	DirectX::XMVECTOR Vec = DirectX::XMVector3Normalize(DirectX::XMVectorSubtract(DirectX::XMLoadFloat3(&target), DirectX::XMLoadFloat3(&GetActor()->GetPosition())));
 	DirectX::XMStoreFloat3(&vec, Vec);
 	Turn(elapsedTime, vec);
 	Move(vec);

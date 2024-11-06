@@ -45,6 +45,8 @@ public:
 
 	// 行列計算
 	void UpdateTransform(const DirectX::XMFLOAT4X4& transform);
+	void UpdateLocalTransform(const DirectX::XMFLOAT4X4& transform);
+	void UpdateWorldTransform(const DirectX::XMFLOAT4X4& transform);
 
 
 	// ノードリスト取得
@@ -66,6 +68,8 @@ public:
 	void PlayAnimation(int playerNo, bool loop, float blendSeconds,float animspeed);
     // アニメーション停止
     void StopAnimation();
+	//アニメーション一時停止
+	void PauseAnimation();
 	// 再生アニメーション番号取得
 	int GetPlayAnimationNo() { return currentAnimationIndex; }
 	int GetPrevPlayAnimationNo() { return prevAnimationIndex; }
@@ -75,6 +79,10 @@ public:
 	bool IsPlayAnimation()const;
 public:
 	void SetHitStopAnimationSpeed(float speed) { hit_stop_animation_speed = speed; }
+	//アニメーションがポーズ中か
+	bool GetAnimationPauseFlag() { return pause_anim_checker; }
+	//現在再生中のアニメーション番号取得
+    int GetCurrentAnimationNo() { return currentAnimationIndex; }
 
 private:
 	std::shared_ptr<ModelResource>	resource;
@@ -89,4 +97,7 @@ private:
 	float animationBlendSeconds = 0.0f;
 	float animation_speed = 1.0f;
 	float hit_stop_animation_speed = 1.0f;
+
+	float pause_anim_vault = 0;
+	bool pause_anim_checker = false;
 };

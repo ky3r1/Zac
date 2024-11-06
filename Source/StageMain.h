@@ -24,7 +24,4 @@ public:
     void DrawDebug() override;
     //Imgui描画
     void DrawImGui() override;
-
-    //// 名前取得
-    //const char* GetName() const override { return "Player"; }
 };

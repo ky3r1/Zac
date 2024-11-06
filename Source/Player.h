@@ -25,6 +25,9 @@ public:
 	// çXêVèàóù
 	void Update(float elapsedTime) override;
 
+	//ï`âÊ
+	void Render(ID3D11DeviceContext* dc, Shader* shader) override;
+
 	//Imguiï`âÊ
 	void DrawImGui() override;
 
@@ -40,45 +43,26 @@ private:
 	float jumpPower = 1000.0f;
 
 private:
-	enum
+	enum Animation
 	{
-		Anim_Combo01, //0
-		Anim_Combo02,
-		Anim_Combo03,
-		Anim_Combo04,
-		Anim_Death,
-		Anim_GunIdle,
-		Anim_GunPutAway,
-		Anim_GunShoot,
-		Anim_GunTakeOut,
-		Anim_HitBack,
-		Anim_HitFront,
-		Anim_HitLeft,
-		Anim_HitRight,
-		Anim_Idle,
-		Anim_IdleLand,
-		Anim_IdleLandFast,
-		Anim_IdleShort,
-		Anim_JumpGoesDown,
-		Anim_JumpGoesDown2,
-		Anim_JumpUp,
-		Anim_JumpUp2,
-		Anim_JumpPeak,
-		Anim_JumpTakeOff,
-		Anim_QuiclTurnLeft,
-		Anim_QuiclTurnRight,
-		Anim_RandomIdle01,
-		Anim_RandomIdle02,
-		Anim_RandomIdle03,
-		Anim_RunForward,
-		Anim_RunForwardInPlace,
-		Anim_RunForwardLanding,
-		Anim_RunForwardLandingFast,
-		Anim_Spawn,
-		Anim_WalkForward,
-		Anim_WalkForwardInPlace,
-		Anim_walkForwardsLanding,
+		Anim_shot_auto,
+		Anim_shot_semiauto,
+		Anim_reload,
+		Anim_idle,
+		Anim_jump,
+		Anim_run_front,
+		Anim_run_back,
+		Anim_run_left,
+		Anim_walk_left,
+		Anim_walk_right,
+		Anim_run_right,
+		Anim_throw,
+		Anim_aim_left,
+		Anim_aim_right,
+		Anim_aim_back,
+		Anim_aim_front,
 		None,
 	};
 private:
+	//Model Gun = "Data/Model/AK47/AK47.mdl";
 };

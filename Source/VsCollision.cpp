@@ -140,7 +140,7 @@ bool VsCollision::RayCastAxisYUnder()
 	};
 	Movement* movement = GetActor()->GetComponent<Movement>().get();
 	DirectX::XMFLOAT3 vec = movement->GetVelocity();
-
+	float offset = -1.0f;
 	DirectX::XMFLOAT3 start = {
 		GetActor()->GetPosition().x,
 		GetActor()->GetPosition().y + GetActor()->GetHeight()*0.5f,
@@ -150,7 +150,7 @@ bool VsCollision::RayCastAxisYUnder()
 
 	DirectX::XMFLOAT3 end = {
 		GetActor()->GetPosition().x,
-		GetActor()->GetPosition().y - 0.5f,
+		GetActor()->GetPosition().y + offset,
 		GetActor()->GetPosition().z
 	};
 	raycastcast_y_end = end;
@@ -191,7 +191,7 @@ bool VsCollision::RayCastAxisYUnder()
 		}
 		return true;
 	}
-	movement->SetNormal({ 0,1,0 });
+	if (movement->GetVelocity().y != 0.0f)movement->SetNormal({ 0,1,0 });
 	//GetActor()->GetComponent<Movement>()->SetNormal(DirectX::XMFLOAT3(0, 1, 0));
 	return false;
 }
@@ -260,8 +260,10 @@ bool VsCollision::RayCastAxisXZ()
 		GetActor()->GetRayPosition().z
     };
 	DirectX::XMFLOAT3 vec = GetActor()->GetComponent<Movement>()->GetVelocity();
+	DirectX::XMFLOAT3 actor_scale = GetActor()->GetScale();
 	float front_scale = 0.15f;//要調整
-	DirectX::XMFLOAT3 front = { GetActor()->GetTransform()._31 * front_scale,GetActor()->GetTransform()._32 * front_scale,GetActor()->GetTransform()._33 * front_scale };
+	DirectX::XMFLOAT3 front = { GetActor()->GetTransform()._31 / actor_scale.x,GetActor()->GetTransform()._32 / actor_scale.y,GetActor()->GetTransform()._33 / actor_scale.z };
+	//DirectX::XMFLOAT3 front = { GetActor()->GetTransform()._31 * front_scale,GetActor()->GetTransform()._32 * front_scale,GetActor()->GetTransform()._33 * front_scale };
 
 	// 移動ベクトル
 	float moveLength = sqrtf(vec.x * vec.x + vec.z * vec.z);
@@ -362,7 +364,7 @@ void VsCollision::DrawDebug()
 {
 	// //デバッグ球描画
 	DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(0, 1, 0, 1);
-	Graphics::Instance().GetDebugRenderer()->DrawCube(raycastcast_y_start, raycastcast_y_end, color);
+	Graphics::Instance().GetLineRenderer()->Line(raycastcast_y_start, raycastcast_y_end, color);
 	color = DirectX::XMFLOAT4(0, 0, 1, 1);
-	Graphics::Instance().GetDebugRenderer()->DrawCube(raycastcast_xz_start, raycastcast_xz_end, color);
+	Graphics::Instance().GetLineRenderer()->Line(raycastcast_xz_start, raycastcast_xz_end, color);
 }

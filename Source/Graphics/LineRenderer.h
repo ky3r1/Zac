@@ -15,6 +15,8 @@ public:
 	// ï`âÊé¿çs
 	void Render(ID3D11DeviceContext* context, const DirectX::XMFLOAT4X4& view, const DirectX::XMFLOAT4X4& projection);
 
+	void Line(const DirectX::XMFLOAT3& start_position, const DirectX::XMFLOAT3& end_position, const DirectX::XMFLOAT4& color);
+
 	// í∏ì_í«â¡
 	void AddVertex(const DirectX::XMFLOAT3& position, const DirectX::XMFLOAT4& color);
 

@@ -350,4 +350,16 @@ private:
 	ActorType				hit_stop_filter = ActorType::All;
 	float					hit_stop_timer = 1.0f;
 	float					hit_stop_anim_speed = 1.0f;
+
+public:
+	enum class StageNumber
+	{
+		MainStage,
+		None,
+	};
+	StageNumber GetStageNumber() { return stage_number; }
+	void SetStageNumber(StageNumber n) { stage_number = n; }
+private:
+	//StageNumber
+	StageNumber						stage_number = StageNumber::None;
 };

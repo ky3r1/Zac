@@ -2,13 +2,14 @@
 
 #include "Movement.h"
 #include "VsCollision.h"
+#include "Gravity.h"
 
 #include "CollisionObject.h"
 #include "TrackingObject.h"
 #include "TimeTrackingObject.h"
 
 #include "Mathf.h"
-
+#include "StageManager.h"
 
 #include "AI/BehaviorTree.h"
 #include "AI/BehaviorData.h"
@@ -21,8 +22,45 @@
 void Enemy::Start()
 {
     GetActor()->AddComponent<Character>();
-    GetActor()->GetComponent<Character>()->SetHealth(GetActor()->GetComponent<Character>()->GetMaxHealth());
-    //GetActor()->GetComponent<Movement>()->SetMoveSpeed(0.3f);
+    GetActor()->GetComponent<Character>()->SetHealth(GetActor()->GetComponent<Character>()->GetMaxHealth());  
+    GetActor()->AddComponent<Movement>();
+    GetActor()->GetComponent<Movement>()->SetMoveSpeed(50.0f);
+    GetActor()->AddComponent<Gravity>();
+    GetActor()->AddComponent<VsCollision>();
+
+    //float points = 50;
+    //waypoints =
+    //{
+    //                                //        0        1         2
+    //    {{-points,0,points},0},     //    // ・ーーーー ・ーーーー・
+    //    {{0,0,points},1},           //    // ｜        ｜        ｜
+    //    {{points,0,points},2},      //    // ｜        ｜        ｜
+    //    {{points,0,0},3},           //    // ｜       8｜        ｜
+    //    {{points,0,-points},4},     //    //7・ーーーー ・ーーーー・3
+    //    {{0,0,-points},5},          //    // ｜        ｜        ｜
+    //    {{-points,0,-points},6},    //    // ｜        ｜        ｜
+    //    {{-points,0,0},7},          //    // ｜        ｜        ｜
+    //    {{0,0,0},8},                //    // ・ーーーー ・ーーーー・
+    //                                //        6        5         4
+    //};
+    //dijkstra_algorithm = new DijkstraAlgorithm(waypoints.size());
+    //auto add_edge = [&](int from, int to)
+    //{
+    //    edge.push_back({ waypoints[from].position, waypoints[to].position });
+    //    dijkstra_algorithm->edge(from, to, Mathf::Distance(waypoints[from].position, waypoints[to].position));
+    //};
+    //add_edge(0, 1);
+    //add_edge(0, 7);
+    //add_edge(1, 2);
+    //add_edge(1, 8);
+    //add_edge(2, 3);
+    //add_edge(3, 4);
+    //add_edge(3, 8);
+    //add_edge(4, 5);
+    //add_edge(5, 6);
+    //add_edge(5, 8);
+    //add_edge(6, 7);
+    //add_edge(7, 8);
 
     //Ai
     {
@@ -78,13 +116,52 @@ void Enemy::Update(float elapsedTime)
     //}
     
     GetActor()->UpdateDelayTime(attack_flag, 2.0f*60.0f);
-    //GetActor()->GetComponent<Movement>()->MoveTarget(ActorManager::Instance().GetPlayer()->GetPosition(), elapsedTime);
-    //GetActor()->GetComponent<Movement>()->MoveTarget(ActorManager::Instance().GetPlayer()->GetPosition(), elapsedTime);
-    //{
-    //    DirectX::XMFLOAT3 vec_pe;
-    //    DirectX::XMStoreFloat3(&vec_pe, DirectX::XMVectorSubtract(DirectX::XMLoadFloat3(&ActorManager::Instance().GetPlayer()->GetPosition()), DirectX::XMLoadFloat3(&GetActor()->GetPosition())));
-    //    GetActor()->GetComponent<Movement>()->Turn(elapsedTime, vec_pe);
-    //}
+    //Djikstra
+    {     
+        //ロード
+        DirectX::XMFLOAT3 position = GetActor()->GetPosition();
+        DirectX::XMFLOAT3 target_position = ActorManager::Instance().GetPlayer()->GetPosition();
+        DijkstraAlgorithm* dijkstra_algorithm = StageManager::Instance().GetDijkstraAlgorithm();
+        std::vector<WayPoint> vector_way_p = dijkstra_algorithm->GetWayPoints();
+      
+        //TargetのWayPointのIDが変わっている or Enemyが終点まで行ったとき
+        int t_id = dijkstra_algorithm->GetNearWayPointId(target_position);
+        if (t_id != target_id)
+        {
+            target_id = t_id;
+            //訪れたポイントをリセット
+            dijkstra_algorithm->ReSetVisited(visited);
+
+            //最短経路探索
+            shortest_path = dijkstra_algorithm->GetPath(position, target_id);
+            //最終ポイントの座標を保存
+            last_waypoint = vector_way_p.at(shortest_path.at(shortest_path.size() - 1)).position;
+        }
+        else
+        { 
+            float d = 0;
+            //最短経路を範囲ベースfor文で周す
+            for(int i: shortest_path)
+            {   
+
+                WayPoint way_p = dijkstra_algorithm->GetWayPoints().at(i);
+                if (visited.at(shortest_path.at(shortest_path.size() - 1)))break;
+                //訪れていたなら計算の必要がないのでcontinue
+                if (visited.at(i)) continue;
+                //目標まで移動
+                next_waypoint =way_p.position;
+                GetActor()->GetComponent<Movement>()->MoveTarget(next_waypoint, elapsedTime);
+                //目標まで到達していたら次の目標地点に進む
+                //到達していないなら次の目的地を取りたくないのでbreakでfor文を抜ける
+                d = Mathf::Distance(position, way_p.position);
+                if (d < way_p.radius)
+                {
+                    visited.at(i) = true;
+                }
+                else break;
+            }
+        }
+    }
     //エネミー同士の衝突判定
     if (GetActor()->GetComponent<VsCollision>()->CylinderVsCylinderPushing(ActorType::Enemy, nullptr))
     {
@@ -203,5 +280,16 @@ void Enemy::DrawDebug()
         DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(0.0f, 0.5f, 1.0f, 1);
         //当たり判定用のデバッグ球を描画
         Graphics::Instance().GetDebugRenderer()->DrawSphere(target_position, 3.0f, color);
+    }
+
+    {
+        DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(1.0f, 0.3f, 0.8f, 1);
+        //当たり判定用のデバッグ球を描画
+        Graphics::Instance().GetDebugRenderer()->DrawSphere(next_waypoint, 2.0f, color);
+    }
+    {
+        DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(0.0f, 1.0f, 0.4f, 1);
+        //当たり判定用のデバッグ球を描画
+        Graphics::Instance().GetDebugRenderer()->DrawSphere(last_waypoint, 2.0f, color);
     }
 }
